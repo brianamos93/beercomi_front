@@ -1,0 +1,76 @@
+import { z } from 'zod'
+
+export interface Entry {
+	id: string;
+	table_name: string;
+	date_updated: Date;
+}
+
+export interface Beer {
+	id: string;
+	name: string;
+	brewery: string;
+	description: string;
+	style: string;
+	ibu: number;
+	abv: number;
+	color: string;
+	author: string;
+	date_created: Date;
+	date_updated: Date
+ 
+}
+
+export interface Brewery {
+	id: string;
+	name: string;
+	date_of_founding: string;
+	date_created: Date;
+	date_updated: Date
+}
+
+export interface Store {
+	id: string;
+	name: string;
+	location: string;
+	date_of_founding: string;
+	date_created: Date;
+	date_updated: Date;
+	author: string;
+	owner: string;
+}
+
+export interface User {
+	id: string;
+	username: string;
+	email: string;
+	password: string;
+}
+
+export const SignupFormSchema = z.object({
+	display_name: z
+	  .string()
+	  .min(5, { message: 'Display Name must be at least 5 characters long.' })
+	  .trim(),
+	email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
+	password: z
+	  .string()
+	  .min(8, { message: 'Be at least 8 characters long' })
+	  .regex(/[a-zA-Z]/, { message: 'Contain at least one letter.' })
+	  .regex(/[0-9]/, { message: 'Contain at least one number.' })
+	  .regex(/[^a-zA-Z0-9]/, {
+		message: 'Contain at least one special character.',
+	  })
+	  .trim(),
+  })
+   
+  export type FormState =
+	| {
+		errors?: {
+		  display_name?: string[]
+		  email?: string[]
+		  password?: string[]
+		}
+		message?: string
+	  }
+	| undefined
