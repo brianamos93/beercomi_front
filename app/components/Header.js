@@ -1,9 +1,37 @@
 "use client"
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 export default function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const pathname = usePathname()
+
+  console.log(pathname)
+
+  const links = [
+    {
+      "page": "About",
+      "route": "/about"
+    },
+    {
+      "page": "Beers",
+      "route": "/beers"
+    },
+    {
+      "page": "Breweries",
+      "route": "/breweries"
+    },
+    {
+      "page": "Stores",
+      "route": "/stores"
+    },
+    {
+      "page": "Contact",
+      "route": "/contact"
+    }
+  ]
 
   return (
     <div className="flex items-center justify-between border-b border-gray-400 py-8">
@@ -40,29 +68,23 @@ export default function Header() {
               </svg>
             </div>
             <ul className="flex flex-col items-center justify-between min-h-[250px]">
-              <li className="border-b border-gray-400 my-8 uppercase">
-                <a href="/about">About</a>
-              </li>
-              <li className="border-b border-gray-400 my-8 uppercase">
-                <a href="/portfolio">Portfolio</a>
-              </li>
-              <li className="border-b border-gray-400 my-8 uppercase">
-                <a href="/contact">Contact</a>
-              </li>
+              {links.map((link) => (
+                <li key={link.page}>
+                  <Link href={link.route} className={clsx('border-b border-gray-400 my-8 uppercase',{
+                    'text-yellow-600 underline': pathname === link.route,
+                  },)}>{link.page}</Link>
+                </li>
+              ))}
             </ul>
           </div>
         </section>
-
         <ul className="DESKTOP-MENU hidden space-x-8 lg:flex">
-          <li>
-            <a href="/about">About</a>
-          </li>
-          <li>
-            <a href="/portfolio">Portfolio</a>
-          </li>
-          <li>
-            <a href="/contact">Contact</a>
-          </li>
+          {links.map((link) => (
+            <li key={link.page}>
+              {console.log(link.route)}
+              <Link href={link.route} className={clsx('hover:text-yellow-600', {'text-yellow-600 underline': pathname === link.route,})}>{link.page}</Link>
+            </li>
+          ))}
         </ul>
       </nav>
       <style>{`
