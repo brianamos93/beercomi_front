@@ -16,22 +16,17 @@ export async function encrypt(payload: any) {
   }
 
 export async function decrypt(input: string): Promise<any> {
-	const { payload } = await jwtVerify(input, key, {
-	algorithms: ["HS256"],
+	try {
+		const { payload } = await jwtVerify(input, key, {
+		algorithms: ["HS256"],
 	});
-return payload;
+	return payload;
+	} catch (error) {
+		console.log("Failed to verify Session")
+	}
+
 }
 
-export const Signup = async (newuserdata: FormData) => {
-	const res = await fetch(url + '/signup', {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({display_name: newuserdata.get("display_name"), email: newuserdata.get("email"), password: newuserdata.get("password")})
-	})
-	return res.json()
-}
 
 export const Login = async (formData: FormData) => {
 	const res = await fetch(url + '/login', {
@@ -39,19 +34,29 @@ export const Login = async (formData: FormData) => {
 		headers: {
 			"Content-Type": "application/json"
 		},
-		body: JSON.stringify({email: formData.get("email"), password: formData})
+		body: JSON.stringify({
+			email: formData.get("email"), 
+			password: formData.get("password")
+		})
 	})
 	if (res.status == 200) {
 		const body = await res.json()
 		const token = body.token
-		const userID = body.userFOrToken.id
+		const userID = body.userForToken.id
+		const displayName = body.userForToken.display_name
 		const expires = new Date(Date.now() + 60 * 60* 1000)
 		const session = await encrypt({ token, expires, userID});
 		(await
 			cookies()).set("session", session, { expires, httpOnly: true});
+		(await
+			cookies()).set("display_name", displayName, { expires, httpOnly: true});
 	} else {
 		return JSON.stringify({"Message": "Error"})
 	}
+}
+export const getOneUser = async (id: string) => {
+	const res = await fetch(`${url}/user/${id}`)
+	return res.json()
 }
 
 export async function logout() {
@@ -63,6 +68,11 @@ export async function logout() {
 
 export async function getSession() {
 	const session = (await cookies()).get("session")?.value;
-	if (!session) return null;
-	return await decrypt(session);
+	if (!session || typeof session !== "string") return null;
+	try {
+		return await decrypt(session)
+	} catch (err) {
+		console.error("Invalid Session Token:", err)
+		return null
+	}
 }
