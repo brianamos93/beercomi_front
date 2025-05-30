@@ -64,7 +64,7 @@ export const SignupFormSchema = z.object({
 	  .trim(),
   })
    
-  export type FormState =
+  export type SignupFormState =
 	| {
 		errors?: {
 		  display_name?: string[]
@@ -73,4 +73,29 @@ export const SignupFormSchema = z.object({
 		}
 		message?: string
 	  }
+	| undefined
+
+export const BeerFormSchema = z.object({
+	name: z
+	.string().trim()
+	.min(1, { message: 'Name must be at least 1 character long.'}).trim(),
+	type: z.string().trim(),
+	abv: z.number(),
+	brewery: z.string().trim(),
+	description: z.string().trim().min(10, { message: 'Description must contain at least 10 characters.'}),
+	ibu: z.number(),
+})
+
+export type BeerFormState =
+	| {
+		errors?: {
+			name?: string[]
+			type?: string[]
+			abv?: string[]
+			brewery?: string[]
+			description?: string[]
+			ibu?: string[]
+		}
+		message?: string
+	}
 	| undefined

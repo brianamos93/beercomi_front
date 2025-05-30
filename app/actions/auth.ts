@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
-import { SignupFormSchema, FormState } from '../utils/def'
+import { SignupFormSchema, SignupFormState } from '../utils/def'
 import { Signup } from '../utils/signup'
  
-export async function signup(state: FormState, formData: FormData) {
+export async function signup(state: SignupFormState, formData: FormData) {
   // Validate form fields
   const validatedFields = SignupFormSchema.safeParse({
     display_name: formData.get('display_name'),
@@ -16,6 +16,6 @@ export async function signup(state: FormState, formData: FormData) {
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
-  Signup(formData)
+  await Signup(formData)
   redirect("/users/login")
 }

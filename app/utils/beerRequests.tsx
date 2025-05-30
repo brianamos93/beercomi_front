@@ -21,7 +21,7 @@ export const getBeer = async (id: string) => {
 	return res.json()
 }
 
-export const createBeer = async (beer: Beer, token: string) => {
+export const createBeer = async (newBeerData: FormData, token: string) => {
 	const res = await fetch(url + '/beers', {
 		method: "POST",
 		headers: {
@@ -29,7 +29,14 @@ export const createBeer = async (beer: Beer, token: string) => {
 			"Content-Type": "application/json",
 
 		},
-		body: JSON.stringify({beer})
+		body: JSON.stringify({
+			name: newBeerData.get('name'),
+			type: newBeerData.get('type'),
+			abv: newBeerData.get('abv'),
+			brewery: newBeerData.get('brewery'),
+			description: newBeerData.get('description'),
+			ibu: newBeerData.get('ibu')
+		})
 	})
 	return res.json()
 }
