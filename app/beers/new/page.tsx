@@ -1,7 +1,8 @@
-import { createServerBeer } from "@/app/actions/beer";
-import BeerForm from "@/app/components/BeerForm";
+import CreateBeerForm from "@/app/components/CreateBeerForm";
+import { getBreweries } from "@/app/utils/requests/breweryRequests";
 
 
-export default function newBeer() {
-	return <BeerForm action={createServerBeer} />
+export default async function newBeer() {
+	const breweries = await getBreweries()
+	return <CreateBeerForm breweries={breweries}/>
 }
