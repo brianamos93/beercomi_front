@@ -6,7 +6,7 @@ export default function BeerCard({ entry }) {
 		<h2 className="text-lg font-semibold">{entry.name} 🍺</h2>
 		<p><strong>Style:</strong> {entry.style}</p>
 		<p><strong>ABV:</strong> {entry.abv}%</p>
-		<p><strong>Brewery:</strong> {entry.brewery}</p>
+		<p><strong>Brewery:</strong> {entry.brewery_name}</p>
 		<p><strong>Updated:</strong> {new Date(entry.date_updated).toLocaleString()}</p>
 	  </div>
 	);
