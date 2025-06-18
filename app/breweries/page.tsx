@@ -1,6 +1,6 @@
 import Link from "next/link";
 import BreweryCard from "../components/BreweryCard";
-import { getBreweries } from "../utils/breweryRequests";
+import { getBreweries } from "../utils/requests/breweryRequests";
 import { Brewery } from "../utils/def";
 
 export default async function brewerys() {

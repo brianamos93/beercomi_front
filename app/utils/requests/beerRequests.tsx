@@ -1,5 +1,5 @@
-import url from "./utils"
-import { Beer } from "./def"
+import url from "../utils"
+import { Beer } from "../def"
 
 export const getBeers = async () => {
 	const res = await fetch(url + '/beers')
@@ -31,11 +31,12 @@ export const createBeer = async (newBeerData: FormData, token: string) => {
 		},
 		body: JSON.stringify({
 			name: newBeerData.get('name'),
-			type: newBeerData.get('type'),
+			style: newBeerData.get('style'),
 			abv: newBeerData.get('abv'),
-			brewery: newBeerData.get('brewery'),
+			brewery_id: newBeerData.get('brewery_id'),
 			description: newBeerData.get('description'),
-			ibu: newBeerData.get('ibu')
+			ibu: newBeerData.get('ibu'),
+			color: newBeerData.get('color'),
 		})
 	})
 	return res.json()

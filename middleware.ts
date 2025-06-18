@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { decrypt } from './app/utils/userRequests'
-import { cookies } from 'next/headers'
+import { decrypt } from './app/utils/requests/userRequests'
  
 // 1. Specify protected and public routes
 const protectedRoutes = ['/beers/new', '/breweries/new', '/stores/new']

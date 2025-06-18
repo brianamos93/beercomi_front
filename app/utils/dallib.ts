@@ -1,13 +1,17 @@
 import 'server-only'
  
 import { cookies } from 'next/headers'
-import { decrypt, getOneUser } from './userRequests'
+import { decrypt, getOneUser } from './requests/userRequests'
 import { redirect } from 'next/navigation'
 import { cache } from 'react'
  
 export const verifySession = cache(async () => {
   const cookie = (await cookies()).get('session')?.value
-  const session = await decrypt(cookie)
+  let session = null
+  if (cookie) {
+	session = await decrypt(cookie)
+  }
+  
  
   if (!session?.userId) {
     redirect('/login')
@@ -25,7 +29,7 @@ export const getUser = cache(async () => {
    
 	  return userdata
 	} catch (error) {
-	  console.log('Failed to fetch user')
+	  console.log(error, 'Failed to fetch user')
 	  return null
 	}
   })

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import StoreCard from "../components/StoreCard";
-import { getStores } from "../utils/storeRequests"
+import { getStores } from "../utils/requests/storeRequests"
 import { Store } from "../utils/def";
 
 export default async function stores() {

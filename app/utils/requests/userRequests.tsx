@@ -1,4 +1,4 @@
-import url from "./utils"
+import url from "../utils"
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 
@@ -42,6 +42,7 @@ export const Login = async (formData: FormData) => {
 	if (res.status == 200) {
 		const body = await res.json()
 		const token = body.token
+		console.log(token)
 		const userID = body.userForToken.id
 		const displayName = body.userForToken.display_name
 		const expires = new Date(Date.now() + 60 * 60* 1000)

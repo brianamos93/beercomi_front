@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import { Login } from "../../utils/userRequests"
+import { Login } from "../../utils/requests/userRequests"
 
 export default function loginForm() {
 	return (

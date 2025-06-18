@@ -1,6 +1,6 @@
 import Link from "next/link";
 import BeerCard from "../components/BeerCard";
-import { getBeers } from "../utils/beerRequests";
+import { getBeers } from "../utils/requests/beerRequests";
 import { Beer } from "../utils/def";
 
 export default async function beers() {

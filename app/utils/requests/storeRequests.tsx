@@ -1,5 +1,5 @@
-import url from "./utils"
-import { Store } from "./def"
+import url from "../utils"
+import { Store } from "../def"
 
 export const getStores = async () => {
 	const res = await fetch(url + '/stores')

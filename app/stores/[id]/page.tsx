@@ -1,4 +1,4 @@
-import { getStore, getStoresList } from "@/app/utils/storeRequests";
+import { getStore, getStoresList } from "@/app/utils/requests/storeRequests";
 import { Store } from "@/app/utils/def";
 
 export async function generateStaticParams() {

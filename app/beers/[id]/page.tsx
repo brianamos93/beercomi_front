@@ -1,4 +1,4 @@
-import { getBeer, getBeersList } from "@/app/utils/beerRequests";
+import { getBeer, getBeersList } from "@/app/utils/requests/beerRequests";
 import { Beer } from "@/app/utils/def";
 
 export async function generateStaticParams() {
