@@ -42,15 +42,12 @@ export const Login = async (formData: FormData) => {
 	if (res.status == 200) {
 		const body = await res.json()
 		const token = body.token
-		console.log(token)
 		const userID = body.userForToken.id
 		const displayName = body.userForToken.display_name
-		const expires = new Date(Date.now() + 60 * 60* 1000)
-		const session = await encrypt({ token, expires, userID});
+		const expires = new Date(Date.now() + 60 * 60 * 1000)
+		const session = await encrypt({ token, expires, userID, displayName});
 		(await
 			cookies()).set("session", session, { expires, httpOnly: true});
-		(await
-			cookies()).set("display_name", displayName, { expires, httpOnly: true});
 	} else {
 		return JSON.stringify({"Message": "Error"})
 	}
