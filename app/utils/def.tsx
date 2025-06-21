@@ -9,6 +9,7 @@ export interface Entry {
 export interface Beer {
 	id: string;
 	name: string;
+	brewery_id: string;
 	brewery: string;
 	description: string;
 	style: string;

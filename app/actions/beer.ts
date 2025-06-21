@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers";
-import { createBeer } from "../utils//requests/beerRequests";
+import { createBeer, updateBeer } from "../utils//requests/beerRequests";
 import { z } from 'zod'
 import { redirect } from "next/navigation";
 import { decrypt } from "../utils/requests/userRequests";
@@ -73,8 +73,9 @@ export async function createServerBeer(prevState: State, formData: FormData) {
 			message: 'Missing Fields. Failed to Create Beer.',
 		}
 	}
+
 	try {
-		console.log(await createBeer(formData, session))
+		await createBeer(formData, session)
 	} catch (error) {
 		return {
 			message: 'Database Error: Failed to Create Beer.'
@@ -92,20 +93,26 @@ export async function updateServerBeer(
 	formData: FormData,
 ) {
 
-	const token = (await cookies()).get('session')?.value;
+	let session = null
+	//const token = (await cookies()).get('session')?.value;
+	const cookie = (await cookies()).get('session')?.value
+	if(cookie) {
+		const decryptedCookie = await decrypt(cookie)
+		session = decryptedCookie.token
+	}
 	
-	const validatedFields = BeerFormSchema.safeParse({
+	const validatedFields = UpdateBeer.safeParse({
 		name: formData.get('name'),
-		type: formData.get('type'),
+		style: formData.get('style'),
 		abv: formData.get('abv'),
-		brewery: formData.get('brewery'),
+		brewery_id: formData.get('brewery_id'),
 		description: formData.get('description'),
 		ibu: formData.get('ibu'),
 		color: formData.get('color')
 	})
 
 
-	if (token == undefined) {
+	if (session == undefined) {
 		return {
 			errors: "Not Logged In"
 		}
@@ -114,9 +121,10 @@ export async function updateServerBeer(
 	if (!validatedFields.success) {
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
+			message: 'Missing Fields. Failed to update beer.',
 		}
 	}
-	console.log(await createBeer(formData, token))
+	console.log(await updateBeer(id, formData, session))
 	revalidatePath('/beers')
 	redirect('/beers')
 }
