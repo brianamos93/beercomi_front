@@ -1,5 +1,8 @@
 import { getBeer, getBeersList } from "@/app/utils/requests/beerRequests";
 import { Beer } from "@/app/utils/def";
+import { cookies } from "next/headers";
+import { decrypt } from "@/app/utils/requests/userRequests";
+import Link from "next/link";
 
 export async function generateStaticParams() {
 	const beers = await getBeersList()
@@ -11,6 +14,15 @@ export async function generateStaticParams() {
 
 export default async function BeerPage({params}:{params: Promise<{ id: string }> 
 }) {
+	const session = await (await cookies()).get('session')?.value
+	let currentUserId = null
+	if(session) {
+		const decryptedCookie = await decrypt(session)
+		currentUserId = decryptedCookie.userID
+	} else {
+		currentUserId = null
+
+	}
 	const beer = await getBeer((await params).id)
 	return (
 			<main>
@@ -24,6 +36,11 @@ export default async function BeerPage({params}:{params: Promise<{ id: string }>
 						<li>{beer.abv}</li>
 						<li>{beer.color}</li>
 						<li>{beer.author}</li>
+						{beer.author === currentUserId && (
+							<li><Link
+							href={`/beers/${beer.id}/edit`}
+							className="text-blue-600 hover:underline font-semibold">Edit</Link></li>
+						)}
 					</ul>
 				</div>
 			</main>
