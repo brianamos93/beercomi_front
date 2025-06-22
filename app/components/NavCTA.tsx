@@ -11,9 +11,7 @@ export default async function NavCTA() {
 		if(cookie) {
 			const decryptedCookie = await decrypt(cookie)
 			session = decryptedCookie.token
-			console.log(session)
 			displayName = decryptedCookie.displayName
-			console.log(decryptedCookie)
 		}
 	
 	if (!session) {
