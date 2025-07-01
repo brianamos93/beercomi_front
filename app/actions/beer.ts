@@ -43,7 +43,6 @@ const UpdateBeer = BeerFormSchema.omit({ id: true, date_updated: true, date_crea
 export async function createServerBeer(prevState: State, formData: FormData) {
 
 	let session = null
-	//const token = (await cookies()).get('session')?.value;
 	const cookie = (await cookies()).get('session')?.value
 	if(cookie) {
 		const decryptedCookie = await decrypt(cookie)
