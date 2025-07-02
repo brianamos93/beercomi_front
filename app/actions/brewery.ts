@@ -6,6 +6,7 @@ import { decrypt } from "../utils/requests/userRequests";
 import { createBrewery } from "../utils/requests/breweryRequests";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { updateBeer } from "../utils/requests/beerRequests";
 
 const BreweryFormSchema = z.object({
 	id: z.string(),
@@ -28,6 +29,7 @@ export type State = {
 }
 
 const CreateBrewery = BreweryFormSchema.omit({ id: true, date_updated: true, date_created: true})
+const UpdateBrewery = BreweryFormSchema.omit({ id: true, date_updated: true, date_created: true})
 
 export async function createServerBrewery(prevState: State, formData: FormData) {
 		let session = null
@@ -65,4 +67,38 @@ export async function createServerBrewery(prevState: State, formData: FormData) 
 
 		revalidatePath('/breweries')
 		redirect('/breweries')
+}
+
+export async function updateServerBrewery(id: string,
+	prevState: State,
+	formData: FormData,
+) {
+	let session = null
+	const cookie = (await cookies()).get('session')?.value
+	if(cookie) {
+		const decryptedCookie = await decrypt(cookie)
+		session = decryptedCookie.token
+	}
+
+	const validatedFields = UpdateBrewery.safeParse({
+		name: formData.get('name'),
+		location: formData.get('location'),
+		date_of_founding: formData.get('date_of_founding')
+	})
+
+	if (session == undefined) {
+		return {
+			errors: "Not Logged In"
+		}
+	}
+
+	if (!validatedFields.success) {
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			message: 'Missing Fields. Failed to update brewery.',
+		}
+	}
+	await updateBeer(id, formData, session)
+	revalidatePath('/beers')
+	redirect('/beers')
 }
