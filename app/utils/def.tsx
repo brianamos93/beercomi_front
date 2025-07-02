@@ -25,6 +25,7 @@ export interface Beer {
 export interface Brewery {
 	id: string;
 	name: string;
+	location: string;
 	date_of_founding: string;
 	date_created: Date;
 	date_updated: Date
