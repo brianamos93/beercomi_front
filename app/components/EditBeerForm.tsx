@@ -1,6 +1,6 @@
 'use client'
 import { useActionState } from "react";
-import { updateServerBeer } from "../actions/beer";
+import { State, updateServerBeer } from "../actions/beer";
 import { Beer, Brewery } from "../utils/def"
 
 export default function EditBeerForm({
