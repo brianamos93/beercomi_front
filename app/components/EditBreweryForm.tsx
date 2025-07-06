@@ -10,12 +10,13 @@ export default function EditBreweryForm({
 	brewery: Brewery;
 }) {
 	const initialState: State = { message: null, errors: {} }
-	const updateBeerwWithId = updateServerBrewery.bind(null, brewery.id)
-	const [state, formAction] = useActionState(updateServerBrewery, initialState)
+	const updateBreweryWithId = updateServerBrewery.bind(null, brewery.id)
+	const [state, formAction] = useActionState(updateBreweryWithId, initialState)
 
 	return (
 		<form action={formAction}>
 			<div>
+				<label htmlFor="name">Name:</label>
 				<input
 					type="text"
 					name="name"
@@ -29,6 +30,7 @@ export default function EditBreweryForm({
 					</div>
 			</div>
 			<div>
+				<label htmlFor="location">Location:</label>
 				<input
 					type="text"
 					name="location"
