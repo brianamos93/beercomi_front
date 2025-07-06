@@ -1,4 +1,4 @@
-import { decrypt } from "../utils/requests/userRequests";
+import { decrypt } from "../../utils/requests/userRequests";
 import Header from "./Header";
 import { cookies } from "next/headers";
 

@@ -1,4 +1,4 @@
-import CreateBeerForm from "@/app/components/CreateBeerForm";
+import CreateBeerForm from "@/app/components/beer/CreateBeerForm";
 import { getBreweries } from "@/app/utils/requests/breweryRequests";
 
 

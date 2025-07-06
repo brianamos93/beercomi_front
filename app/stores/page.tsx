@@ -1,5 +1,5 @@
 import Link from "next/link";
-import StoreCard from "../components/StoreCard";
+import StoreCard from "../components/store/StoreCard";
 import { getStores } from "../utils/requests/storeRequests"
 import { Store } from "../utils/def";
 

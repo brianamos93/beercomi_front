@@ -1,5 +1,5 @@
 import Link from "next/link";
-import BreweryCard from "../components/BreweryCard";
+import BreweryCard from "../components/brewery/BreweryCard";
 import { getBreweries } from "../utils/requests/breweryRequests";
 import { Brewery } from "../utils/def";
 

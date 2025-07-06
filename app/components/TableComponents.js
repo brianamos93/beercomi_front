@@ -1,6 +1,6 @@
-import BeerCard from "./BeerCard";
-import StoreCard from "./StoreCard";
-import BreweryCard from "./BreweryCard";
+import BeerCard from "./beer/BeerCard";
+import StoreCard from "./store/StoreCard";
+import BreweryCard from "./brewery/BreweryCard";
 import DefaultCard from "./DefaultCard";
 
 const TableComponents = {
