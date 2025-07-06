@@ -3,10 +3,9 @@
 import { z } from "zod"
 import { cookies } from "next/headers";
 import { decrypt } from "../utils/requests/userRequests";
-import { createBrewery } from "../utils/requests/breweryRequests";
+import { createBrewery, updateBrewery } from "../utils/requests/breweryRequests";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { updateBeer } from "../utils/requests/beerRequests";
 
 const BreweryFormSchema = z.object({
 	id: z.string(),
@@ -69,7 +68,8 @@ export async function createServerBrewery(prevState: State, formData: FormData) 
 		redirect('/breweries')
 }
 
-export async function updateServerBrewery(id: string,
+export async function updateServerBrewery(
+	id: string,
 	prevState: State,
 	formData: FormData,
 ) {
@@ -98,7 +98,7 @@ export async function updateServerBrewery(id: string,
 			message: 'Missing Fields. Failed to update brewery.',
 		}
 	}
-	await updateBeer(id, formData, session)
-	revalidatePath('/beers')
-	redirect('/beers')
+	await updateBrewery(id, formData, session)
+	revalidatePath('/breweries')
+	redirect('/breweries')
 }
