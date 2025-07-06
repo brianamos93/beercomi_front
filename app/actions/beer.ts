@@ -14,7 +14,7 @@ const BeerFormSchema = z.object({
 	.min(1, { message: 'Name must be at least 1 character long.'}).trim(),
 	style: z.string().trim(),
 	abv: z.coerce.number(),
-	brewery_id: z.string(),
+	brewery_id: z.string({message: 'You must select a brewery.'}),
 	description: z.string().trim().min(10, { message: 'Description must contain at least 10 characters.'}),
 	ibu: z.coerce.number(),
 	color: z.string(),
@@ -24,6 +24,15 @@ const BeerFormSchema = z.object({
 })
 
 export type State = {
+	beer?:{
+		name?: string | null;
+		style?: string | null;
+		abv?: number | null;
+		brewery_id?: string | null;
+		description?: string | null;
+		ibu?: number | null;
+		color?: string | null;
+	}
   errors?: {
     name?: string[];
     style?: string[];
@@ -68,6 +77,15 @@ export async function createServerBeer(prevState: State, formData: FormData) {
 
 	if (!validatedFields.success) {
 		return {
+			beer: {
+			name: formData.get('name')?.toString() ?? '',
+			style: formData.get('style')?.toString() ?? '',
+			abv: Number(formData.get('abv')),
+			brewery_id: formData.get('brewery_id')?.toString() ?? '',
+			description: formData.get('description')?.toString() ?? '',
+			ibu: Number(formData.get('ibu')),
+			color: formData.get('color')?.toString() ?? ''
+		},
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: 'Missing Fields. Failed to Create Beer.',
 		}
@@ -93,7 +111,6 @@ export async function updateServerBeer(
 ) {
 
 	let session = null
-	//const token = (await cookies()).get('session')?.value;
 	const cookie = (await cookies()).get('session')?.value
 	if(cookie) {
 		const decryptedCookie = await decrypt(cookie)
@@ -123,7 +140,7 @@ export async function updateServerBeer(
 			message: 'Missing Fields. Failed to update beer.',
 		}
 	}
-	console.log(await updateBeer(id, formData, session))
+	await updateBeer(id, formData, session)
 	revalidatePath('/beers')
 	redirect('/beers')
 }
