@@ -19,6 +19,11 @@ const BreweryFormSchema = z.object({
 })
 
 export type State = {
+	brewery?: {
+		name?: string | null;
+		location?: string | null;
+		date_of_founding: string | null;
+	};
 	errors?: {
 		name?: string[];
 		location?: string[];
@@ -51,6 +56,11 @@ export async function createServerBrewery(prevState: State, formData: FormData) 
 
 		if (!validatedFields.success) {
 			return {
+				brewery: {
+					name: formData.get('name')?.toString() ?? '',
+					location: formData.get('location')?.toString() ?? '',
+					date_of_founding: formData.get('date_of_founding')?.toString() ?? '',
+				},
 				errors: validatedFields.error.flatten().fieldErrors,
 				message: 'Missing Fields. Failed to Create Brewery.'
 			}

@@ -15,6 +15,7 @@ export default function CreateBeerForm() {
 					type="text"
 					name="name"
 					placeholder="Name"
+					defaultValue={state?.brewery?.name ?? ""}
 				/>
 				<div id="name-error" aria-live="polite" aria-atomic="true">
 						{state?.errors?.name && state.errors.name.map((error: string) => (
@@ -27,6 +28,7 @@ export default function CreateBeerForm() {
 					type="text"
 					name="location"
 					placeholder="Location"
+					defaultValue={state?.brewery?.location ?? ""}
 				/>
 				<div id="location-error" aria-live="polite" aria-atomic="true">
 						{state?.errors?.location && state.errors.location.map((error: string) => (
@@ -36,7 +38,12 @@ export default function CreateBeerForm() {
 			</div>
 			<div>
 				<label htmlFor="date_of_founding">Date of Founding:</label>
-				<input type="text" name="date_of_founding" id="date_of_founding" />
+				<input 
+				type="text" 
+				name="date_of_founding" 
+				id="date_of_founding"
+				defaultValue={state?.brewery?.date_of_founding ?? ""} 
+				/>
 				<div id="color-error" aria-live="polite" aria-atomic="true">
 					{state?.errors?.date_of_founding && state.errors.date_of_founding.map((error: string) => (
 						<p className="mt-2 text-sm text-red-500" key={error}>{error}</p>
