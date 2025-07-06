@@ -1,5 +1,4 @@
 import url from "../utils"
-import { Beer } from "../def"
 
 export const getBeers = async () => {
 	const res = await fetch(url + '/beers')
