@@ -1,5 +1,4 @@
 import url from "../utils"
-import { Brewery } from "../def"
 
 export const getBreweries = async () => {
 	const res = await fetch(url + '/breweries')
@@ -38,7 +37,7 @@ export const createBrewery = async (newBreweryData:FormData, token: string) => {
 	return res.json()
 }
 
-export const updateBrewery = async (id: string, brewery: Brewery, token: string) => {
+export const updateBrewery = async (id: string, updatedBreweryData: FormData, token: string) => {
 	const res = await fetch(`${url}/breweries/${id}`,{
 		method: "PUT",
 		headers: {
@@ -46,7 +45,11 @@ export const updateBrewery = async (id: string, brewery: Brewery, token: string)
 			"Content-Type": "application/json",
 
 		},
-		body: JSON.stringify({brewery})
+		body: JSON.stringify({
+			name: updatedBreweryData.get('name'),
+			location: updatedBreweryData.get('location'),
+			date_of_founding: updatedBreweryData.get('date_of_founding'),
+		})
 	})
 	return res.json()
 }
