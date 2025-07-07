@@ -21,7 +21,7 @@ export const getStore = async (id: string) => {
 	return res.json()
 }
 
-export const createStore = async (store: Store, token: string) => {
+export const createStore = async (formdata: FormData, token: string) => {
 	const res = await fetch(url + '/stores', {
 		method: "POST",
 		headers: {
@@ -29,12 +29,16 @@ export const createStore = async (store: Store, token: string) => {
 			"Content-Type": "application/json",
 
 		},
-		body: JSON.stringify({store})
+		body: JSON.stringify({
+			name: formdata.get('name'),
+			location: formdata.get('location'),
+			date_of_founding: formdata.get('date_of_founding')
+		})
 	})
 	return res.json()
 }
 
-export const updateStore = async (id: string, store: Store, token: string) => {
+export const updateStore = async (id: string, updatedStoreData: FormData, token: string) => {
 	const res = await fetch(`${url}/stores/${id}`,{
 		method: "PUT",
 		headers: {
@@ -42,7 +46,11 @@ export const updateStore = async (id: string, store: Store, token: string) => {
 			"Content-Type": "application/json",
 
 		},
-		body: JSON.stringify({store})
+		body: JSON.stringify({
+			name: updatedStoreData.get('name'),
+			location: updatedStoreData.get('location'),
+			date_of_founding: updatedStoreData.get('date_of_founding')
+		})
 	})
 	return res.json()
 }
