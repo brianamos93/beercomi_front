@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState } from "react"
-import { createServerBrewery, State } from "../actions/brewery"
+import { createServerBrewery, State } from "@/app/actions/brewery"
 
 export default function CreateBeerForm() {
 	const initialState: State = { message: null, errors: {} }

@@ -1,4 +1,4 @@
-import CreateBreweryForm from "@/app/components/CreateBreweryForm";
+import CreateBreweryForm from "@/app/components/brewery/CreateBreweryForm";
 
 
 export default async function newBrewery() {
