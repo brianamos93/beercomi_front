@@ -1,4 +1,4 @@
-import EditBeerForm from "@/app/components/EditBeerForm";
+import EditBeerForm from "@/app/components/beer/EditBeerForm";
 import { getBeer } from "@/app/utils/requests/beerRequests";
 import { getBreweries } from "@/app/utils/requests/breweryRequests";
 import { Metadata } from "next";
