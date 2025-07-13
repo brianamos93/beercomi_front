@@ -1,5 +1,3 @@
-
-
 export default function BeerCard({ entry }) {
 	return (
 	  <div className="border p-4 rounded-lg shadow-md bg-yellow-50">
