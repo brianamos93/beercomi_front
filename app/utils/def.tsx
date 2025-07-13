@@ -10,7 +10,7 @@ export interface Beer {
 	id: string;
 	name: string;
 	brewery_id: string;
-	brewery: string;
+	brewery_name: string;
 	description: string;
 	style: string;
 	ibu: number;
