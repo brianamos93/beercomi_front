@@ -24,34 +24,68 @@ export default function CreateBeerReviewForm({
 					</div>
 			</div>
 			<div>
-			<fieldset className="flex flex-row-reverse justify-center gap-1" defaultValue={state?.review?.rating}>
+			<fieldset className="flex flex-row-reverse justify-center gap-1">
 				
  
-				<input type="radio" name="rating" id="star5" value="5" className="peer hidden" />
+				<input 
+					type="radio" 
+					name="rating" 
+					id="star5" value="5" 
+					className="peer hidden" 
+					defaultChecked={state?.review?.rating === 5}
+				/>
 				<label htmlFor="star5" className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300">
 				★
 				</label>
 
 
-				<input type="radio" name="rating" id="star4" value="4" className="peer hidden" />
+				<input 
+					type="radio" 
+					name="rating" 
+					id="star4" 
+					value="4" 
+					className="peer hidden" 
+					defaultChecked={state?.review?.rating === 4}
+				/>
 				<label htmlFor="star4" className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label">
 				★
 				</label>
 
 
-				<input type="radio" name="rating" id="star3" value="3" className="peer hidden" />
+				<input 
+					type="radio" 
+					name="rating" 
+					id="star3" 
+					value="3" 
+					className="peer hidden" 
+					defaultChecked={state?.review?.rating === 3}
+				/>
 				<label htmlFor="star3" className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label">
 				★
 				</label>
 
 
-				<input type="radio" name="rating" id="star2" value="2" className="peer hidden" />
+				<input 
+					type="radio" 
+					name="rating" 
+					id="star2" 
+					value="2" 
+					className="peer hidden" 
+					defaultChecked={state?.review?.rating === 2}
+				/>
 				<label htmlFor="star2" className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label">
 				★
 				</label>
 
 			
-				<input type="radio" name="rating" id="star1" value="1" className="peer hidden" />
+				<input 
+					type="radio" 
+					name="rating" 
+					id="star1" 
+					value="1" 
+					className="peer hidden" 
+					defaultChecked={state?.review?.rating === 1}
+				/>
 				<label htmlFor="star1" className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label">
 				★
 				</label>
