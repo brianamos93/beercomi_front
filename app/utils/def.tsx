@@ -6,6 +6,15 @@ export interface Entry {
 	date_updated: Date;
 }
 
+export interface Review {
+	id: string;
+	beer_id: string;
+	review: string;
+	rating: number;
+	author: string;
+	author_name: string;
+}
+
 export interface Beer {
 	id: string;
 	name: string;
@@ -17,6 +26,8 @@ export interface Beer {
 	abv: number;
 	color: string;
 	author: string;
+	author_name: string;
+	reviews: Review[];
 	date_created: Date;
 	date_updated: Date
  
