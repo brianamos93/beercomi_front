@@ -1,5 +1,15 @@
 import url from "../utils"
 
+export const getReview = async (id: string) => {
+	const res = await fetch(url + `/reviews/${id}`, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+		}
+	})
+	return res.json()
+}
+
 export const createReview = async (newReviewData: FormData, token: string) => {
 	const res = await fetch(url + '/beers/review', {
 		method: "POST",
@@ -12,6 +22,23 @@ export const createReview = async (newReviewData: FormData, token: string) => {
 			review: newReviewData.get('review'),
 			rating: newReviewData.get('rating'),
 			beer: newReviewData.get('beer'),
+		})
+	})
+	return res.json()
+}
+
+export const editReview = async (id: string, formData: FormData, token: string) => {
+	const res = await fetch(url + `/reviews/${id}`, {
+		method: "PUT",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			id: formData.get('id'),
+			review: formData.get('review'),
+			rating: formData.get('rating'),
+			beer: formData.get('beer'),
 		})
 	})
 	return res.json()
