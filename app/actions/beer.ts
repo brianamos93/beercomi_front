@@ -140,7 +140,14 @@ export async function updateServerBeer(
 			message: 'Missing Fields. Failed to update beer.',
 		}
 	}
-	await updateBeer(id, formData, session)
+	try {
+		await updateBeer(id, formData, session)
+	} catch (error) {
+		return {
+			message: 'Database Error: Failed to update beer.'
+		}	
+		
+	}
 	revalidatePath('/beers')
 	redirect('/beers')
 }
