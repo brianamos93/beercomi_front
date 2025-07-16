@@ -3,7 +3,7 @@
 import { z } from "zod"
 import { decrypt } from "../utils/requests/userRequests"
 import { cookies } from "next/headers"
-import { createReview } from "../utils/requests/reviewRequests"
+import { createReview, editReview } from "../utils/requests/reviewRequests"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -31,7 +31,8 @@ export type State = {
 	message?: string | null;
 	}
 
-const CreateReview = ReviewFormSchema.omit({id: true, date_updated: true, date_created: true, author: true})
+const CreateReview = ReviewFormSchema.omit({ id: true, date_updated: true, date_created: true, author: true })
+const UpdateReview = ReviewFormSchema.omit({ id: true, date_updated: true, date_created: true, author: true })
 
 export async function createServerReview(prevState: State, formData: FormData) {
 	let session = null
@@ -72,4 +73,48 @@ export async function createServerReview(prevState: State, formData: FormData) {
 		}
 		revalidatePath('/beers')
 		redirect(`/beers/${formData.get('beer')}`)
+}
+
+export async function editServerReview(id: string, prevState: State, formData: FormData) {
+	let session = null
+	const cookie = (await cookies()).get('session')?.value
+	if(cookie) {
+		const decryptedCookie = await decrypt(cookie)
+		session = decryptedCookie.token
+	}
+
+	const validatedFields = UpdateReview.safeParse({
+		beer: formData.get('beer'),
+		review: formData.get('review'),
+		rating: formData.get('rating')
+	})
+
+	if (session == undefined) {
+		return {
+			errors: "Not Logged In"
+		}
+	}
+
+	if (!validatedFields.success) {
+		return {
+			review: {
+				review: formData.get('review')?.toString() ?? '',
+				rating: Number(formData.get('rating')) ?? ''
+			},
+			errors: validatedFields.error.flatten().fieldErrors,
+			message: 'Missing Fields. Failed to Edit Review.'
+		}
+	}
+
+	try {
+		await editReview(id, formData, session)
+	} catch (error) {
+		return {
+			message: 'Database Error: Failed to Edit Review.'
+		}
+		
+	}
+	
+	revalidatePath('/beers')
+	redirect(`/beers/${formData.get('beer')}`)
 }

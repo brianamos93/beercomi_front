@@ -38,6 +38,11 @@ export default async function BeerPage({params}:{params: Promise<{ id: string }>
 							<p className="text-gray-700">{review.review}</p>
 							<p className="text-yellow-500">Rating: {review.rating}</p>	
 							<p className="text-gray-500">By: {review.author_name}</p>
+							{review.author_id === currentUserId && (
+								<span><Link
+									href={`/beers/${beer.id}/review/${review.id}/edit`}
+									className="text-blue-600 hover:underline font-semibold">Edit</Link></span>
+							)}
 						</div>))}
 			</main>
 
