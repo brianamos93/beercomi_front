@@ -1,8 +1,9 @@
 import { getBrewery, getBreweriesList } from "@/app/utils/requests/breweryRequests";
-import { Brewery } from "@/app/utils/def";
+import { Beer, Brewery } from "@/app/utils/def";
 import Link from "next/link";
 import { decrypt } from "@/app/utils/requests/userRequests";
 import { cookies } from "next/headers";
+import BeerCard from "@/app/components/beer/BeerCard";
 
 export async function generateStaticParams() {
 	const breweries = await getBreweriesList()
@@ -40,6 +41,13 @@ export default async function BreweryPage({params}:{params: Promise<{ id: string
 							className="text-blue-600 hover:underline font-semibold">Edit</Link></li>
 						)}
 					</ul>
+					<div className="mt-6 flex flex-col space-y-4">
+						{brewery.beers.map((beer: Beer) => (
+							<Link href={`/beers/${beer.id}`} key={beer.id}>
+								<BeerCard entry={beer} key={beer.id} />
+							</Link>
+						))}
+					</div>
 				</div>
 			</main>
 	)	
