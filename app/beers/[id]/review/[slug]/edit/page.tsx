@@ -21,7 +21,9 @@ export default async function editBeerReview(props: { params: Promise<{ id: stri
 	if (!beer || !review) {
 		notFound();
 	}
-
+		if (beer.id !== review.beerid) {
+		notFound();
+	}
 	return (
 		<main>
 			<EditBeerReviewForm beer={beer} review={review} />
