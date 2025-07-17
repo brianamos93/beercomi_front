@@ -4,8 +4,8 @@ import { editServerReview, State } from "@/app/actions/review";
 import { Beer, Review } from "@/app/utils/def";
 import { useActionState } from "react";
 
-export default function CreateBeerReviewForm({
-	beer, review
+export default function EditBeerReviewForm({
+	beer, review,
 }: {beer: Beer;
 	review: Review
 }) {
@@ -18,7 +18,7 @@ export default function CreateBeerReviewForm({
 			<input type="hidden" name="beer" value={beer.id} />
 			<div>
 				<label htmlFor="review">Review:</label>
-				<textarea name="review" id="review" cols="30" rows="10" defaultValue={review.review}></textarea>
+				<textarea name="review" id="review" defaultValue={review.review}></textarea>
 				<div id="review-error" aria-live="polite" aria-atomic="true">
 						{state?.errors?.review && state.errors.review.map((error: string) => (
 							<p className="mt-2 text-sm text-red-500" key={error}>{error}</p>
