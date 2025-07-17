@@ -75,7 +75,11 @@ export async function createServerReview(prevState: State, formData: FormData) {
 		redirect(`/beers/${formData.get('beer')}`)
 }
 
-export async function editServerReview(id: string, prevState: State, formData: FormData) {
+export async function editServerReview(
+	id: string, 
+	prevState: State, 
+	formData: FormData,
+) {
 	let session = null
 	const cookie = (await cookies()).get('session')?.value
 	if(cookie) {
@@ -105,7 +109,6 @@ export async function editServerReview(id: string, prevState: State, formData: F
 			message: 'Missing Fields. Failed to Edit Review.'
 		}
 	}
-
 	try {
 		await editReview(id, formData, session)
 	} catch (error) {
