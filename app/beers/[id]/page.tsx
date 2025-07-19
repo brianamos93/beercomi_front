@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { decrypt } from "@/app/utils/requests/userRequests";
 import Link from "next/link";
 import BeerCardDetailed from "@/app/components/beer/BeerCardDetailed";
+import CreateBeerReviewForm from "@/app/components/beer/review/CreateBeerReviewForm";
 
 export async function generateStaticParams() {
 	const beers = await getBeersList()
@@ -35,17 +36,9 @@ export default async function BeerPage({params}:{params: Promise<{ id: string }>
 						)}
 					<div>
 						<h2 className="text-2xl font-bold mt-6 mb-4">Reviews</h2>
-						{beer.reviews.length === 0 && (
-							<div className="text-center mt-4">
-								<p className="text-gray-500">Be the first to write a review.</p>
-								<Link className="text-yellow-600 hover:underline font-semibold" href={`/beers/${beer.id}/review/new`}>Write Review</Link>
-							</div>
-						)}
-						{beer.reviews.length > 0 && (
-							<div className="text-center mt-4 mb-4">
-								<Link className="text-yellow-600 hover:underline font-semibold" href={`/beers/${beer.id}/review/new`}>Write Review</Link>
-							</div>
-						)}
+						{currentUserId !== null && (
+							<CreateBeerReviewForm beer={beer} />
+							)}
 						{beer.reviews.map((review) => (
 							<div key={review.id} className="border p-4 mb-4">
 								<p className="text-gray-700">{review.review}</p>
