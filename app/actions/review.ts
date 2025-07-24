@@ -15,8 +15,8 @@ const ReviewFormSchema = z.object({
 	rating: z.coerce.number(),
 	date_updated: z.date(),
 	date_created: z.date(),
-	beer: z.string(),
-	author: z.string()
+	beer_id: z.string(),
+	author_id: z.string()
 })
 
 export type State = {
@@ -31,8 +31,8 @@ export type State = {
 	message?: string | null;
 	}
 
-const CreateReview = ReviewFormSchema.omit({ id: true, date_updated: true, date_created: true, author: true })
-const UpdateReview = ReviewFormSchema.omit({ id: true, date_updated: true, date_created: true, author: true })
+const CreateReview = ReviewFormSchema.omit({ id: true, date_updated: true, date_created: true, author_id: true })
+const UpdateReview = ReviewFormSchema.omit({ id: true, date_updated: true, date_created: true, author_id: true })
 
 export async function createServerReview(prevState: State, formData: FormData) {
 	let session = null
@@ -43,7 +43,7 @@ export async function createServerReview(prevState: State, formData: FormData) {
 		}
 
 		const validatedFields = CreateReview.safeParse({
-			beer: formData.get('beer'),
+			beer_id: formData.get('beer_id'),
 			review: formData.get('review'),
 			rating: formData.get('rating')
 		})
@@ -88,7 +88,7 @@ export async function editServerReview(
 	}
 
 	const validatedFields = UpdateReview.safeParse({
-		beer: formData.get('beer'),
+		beer_id: formData.get('beer_id'),
 		review: formData.get('review'),
 		rating: formData.get('rating')
 	})
@@ -119,5 +119,5 @@ export async function editServerReview(
 	}
 	
 	revalidatePath('/beers')
-	redirect(`/beers/${formData.get('beer')}`)
+	redirect(`/beers/${formData.get('beer_id')}`)
 }

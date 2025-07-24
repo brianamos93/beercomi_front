@@ -13,7 +13,7 @@ export default function CreateBeerReviewForm({
 
 	return (
 		<form action={formAction}>
-			<input type="hidden" name="beer" value={beer.id} />
+			<input type="hidden" name="beer_id" value={beer.id} />
 			<div>
 				<label htmlFor="review">Review:</label>
 				<textarea name="review" id="review" cols="30" rows="10" defaultValue={state?.review?.review}></textarea>

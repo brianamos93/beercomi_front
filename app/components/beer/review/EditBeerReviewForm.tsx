@@ -13,9 +13,11 @@ export default function EditBeerReviewForm({
 	const updateReviewWithId = editServerReview.bind(null, review.id)
 	const [state, formAction] = useActionState(updateReviewWithId, initialState)
 
+	const formatedRating = Number(review.rating)
+
 	return (
 		<form action={formAction}>
-			<input type="hidden" name="beer" value={beer.id} />
+			<input type="hidden" name="beer_id" value={review.beer_id} />
 			<div>
 				<label htmlFor="review">Review:</label>
 				<textarea name="review" id="review" defaultValue={review.review}></textarea>
@@ -34,7 +36,7 @@ export default function EditBeerReviewForm({
 					name="rating" 
 					id="star5" value="5" 
 					className="peer hidden" 
-					defaultChecked={review.rating === 5}
+					defaultChecked={formatedRating === 5}
 				/>
 				<label htmlFor="star5" className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300">
 				★
@@ -47,7 +49,7 @@ export default function EditBeerReviewForm({
 					id="star4" 
 					value="4" 
 					className="peer hidden" 
-					defaultChecked={review.rating === 4}
+					defaultChecked={formatedRating === 4}
 				/>
 				<label htmlFor="star4" className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label">
 				★
@@ -60,7 +62,7 @@ export default function EditBeerReviewForm({
 					id="star3" 
 					value="3" 
 					className="peer hidden" 
-					defaultChecked={review.rating === 3}
+					defaultChecked={formatedRating === 3}
 				/>
 				<label htmlFor="star3" className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label">
 				★
@@ -73,7 +75,7 @@ export default function EditBeerReviewForm({
 					id="star2" 
 					value="2" 
 					className="peer hidden" 
-					defaultChecked={review.rating === 2}
+					defaultChecked={formatedRating === 2}
 				/>
 				<label htmlFor="star2" className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label">
 				★
@@ -86,7 +88,7 @@ export default function EditBeerReviewForm({
 					id="star1" 
 					value="1" 
 					className="peer hidden" 
-					defaultChecked={review.rating === 1}
+					defaultChecked={formatedRating === 1}
 				/>
 				<label htmlFor="star1" className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label">
 				★

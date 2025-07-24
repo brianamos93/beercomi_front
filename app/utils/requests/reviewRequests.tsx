@@ -21,7 +21,7 @@ export const createReview = async (newReviewData: FormData, token: string) => {
 		body: JSON.stringify({
 			review: newReviewData.get('review'),
 			rating: newReviewData.get('rating'),
-			beer: newReviewData.get('beer'),
+			beer_id: newReviewData.get('beer_id'),
 		})
 	})
 	return res.json()
@@ -37,7 +37,7 @@ export const editReview = async (id: string, formData: FormData, token: string) 
 		body: JSON.stringify({
 			review: formData.get('review'),
 			rating: formData.get('rating'),
-			beer: formData.get('beer'),
+			beer_id: formData.get('beer_id'),
 		})
 	})
 	return res.json()

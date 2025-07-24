@@ -21,7 +21,7 @@ export default async function editBeerReview(props: { params: Promise<{ id: stri
 	if (!beer || !review) {
 		notFound();
 	}
-		if (beer.id !== review.beerid) {
+		if (beer.id !== review.beer_id) {
 		notFound();
 	}
 	return (
