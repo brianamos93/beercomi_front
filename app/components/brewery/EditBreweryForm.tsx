@@ -1,8 +1,8 @@
 'use client'
 
 import { useActionState } from "react"
-import { State, updateServerBrewery } from "../actions/brewery"
-import { Brewery } from "../utils/def"
+import { State, updateServerBrewery } from "../../actions/brewery"
+import { Brewery } from "../../utils/def"
 
 export default function EditBreweryForm({
 	brewery,

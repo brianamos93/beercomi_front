@@ -33,7 +33,7 @@ export default async function BreweryPage({params}:{params: Promise<{ id: string
 					<ul>
 						<li>{brewery.location}</li>
 						<li>{brewery.date_of_founding}</li>
-						<li>{brewery.authorid}</li>
+						<li>{brewery.author_id}</li>
 						<li>{brewery.display_name}</li>
 						{brewery.authorid === currentUserId && (
 							<li><Link
