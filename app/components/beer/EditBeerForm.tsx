@@ -11,7 +11,7 @@ export default function EditBeerForm({
 }) {
 	const initialState: State = { message: null, errors: {} };
 	const updateBeerwWithId = updateServerBeer.bind(null, beer.id)
-	const [state, formAction] = useActionState(updateBeerwWithId, initialState)
+	const [state, formAction] = useActionState<State, FormData>(updateBeerwWithId, initialState)
 
 	return (
 		<form action={formAction}>
