@@ -1,5 +1,5 @@
 import { getBeer, getBeersList } from "@/app/utils/requests/beerRequests";
-import { Beer } from "@/app/utils/def";
+import { Beer, Review } from "@/app/utils/def";
 import { cookies } from "next/headers";
 import { decrypt } from "@/app/utils/requests/userRequests";
 import Link from "next/link";
@@ -39,7 +39,7 @@ export default async function BeerPage({params}:{params: Promise<{ id: string }>
 						{currentUserId !== null && (
 							<CreateBeerReviewForm beer={beer} />
 							)}
-						{beer.reviews.map((review) => (
+						{beer.reviews.map((review: Review) => (
 							<div key={review.id} className="border p-4 mb-4">
 								<p className="text-gray-700">{review.review}</p>
 								<p className="text-yellow-500">Rating: {review.rating}</p>
