@@ -11,7 +11,7 @@ export interface Review {
 	beer_id: string;
 	review: string;
 	rating: number;
-	author: string;
+	author_id: string;
 	author_name: string;
 }
 
@@ -55,9 +55,10 @@ export interface Store {
 
 export interface User {
 	id: string;
-	username: string;
+	display_name: string;
 	email: string;
 	password: string;
+	profile_img_url: string;
 }
 
 export const SignupFormSchema = z.object({
