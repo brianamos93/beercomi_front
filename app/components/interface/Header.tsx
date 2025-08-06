@@ -3,6 +3,7 @@
 type Props = {
   user: {
     display_name: string;
+    profile_img_url: string;
     isAuthenticated: boolean;
   }
 }
@@ -75,7 +76,9 @@ export default function Header({ user }: Props) {
             <ul className="flex flex-col items-center justify-between min-h-[250px]">
                 {user.isAuthenticated ? (
                   <>
-                    <li className="text-sm text-gray-700">Welcome back! {user.display_name}</li>
+                    <li className="text-sm text-gray-700">
+                      Welcome back! {user.display_name}</li>
+                      
                   </>
                 ) : (
                   <>
