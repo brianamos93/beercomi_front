@@ -7,7 +7,7 @@ import { Brewery } from "../../utils/def"
 export default function CreateBeerForm({ breweries }: { breweries: Brewery[] }) {
 	const initialState: State = { message: null, errors: {} }
 
-	const [state, formAction] = useActionState(createServerBeer, initialState)
+	const [state, formAction] = useActionState<State, FormData>(createServerBeer, initialState)
 
 	return (
 		<form action={formAction}>
