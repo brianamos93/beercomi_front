@@ -1,4 +1,6 @@
-export default function BeerCard({ entry }) {
+import { Beer } from "@/app/utils/def";
+
+export default function BeerCard({ entry }: { entry: Beer }) {
 	return (
 	  <div className="border p-4 rounded-lg shadow-md bg-yellow-50">
 		<h2 className="text-lg font-semibold">{entry.name} 🍺</h2>
