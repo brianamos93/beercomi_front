@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link";
 import TableComponents from "./components/TableComponents"
 import { useEffect, useState } from "react";
 
@@ -61,9 +60,7 @@ export default function Home() {
               const Component = TableComponents[componentKey] || TableComponents.default;
                 return (
                   <li key={entry.id}>
-                  <Link href={`/${entry.table_name}/${entry.id}`}>
                   <Component entry={entryDetails[entry.id] || entry} />
-                  </Link>
                   </li>
             );
           })}
