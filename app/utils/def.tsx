@@ -12,7 +12,9 @@ export interface Review {
 	review: string;
 	rating: number;
 	author_id: string;
-	author_name: string;
+	author_display_name: string;
+	date_created: string;
+	date_updated: string;
 }
 
 export interface Beer {
