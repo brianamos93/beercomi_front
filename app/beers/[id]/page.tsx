@@ -40,10 +40,10 @@ export default async function BeerPage({params}:{params: Promise<{ id: string }>
 							<CreateBeerReviewForm beer={beer} />
 							)}
 						{beer.reviews.map((review: Review) => (
-							<div key={review.id} className="border p-4 mb-4">
+							<div id={review.id} key={review.id} className="border p-4 mb-4">
 								<p className="text-gray-700">{review.review}</p>
 								<p className="text-yellow-500">Rating: {review.rating}</p>
-								<p className="text-gray-500">By: {review.author_name}</p>
+								<p className="text-gray-500">By: {review.author_display_name}</p>
 								{review.author_id === currentUserId && (
 									<span><Link
 										href={`/beers/${beer.id}/review/${review.id}/edit`}
