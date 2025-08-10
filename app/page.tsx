@@ -7,8 +7,14 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
 
-    const [entries, setEntries] = useState([])
-    const [entryDetails, setEntryDetails] = useState({})
+    type Entry = {
+      id: number | string;
+      table_name: string;
+      [key: string]: unknown;
+    };
+
+    const [entries, setEntries] = useState<Entry[]>([])
+    const [entryDetails, setEntryDetails] = useState<Record<string | number, unknown>>({})
 
     useEffect(() => {
       async function fetchData() {
@@ -22,7 +28,11 @@ export default function Home() {
     useEffect(() => {
       entries.forEach((entry) => {
         if (!entryDetails[entry.id]) {
-          fetch(`http://localhost:3005/${entry.table_name}/${entry.id}`)
+          let url = `http://localhost:3005/${entry.table_name}/${entry.id}`
+          if (entry.table_name == 'beer_reviews') {
+            url = `http://localhost:3005/beers/review/${entry.id}`
+          }
+          fetch(url)
           .then((res) => res.json())
           .then((data) => {
             setEntryDetails((prev) => ({ ...prev, [entry.id]: data}))
@@ -46,7 +56,9 @@ export default function Home() {
             ) : (
             <ul className="space-y-4">
                 {entries.map((entry) => {
-              const Component = TableComponents[entry.table_name] || TableComponents.default;
+              type TableComponentKey = keyof typeof TableComponents;
+              const componentKey = entry.table_name as TableComponentKey;
+              const Component = TableComponents[componentKey] || TableComponents.default;
                 return (
                   <li key={entry.id}>
                   <Link href={`/${entry.table_name}/${entry.id}`}>
