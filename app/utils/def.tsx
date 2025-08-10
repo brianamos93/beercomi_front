@@ -15,6 +15,8 @@ export interface Review {
 	author_display_name: string;
 	date_created: string;
 	date_updated: string;
+	brewery_name: string;
+	beer_name: string;
 }
 
 export interface Beer {
