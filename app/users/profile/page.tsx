@@ -1,5 +1,5 @@
 import { decrypt, getOneUser } from "@/app/utils/requests/userRequests"
-import { PlusIcon } from "@heroicons/react/24/solid"
+import { MapPinIcon, PlusIcon } from "@heroicons/react/24/solid"
 import { cookies } from "next/headers"
 import Image from 'next/image'
 import Link from "next/link"
@@ -18,16 +18,16 @@ export default async function Profile() {
 	const pictureurl = user.profile_img_url ? `http://localhost:3005/uploads/${user.profile_img_url}` : "http://localhost:3005/uploads/defaultavatar.png";
 	const altText = user.profile_img_url ? `${user.display_name}'s avatar` : "Default Avatar";
 	return (
-		<main className="flex flex-col">
+		<main className="flex flex-col items-center">
 			<div className="flex flex-row justify-center p-4">
-				<div className="relative">
+				<div className="relative inline-block max-w-[100px] max-h-[100px]">
 					<div>
 						<Image
 						src={pictureurl}
 						alt={altText}
-						height={100}
-						width={100}
-						className="rounded-full max-w-full h-auto"
+						height={200}
+						width={200}
+						className="rounded-full w-full h-auto block object-cover"
 						/>
 					</div>
 					<div className="absolute right-0 bottom-0">
@@ -37,9 +37,15 @@ export default async function Profile() {
 					</div>
 				</div>
 				<div className="p-4">
-					<h2 className="text-3xl">{user.display_name}</h2>
-					<p className="">Osaka, Japan</p>
+					<h2 className="text-2xl">{user.display_name}</h2>
+					<div className="flex flex-row">
+						<MapPinIcon className="size-5 text-blue-600"/>
+						<p className="text-base">Osaka, Japan</p>
+					</div>
 				</div>
+			</div>
+			<div className="max-w-[500px] p-4">
+				<p className="text-center text-sm">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.</p>
 			</div>
 		</main>
 	)
