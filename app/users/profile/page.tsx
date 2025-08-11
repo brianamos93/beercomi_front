@@ -1,4 +1,5 @@
-import { decrypt, getOneUser } from "@/app/utils/requests/userRequests"
+import TableComponents from "@/app/components/TableComponents"
+import { decrypt, getOneUser, getRecentActivityOneUser } from "@/app/utils/requests/userRequests"
 import { MapPinIcon, PlusIcon } from "@heroicons/react/24/solid"
 import { cookies } from "next/headers"
 import Image from 'next/image'
@@ -17,8 +18,26 @@ export default async function Profile() {
 	const user = await getOneUser(currentUserId)
 	const pictureurl = user.profile_img_url ? `http://localhost:3005/uploads/${user.profile_img_url}` : "http://localhost:3005/uploads/defaultavatar.png";
 	const altText = user.profile_img_url ? `${user.display_name}'s avatar` : "Default Avatar";
+	const recentActivity = await getRecentActivityOneUser(currentUserId)
+
+    // Fetch all entry data in parallel
+    const entriesArr = await Promise.all(
+        recentActivity.map(async (entry) => {
+            let url = `http://localhost:3005/${entry.table_name}/${entry.id}`
+            if (entry.table_name == 'beer_reviews') {
+                url = `http://localhost:3005/beers/review/${entry.id}`
+            }
+            const res = await fetch(url)
+            const data = await res.json()
+            return { id: entry.id, data }
+        })
+    )
+    const entries: Record<string, any> = {}
+    entriesArr.forEach(({ id, data }) => {
+        entries[id] = data
+    })
 	return (
-		<main className="flex flex-col items-center">
+		<main className="flex flex-col justify-center max-w-2xl mx-auto p-4">
 			<div className="flex flex-row justify-center p-4">
 				<div className="relative inline-block max-w-[100px] max-h-[100px]">
 					<div>
@@ -44,8 +63,22 @@ export default async function Profile() {
 					</div>
 				</div>
 			</div>
-			<div className="max-w-[500px] p-4">
+			<div className="max-w-[500px] max-w-2xl mx-auto p-4">
 				<p className="text-center text-sm">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient.</p>
+			</div>
+			<div>
+				<ul className="space-y-4">
+				{recentActivity.map((entry) => {
+					type TableComponentKey = keyof typeof TableComponents;
+              		const componentKey = entry.table_name as TableComponentKey;
+              		const Component = TableComponents[componentKey] || TableComponents.default;
+                		return (
+                  			<li className="" key={entry.id}>
+                  			<Component entry={entries[entry.id]}/>
+                  			</li>
+						)
+				})}
+				</ul>
 			</div>
 		</main>
 	)

@@ -74,3 +74,8 @@ export async function getSession() {
 		return null
 	}
 }
+
+export const getRecentActivityOneUser = async (userId: string) => {
+	const res = await fetch(url + `/user/${userId}/recentactivity`)
+	return res.json()
+}
