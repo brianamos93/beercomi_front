@@ -1,8 +1,8 @@
 import { getStore, getStoresList } from "@/app/utils/requests/storeRequests";
 import { Store } from "@/app/utils/def";
-import { decrypt } from "@/app/utils/requests/userRequests";
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { getLoggedInUsersData } from "@/app/utils/requests/userRequests";
 
 export async function generateStaticParams() {
 	const stores = await getStoresList()
@@ -14,15 +14,12 @@ export async function generateStaticParams() {
 
 export default async function StorePage({params}:{params: Promise<{ id: string }> 
 }) {
-	const session = await (await cookies()).get('session')?.value
-	let currentUserId = null
-		if(session) {
-			const decryptedCookie = await decrypt(session)
-			currentUserId = decryptedCookie.userID
-		} else {
-			currentUserId = null
-	
-		}
+	const token = await (await cookies()).get('token')?.value
+	let userId = null
+	if(token) {
+		const userData = await getLoggedInUsersData(token)
+		userId = userData.id
+	}
 	const store = await getStore((await params).id)
 	return (
 			<main>
@@ -33,7 +30,7 @@ export default async function StorePage({params}:{params: Promise<{ id: string }
 						<li>{store.date_of_founding}</li>
 						<li>{store.owner}</li>
 						<li>{new Date(store.date_updated).toLocaleString()}</li>
-						{store.author === currentUserId && (
+						{store.author === userId && (
 							<li><Link
 							href={`/beers/${store.id}/edit`}
 							className="text-blue-600 hover:underline font-semibold">Edit</Link></li>
