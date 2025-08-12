@@ -19,9 +19,7 @@ export default async function beers() {
 					<ul className="space-y-4">
 					{data.map((beer: Beer) => (
 						<li key={beer.id}>
-							<Link href={`/beers/${beer.id}`}>
 							<BeerCard entry={beer} />
-							</Link>
 						</li>
 					))}
 					</ul>
