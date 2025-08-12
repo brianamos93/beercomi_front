@@ -4,6 +4,7 @@ import Link from "next/link";
 
 export default function BreweryCard({ entry }: { entry: Brewery}) {
 	return (
+		<>
 		<Link
 		href={`/breweries/${entry.id}`}
 		>
@@ -14,5 +15,6 @@ export default function BreweryCard({ entry }: { entry: Brewery}) {
 				<p><strong>Updated:</strong> {new Date(entry.date_updated).toLocaleString()}</p>
 			</div>
 	  </Link>
+	  </>
 	);
   }

@@ -3,6 +3,7 @@ import Link from "next/link";
 
 export default function BeerCard({ entry }: { entry: Beer }) {
 	return (
+		<>
 		<Link
 		href={`/beers/${entry.id}`}
 		>
@@ -14,5 +15,6 @@ export default function BeerCard({ entry }: { entry: Beer }) {
 				<p><strong>Updated:</strong> {new Date(entry.date_updated).toLocaleString()}</p>
 	  		</div>
 	  </Link>
+	  </>
 	);
   }
