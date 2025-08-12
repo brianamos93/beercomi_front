@@ -2,7 +2,6 @@
 
 import { z } from "zod"
 import { cookies } from "next/headers";
-import { decrypt } from "../utils/requests/userRequests";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createStore, updateStore } from "../utils/requests/storeRequests";
@@ -36,19 +35,15 @@ const CreateStore = StoreFormSchema.omit({ id: true, date_updated: true, date_cr
 const UpdateStore = StoreFormSchema.omit({ id: true, date_updated: true, date_created: true})
 
 export async function createServerStore(prevState: State, formData: FormData) {
-		let session = null
-		const cookie = (await cookies()).get('session')?.value
-		if(cookie) {
-			const decryptedCookie = await decrypt(cookie)
-			session = decryptedCookie.token
-		}
+		const token = (await cookies()).get('session')?.value
+
 		const validatedFields = CreateStore.safeParse({
 			name: formData.get('name'),
 			location: formData.get('location'),
 			date_of_founding: formData.get('date_of_founding')
 		})
 
-		if (session == undefined) {
+		if (token == undefined) {
 			return {
 				errors: "Not Logged In"
 			}
@@ -67,7 +62,7 @@ export async function createServerStore(prevState: State, formData: FormData) {
 		}
 
 		try {
-			await createStore(formData, session)
+			await createStore(formData, token)
 		} catch (error) {
 			return {
 				message: 'Datebase Error: Failed to Create Store.'
@@ -83,12 +78,8 @@ export async function updateServerStore(
 	prevState: State,
 	formData: FormData,
 ) {
-	let session = null
-	const cookie = (await cookies()).get('session')?.value
-	if(cookie) {
-		const decryptedCookie = await decrypt(cookie)
-		session = decryptedCookie.token
-	}
+
+	const token = (await cookies()).get('session')?.value
 
 	const validatedFields = UpdateStore.safeParse({
 		name: formData.get('name'),
@@ -96,7 +87,7 @@ export async function updateServerStore(
 		date_of_founding: formData.get('date_of_founding')
 	})
 
-	if (session == undefined) {
+	if (token == undefined) {
 		return {
 			errors: "Not Logged In"
 		}
@@ -108,7 +99,7 @@ export async function updateServerStore(
 			message: 'Missing Fields. Failed to update store.',
 		}
 	}
-	await updateStore(id, formData, session)
+	await updateStore(id, formData, token)
 	revalidatePath('/stores')
 	redirect('/stores')
 }

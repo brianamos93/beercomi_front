@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 import { createBeer, updateBeer } from "../utils//requests/beerRequests";
 import { z } from 'zod'
 import { redirect } from "next/navigation";
-import { decrypt } from "../utils/requests/userRequests";
 
 const BeerFormSchema = z.object({
 	id: z.string(),
@@ -51,12 +50,7 @@ const UpdateBeer = BeerFormSchema.omit({ id: true, date_updated: true, date_crea
 
 export async function createServerBeer(prevState: State, formData: FormData) {
 
-	let session = null
-	const cookie = (await cookies()).get('session')?.value
-	if(cookie) {
-		const decryptedCookie = await decrypt(cookie)
-		session = decryptedCookie.token
-	}
+	const token = (await cookies()).get('token')?.value
 
 	const validatedFields = CreateBeer.safeParse({
 		name: formData.get('name'),
@@ -69,7 +63,7 @@ export async function createServerBeer(prevState: State, formData: FormData) {
 	})
 
 
-	if (session == undefined) {
+	if (token == undefined) {
 		return {
 			errors: "Not Logged In"
 		}
@@ -92,7 +86,7 @@ export async function createServerBeer(prevState: State, formData: FormData) {
 	}
 
 	try {
-		await createBeer(formData, session)
+		await createBeer(formData, token)
 	} catch (error) {
 		return {
 			message: 'Database Error: Failed to Create Beer.'
@@ -110,12 +104,8 @@ export async function updateServerBeer(
 	formData: FormData,
 ) {
 
-	let session = null
-	const cookie = (await cookies()).get('session')?.value
-	if(cookie) {
-		const decryptedCookie = await decrypt(cookie)
-		session = decryptedCookie.token
-	}
+	const token = (await cookies()).get('session')?.value
+
 	
 	const validatedFields = UpdateBeer.safeParse({
 		name: formData.get('name'),
@@ -128,7 +118,7 @@ export async function updateServerBeer(
 	})
 
 
-	if (session == undefined) {
+	if (token == undefined) {
 		return {
 			errors: "Not Logged In"
 		}
@@ -141,7 +131,7 @@ export async function updateServerBeer(
 		}
 	}
 	try {
-		await updateBeer(id, formData, session)
+		await updateBeer(id, formData, token)
 	} catch (error) {
 		return {
 			message: 'Database Error: Failed to update beer.'

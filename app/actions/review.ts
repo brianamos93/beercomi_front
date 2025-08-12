@@ -1,7 +1,6 @@
 'use server'
 
 import { z } from "zod"
-import { decrypt } from "../utils/requests/userRequests"
 import { cookies } from "next/headers"
 import { createReview, editReview } from "../utils/requests/reviewRequests"
 import { revalidatePath } from "next/cache"
@@ -35,12 +34,7 @@ const CreateReview = ReviewFormSchema.omit({ id: true, date_updated: true, date_
 const UpdateReview = ReviewFormSchema.omit({ id: true, date_updated: true, date_created: true, author_id: true })
 
 export async function createServerReview(prevState: State, formData: FormData) {
-	let session = null
-		const cookie = (await cookies()).get('session')?.value
-		if(cookie) {
-			const decryptedCookie = await decrypt(cookie)
-			session = decryptedCookie.token
-		}
+		const token = (await cookies()).get('token')?.value
 
 		const validatedFields = CreateReview.safeParse({
 			beer_id: formData.get('beer_id'),
@@ -48,7 +42,7 @@ export async function createServerReview(prevState: State, formData: FormData) {
 			rating: formData.get('rating')
 		})
 
-		if (session == undefined) {
+		if (token == undefined) {
 			return {
 				errors: "Not Logged In"
 			}
@@ -65,7 +59,7 @@ export async function createServerReview(prevState: State, formData: FormData) {
 			}
 		}
 		try {
-			await createReview(formData, session)
+			await createReview(formData, token)
 		} catch (error) {
 			return {
 				message: 'Database Error: Failed to Create Review.'
@@ -80,12 +74,9 @@ export async function editServerReview(
 	prevState: State, 
 	formData: FormData,
 ) {
-	let session = null
-	const cookie = (await cookies()).get('session')?.value
-	if(cookie) {
-		const decryptedCookie = await decrypt(cookie)
-		session = decryptedCookie.token
-	}
+
+	const token = (await cookies()).get('token')?.value
+
 
 	const validatedFields = UpdateReview.safeParse({
 		beer_id: formData.get('beer_id'),
@@ -93,7 +84,7 @@ export async function editServerReview(
 		rating: formData.get('rating')
 	})
 
-	if (session == undefined) {
+	if (token == undefined) {
 		return {
 			errors: "Not Logged In"
 		}
@@ -110,7 +101,7 @@ export async function editServerReview(
 		}
 	}
 	try {
-		await editReview(id, formData, session)
+		await editReview(id, formData, token)
 	} catch (error) {
 		return {
 			message: 'Database Error: Failed to Edit Review.'

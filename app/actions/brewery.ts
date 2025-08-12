@@ -2,7 +2,6 @@
 
 import { z } from "zod"
 import { cookies } from "next/headers";
-import { decrypt } from "../utils/requests/userRequests";
 import { createBrewery, updateBrewery } from "../utils/requests/breweryRequests";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -36,19 +35,15 @@ const CreateBrewery = BreweryFormSchema.omit({ id: true, date_updated: true, dat
 const UpdateBrewery = BreweryFormSchema.omit({ id: true, date_updated: true, date_created: true})
 
 export async function createServerBrewery(prevState: State, formData: FormData) {
-		let session = null
-		const cookie = (await cookies()).get('session')?.value
-		if(cookie) {
-			const decryptedCookie = await decrypt(cookie)
-			session = decryptedCookie.token
-		}
+		const token = (await cookies()).get('session')?.value
+
 		const validatedFields = CreateBrewery.safeParse({
 			name: formData.get('name'),
 			location: formData.get('location'),
 			date_of_founding: formData.get('date_of_founding')
 		})
 
-		if (session == undefined) {
+		if (token == undefined) {
 			return {
 				errors: "Not Logged In"
 			}
@@ -67,7 +62,7 @@ export async function createServerBrewery(prevState: State, formData: FormData) 
 		}
 
 		try {
-			await createBrewery(formData, session)
+			await createBrewery(formData, token)
 		} catch (error) {
 			return {
 				message: 'Datebase Error: Failed to Create Brewery.'

@@ -2,13 +2,9 @@
 
 import { cookies } from "next/headers";
 import { z } from "zod"
-import { decrypt } from "../utils/requests/userRequests";
 import { uploadAvatar } from "../utils/requests/profileRequests";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 const AvatarFormSchema = z.object({
 	id: z.string(),
@@ -31,17 +27,13 @@ export type State = {
 const UploadAvatar = AvatarFormSchema.omit({ id: true })
 
 export async function uploadAvatarServer(prevState: State, formData: FormData) {
-	let session = null
-		const cookie = (await cookies()).get('session')?.value
-		if(cookie) {
-			const decryptedCookie = await decrypt(cookie)
-			session = decryptedCookie.token
-		}
+		const token = (await cookies()).get('token')?.value
+
 		const validatedFields = UploadAvatar.safeParse({
 			file: formData.get('avatar')
 		})
 
-		if (session == undefined) {
+		if (token == undefined) {
 			return {
 				errors: "Not Logged In"
 			}
@@ -57,7 +49,7 @@ export async function uploadAvatarServer(prevState: State, formData: FormData) {
 			}
 		}
 		try {
-			await uploadAvatar(formData, session)
+			await uploadAvatar(formData, token)
 		} catch (error) {
 			return {
 				message: 'Database Error: Failed to Uplaod Avatar.'
