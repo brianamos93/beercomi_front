@@ -21,7 +21,6 @@ export default async function BeerPage({params}:{params: Promise<{ id: string }>
 	if(token) {
 		const userData = await getLoggedInUsersData(token)
 		userId = userData.id
-		console.log(userId)
 	}
 
 	const beer = await getBeer((await params).id)
