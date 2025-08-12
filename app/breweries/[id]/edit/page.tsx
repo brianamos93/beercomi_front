@@ -1,4 +1,4 @@
-import EditBreweryForm from "@/app/components/EditBreweryForm";
+import EditBreweryForm from "@/app/components/brewery/EditBreweryForm";
 import { getBrewery } from "@/app/utils/requests/breweryRequests";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
