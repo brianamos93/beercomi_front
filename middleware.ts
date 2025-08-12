@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { decrypt } from './app/utils/requests/userRequests'
 import { getBeer } from './app/utils/requests/beerRequests'
+import { getLoggedInUsersData } from './app/utils/requests/userRequests'
  
 // 1. Specify protected and public routes
 const protectedRoutePatterns = [
@@ -17,27 +17,25 @@ export default async function middleware(req: NextRequest) {
   const isProtectedRoute = protectedRoutePatterns.some(pattern => pattern.test(path))
   const isPublicRoute = publicRoutes.includes(path)
  
-  // 3. Decrypt the session from the cookie
-  let session = null
-  const cookie = req.cookies.get('session')?.value
-  if (cookie) {
-    session = await decrypt(cookie)
+  // 3. Get the token
+  const token = req.cookies.get('token')?.value
+  let user = null
+  if (token) {
+    user = await getLoggedInUsersData(token)
   }
- 
+  
   // 4. Redirect to /login if the user is not authenticated
-  if (isProtectedRoute && !session) {
+  if (isProtectedRoute && !token) {
     return NextResponse.redirect(new URL('/users/login', req.nextUrl))
   }
 
   const match = req.nextUrl.pathname.match(/^\/beers\/([^\/]+)\/edit$/)
-  if (match && session) {
+  if (match && token) {
     const beerId = match[1]
 
     try {
       const beer = await getBeer(beerId)
-      console.log(session.userID)
-      console.log(beer.author)
-      if (beer.author !== session.userID) {
+      if (beer.author !== user.id) {
         return NextResponse.redirect(new URL('/unauthorized', req.nextUrl)) // Or show 403 page
       }
     } catch (error) {
@@ -48,7 +46,7 @@ export default async function middleware(req: NextRequest) {
   // 5. Redirect to /dashboard if the user is authenticated
   if (
     isPublicRoute &&
-    session?.userId &&
+    user?.id &&
     !req.nextUrl.pathname.startsWith('/feed')
   ) {
     return NextResponse.redirect(new URL('/feed', req.nextUrl))
