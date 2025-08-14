@@ -18,7 +18,8 @@ const BeerFormSchema = z.object({
 	ibu: z.coerce.number(),
 	color: z.string(),
 	date_updated: z.date(),
-	date_created: z.date()
+	date_created: z.date(),
+	cover_image: z.any()
 	
 })
 
@@ -31,6 +32,7 @@ export type State = {
 		description?: string | null;
 		ibu?: number | null;
 		color?: string | null;
+		cover_image?: File | null;
 	}
   errors?: {
     name?: string[];
@@ -40,6 +42,7 @@ export type State = {
 	description?: string[];
 	ibu?: string[];
 	color?: string[];
+	cover_image?: string[];
   };
   message?: string | null;
 };
@@ -78,7 +81,8 @@ export async function createServerBeer(prevState: State, formData: FormData) {
 			brewery_id: formData.get('brewery_id')?.toString() ?? '',
 			description: formData.get('description')?.toString() ?? '',
 			ibu: Number(formData.get('ibu')),
-			color: formData.get('color')?.toString() ?? ''
+			color: formData.get('color')?.toString() ?? '',
+			cover_iamge: formData.get('cover_image')?.toString() ?? ''
 		},
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: 'Missing Fields. Failed to Create Beer.',
