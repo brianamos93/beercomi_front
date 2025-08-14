@@ -22,22 +22,14 @@ export const getBeer = async (id: string) => {
 }
 
 export const createBeer = async (newBeerData: FormData, token: string) => {
+	console.log(newBeerData)
 	const res = await fetch(url + '/beers', {
 		method: "POST",
 		headers: {
 			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
 
 		},
-		body: JSON.stringify({
-			name: newBeerData.get('name'),
-			style: newBeerData.get('style'),
-			abv: newBeerData.get('abv'),
-			brewery_id: newBeerData.get('brewery_id'),
-			description: newBeerData.get('description'),
-			ibu: newBeerData.get('ibu'),
-			color: newBeerData.get('color'),
-		})
+		body: newBeerData
 	})
 	return res.json()
 }
