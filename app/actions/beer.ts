@@ -62,7 +62,8 @@ export async function createServerBeer(prevState: State, formData: FormData) {
 		brewery_id: formData.get('brewery_id'),
 		description: formData.get('description'),
 		ibu: formData.get('ibu'),
-		color: formData.get('color')
+		color: formData.get('color'),
+		cover_iamge: formData.get('cover_image')
 	})
 
 
@@ -82,7 +83,7 @@ export async function createServerBeer(prevState: State, formData: FormData) {
 			description: formData.get('description')?.toString() ?? '',
 			ibu: Number(formData.get('ibu')),
 			color: formData.get('color')?.toString() ?? '',
-			cover_iamge: formData.get('cover_image')?.toString() ?? ''
+			cover_image: formData.get('cover_image')?.toString() ?? ''
 		},
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: 'Missing Fields. Failed to Create Beer.',
@@ -118,7 +119,8 @@ export async function updateServerBeer(
 		brewery_id: formData.get('brewery_id'),
 		description: formData.get('description'),
 		ibu: formData.get('ibu'),
-		color: formData.get('color')
+		color: formData.get('color'),
+		cover_image: formData.get('cover_image')
 	})
 
 
