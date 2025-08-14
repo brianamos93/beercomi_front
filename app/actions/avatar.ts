@@ -16,7 +16,7 @@ const AvatarFormSchema = z.object({
 
 export type State = {
 	avatar?:{
-		file?: Blob | null;
+		file?: File | null;
 	}
 	errors?: {
 		file?: string[]
