@@ -43,15 +43,6 @@ export default async function middleware(req: NextRequest) {
     }
   }
  
-  // 5. Redirect to /dashboard if the user is authenticated
-  if (
-    isPublicRoute &&
-    user?.id &&
-    !req.nextUrl.pathname.startsWith('/feed')
-  ) {
-    return NextResponse.redirect(new URL('/feed', req.nextUrl))
-  }
- 
   return NextResponse.next()
 }
  

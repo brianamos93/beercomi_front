@@ -35,7 +35,7 @@ const CreateBrewery = BreweryFormSchema.omit({ id: true, date_updated: true, dat
 const UpdateBrewery = BreweryFormSchema.omit({ id: true, date_updated: true, date_created: true})
 
 export async function createServerBrewery(prevState: State, formData: FormData) {
-		const token = (await cookies()).get('session')?.value
+		const token = (await cookies()).get('token')?.value
 
 		const validatedFields = CreateBrewery.safeParse({
 			name: formData.get('name'),
@@ -78,12 +78,9 @@ export async function updateServerBrewery(
 	prevState: State,
 	formData: FormData,
 ) {
-	let session = null
-	const cookie = (await cookies()).get('session')?.value
-	if(cookie) {
-		const decryptedCookie = await decrypt(cookie)
-		session = decryptedCookie.token
-	}
+
+	const token = (await cookies()).get('token')?.value
+
 
 	const validatedFields = UpdateBrewery.safeParse({
 		name: formData.get('name'),
@@ -91,7 +88,7 @@ export async function updateServerBrewery(
 		date_of_founding: formData.get('date_of_founding')
 	})
 
-	if (session == undefined) {
+	if (token == undefined) {
 		return {
 			errors: "Not Logged In"
 		}
@@ -103,7 +100,7 @@ export async function updateServerBrewery(
 			message: 'Missing Fields. Failed to update brewery.',
 		}
 	}
-	await updateBrewery(id, formData, session)
+	await updateBrewery(id, formData, token)
 	revalidatePath('/breweries')
 	redirect('/breweries')
 }

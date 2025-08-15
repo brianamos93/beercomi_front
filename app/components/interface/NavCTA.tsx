@@ -6,19 +6,22 @@ export default async function NavCTA() {
 
 	let displayName = null
 	let profile_img_url = null
-		//const token = (await cookies()).get('session')?.value;
-		const token = (await cookies()).get('token')?.value
+	let auth = false
+		const cookieStore = await cookies()
+		const token = cookieStore.get('token')?.value
 		if(token) {
 			const userData = await getLoggedInUsersData(token)
-		
+			console.log("userData:", userData)
+					
 			displayName = userData.display_name
 			profile_img_url = userData.profile_img_url
+			auth = true
 		}
 	
 	if (!token) {
 		const user = {
-			display_name: "Guest",
-			profile_img_url: "./public/defaultavatar.png",
+			display_name: null,
+			profile_img_url: null,
 			isAuthenticated: false,
 		}
 		return <Header user={user} />
@@ -26,7 +29,7 @@ export default async function NavCTA() {
 	const user = {
 		display_name: displayName,
 		profile_img_url: profile_img_url,
-		isAuthenticated: Boolean(token),
+		isAuthenticated: auth,
 	}
 
 	return <Header user={user} />
