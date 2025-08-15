@@ -21,6 +21,7 @@ export interface Review {
 
 export interface Beer {
 	id: string;
+	cover_iamge: string;
 	name: string;
 	brewery_id: string;
 	brewery_name: string;
