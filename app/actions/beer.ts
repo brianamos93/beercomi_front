@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers";
-import { createBeer, getBeer, updateBeer } from "../utils//requests/beerRequests";
+import { createBeer, updateBeer } from "../utils//requests/beerRequests";
 import { z } from 'zod'
 import { redirect } from "next/navigation";
 
