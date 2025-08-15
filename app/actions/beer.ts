@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers";
-import { createBeer, updateBeer } from "../utils//requests/beerRequests";
+import { createBeer, getBeer, updateBeer } from "../utils//requests/beerRequests";
 import { z } from 'zod'
 import { redirect } from "next/navigation";
 
@@ -89,7 +89,6 @@ export async function createServerBeer(prevState: State, formData: FormData) {
 			message: 'Missing Fields. Failed to Create Beer.',
 		}
 	}
-
 	try {
 		await createBeer(formData, token)
 	} catch (error) {
@@ -136,6 +135,7 @@ export async function updateServerBeer(
 			message: 'Missing Fields. Failed to update beer.',
 		}
 	}
+
 	try {
 		await updateBeer(id, formData, token)
 	} catch (error) {

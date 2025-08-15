@@ -39,18 +39,8 @@ export const updateBeer = async (id: string, updatedBeerData: FormData, token: s
 		method: "PUT",
 		headers: {
 			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
-
 		},
-		body: JSON.stringify({
-			name: updatedBeerData.get('name'),
-			style: updatedBeerData.get('style'),
-			abv: updatedBeerData.get('abv'),
-			brewery_id: updatedBeerData.get('brewery_id'),
-			description: updatedBeerData.get('description'),
-			ibu: updatedBeerData.get('ibu'),
-			color: updatedBeerData.get('color'),
-		})
+		body: updatedBeerData
 	})
 	return res.json()
 }
