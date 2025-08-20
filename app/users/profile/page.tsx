@@ -1,24 +1,20 @@
 import TableComponents from "@/app/components/TableComponents"
-import { decrypt, getOneUser, getRecentActivityOneUser } from "@/app/utils/requests/userRequests"
+import { getLoggedInUsersData, getRecentActivityOneUser } from "@/app/utils/requests/userRequests"
 import { MapPinIcon, PlusIcon } from "@heroicons/react/24/solid"
 import { cookies } from "next/headers"
 import Image from 'next/image'
 import Link from "next/link"
 
 export default async function Profile() {
-	const session = await (await cookies()).get('session')?.value
-	let currentUserId = null
-	if(session) {
-		const decryptedCookie = await decrypt(session)
-		currentUserId = decryptedCookie.userID
-	} else {
-		currentUserId = null
-
+	const userData = await (await cookies()).get('userData')?.value
+	let userId
+	if(userData) {
+		userId = await getLoggedInUsersData(userData.id)
 	}
-	const user = await getOneUser(currentUserId)
+
 	const pictureurl = user.profile_img_url ? `http://localhost:3005/uploads/${user.profile_img_url}` : "http://localhost:3005/uploads/defaultavatar.png";
 	const altText = user.profile_img_url ? `${user.display_name}'s avatar` : "Default Avatar";
-	const recentActivity = await getRecentActivityOneUser(currentUserId)
+	const recentActivity = await getRecentActivityOneUser(userId)
 
     // Fetch all entry data in parallel
     const entriesArr = await Promise.all(
