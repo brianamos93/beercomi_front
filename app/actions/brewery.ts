@@ -14,7 +14,8 @@ const BreweryFormSchema = z.object({
 	location: z.string().trim().min(5, { message: 'Brewery location must be at least 5 characters long.'}),
 	date_of_founding: z.string().trim().min(4, { message: 'The date of founding must be at least 4 character long.'}),
 	date_updated: z.date(),
-	date_created: z.date()
+	date_created: z.date(),
+	cover_image: z.any()
 })
 
 export type State = {
@@ -22,11 +23,13 @@ export type State = {
 		name?: string | null;
 		location?: string | null;
 		date_of_founding: string | null;
+		cover_image: File | null;
 	};
 	errors?: {
 		name?: string[];
 		location?: string[];
 		date_of_founding: string[];
+		cover_iamge: string[];
 	};
 	message?: string | null;
 }
@@ -40,7 +43,8 @@ export async function createServerBrewery(prevState: State, formData: FormData) 
 		const validatedFields = CreateBrewery.safeParse({
 			name: formData.get('name'),
 			location: formData.get('location'),
-			date_of_founding: formData.get('date_of_founding')
+			date_of_founding: formData.get('date_of_founding'),
+			cover_image: formData.get('cover_image')
 		})
 
 		if (token == undefined) {
@@ -55,6 +59,7 @@ export async function createServerBrewery(prevState: State, formData: FormData) 
 					name: formData.get('name')?.toString() ?? '',
 					location: formData.get('location')?.toString() ?? '',
 					date_of_founding: formData.get('date_of_founding')?.toString() ?? '',
+					cover_image: formData.get('cover_image')?.toString() ?? '',
 				},
 				errors: validatedFields.error.flatten().fieldErrors,
 				message: 'Missing Fields. Failed to Create Brewery.'
@@ -85,7 +90,8 @@ export async function updateServerBrewery(
 	const validatedFields = UpdateBrewery.safeParse({
 		name: formData.get('name'),
 		location: formData.get('location'),
-		date_of_founding: formData.get('date_of_founding')
+		date_of_founding: formData.get('date_of_founding'),
+		cover_image: formData.get('cover_image'),
 	})
 
 	if (token == undefined) {

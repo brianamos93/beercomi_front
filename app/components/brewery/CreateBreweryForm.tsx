@@ -11,6 +11,14 @@ export default function CreateBeerForm() {
 	return (
 		<form action={formAction}>
 			<div>
+				<input type="file" name="cover_image" id="cover_image" />
+				<div id="cover_image-error" aria-live="polite" aria-atomic="true">
+					{state?.errors?.cover_image && state.errors.cover_image.map((error: string) => (
+					<p className="mt-2 text-sm text-red-500" key={error}>{error}</p>
+					))}
+					</div>
+				</div>
+			<div>
 				<input
 					type="text"
 					name="name"
