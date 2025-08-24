@@ -53,18 +53,18 @@ export default function Home() {
               {entries.length === 0 ? (
               <p className="text-gray-500">Loading...</p>
             ) : (
-            <ul className="space-y-4">
+            <div className="space-y-4">
                 {entries.map((entry) => {
               type TableComponentKey = keyof typeof TableComponents;
               const componentKey = entry.table_name as TableComponentKey;
               const Component = TableComponents[componentKey] || TableComponents.default;
                 return (
-                  <li key={entry.id}>
-                  <Component entry={entryDetails[entry.id] || entry} />
-                  </li>
+                  <div key={entry.id}>
+                    <Component key={entry.id} entry={entryDetails[entry.id] || entry} />
+                  </div>
             );
           })}
-        </ul>
+        </div>
       )}
     </div>
       </main>
