@@ -4,6 +4,9 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import BeerCard from "@/app/components/beer/BeerCard";
 import { getLoggedInUsersData } from "@/app/utils/requests/userRequests";
+import Image from 'next/image'
+import CoverImage from "@/app/components/interface/coverImage";
+
 
 export async function generateStaticParams() {
 	const breweries = await getBreweriesList()
@@ -26,6 +29,9 @@ export default async function BreweryPage({params}:{params: Promise<{ id: string
 	return (
 			<main>
 				<div className="max-w-2xl mx-auto p-4">
+					<div>
+						<CoverImage cover_image={brewery.cover_image} name={brewery.cover_image}/>
+					</div>
 					<h1 className="text-2xl font-bold mb-4">{brewery.name}</h1>
 					<ul>
 						<li>{brewery.location}</li>
