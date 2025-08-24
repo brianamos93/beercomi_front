@@ -43,6 +43,7 @@ export interface Brewery {
 	name: string;
 	location: string;
 	date_of_founding: string;
+	cover_image: string;
 	date_created: Date;
 	date_updated: Date
 }
