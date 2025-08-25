@@ -45,6 +45,7 @@ export default async function BreweryPage({params}:{params: Promise<{ id: string
 						)}
 					</ul>
 					<div className="mt-6 flex flex-col space-y-4">
+						<h2 className="text-xl font-bold mb-2">Beers</h2>
 						{brewery.beers.map((beer: Beer) => (
 								<BeerCard entry={beer} key={beer.id} />
 						))}
