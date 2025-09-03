@@ -17,6 +17,12 @@ export interface Review {
 	date_updated: string;
 	brewery_name: string;
 	beer_name: string;
+	photos: [
+		id: string,
+		photo_url: string,
+		date_updated: string,
+		position: number
+	]
 }
 
 export interface Beer {
