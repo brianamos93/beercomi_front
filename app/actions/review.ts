@@ -6,6 +6,8 @@ import { createReview, editReview } from "../utils/requests/reviewRequests"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
+const fileSchema = z.custom<File>();
+
 const ReviewFormSchema = z.object({
 	id: z.string(),
 	review: z.string()
@@ -15,17 +17,25 @@ const ReviewFormSchema = z.object({
 	date_updated: z.date(),
 	date_created: z.date(),
 	beer_id: z.string(),
-	author_id: z.string()
+	author_id: z.string(),
+	photos: z
+    .union([fileSchema, z.array(fileSchema)])
+    .transform((val) => (Array.isArray(val) ? val : [val]))
+    .refine((arr) => arr.length <= 4, {
+      message: "Up to 4 photos are allowed.",
+    }),
 })
 
 export type State = {
 	review?:{
 		review?: string | null;
 		rating?: number | null;
+		photos?: File[] | null;
 	}
 	errors?: {
 		review?: string[];
 		rating?: string[];
+		photos?: string[];
 	}
 	message?: string | null;
 	}
@@ -39,7 +49,8 @@ export async function createServerReview(prevState: State, formData: FormData) {
 		const validatedFields = CreateReview.safeParse({
 			beer_id: formData.get('beer_id'),
 			review: formData.get('review'),
-			rating: formData.get('rating')
+			rating: formData.get('rating'),
+			photos: formData.get('photos')
 		})
 
 		if (token == undefined) {
@@ -53,6 +64,7 @@ export async function createServerReview(prevState: State, formData: FormData) {
 				review: {
 					review: formData.get('review')?.toString() ?? '',
 					rating: Number(formData.get('rating')) ?? '',
+					photos: formData.get('photos')?.toString() ?? ''
 				},
 				errors: validatedFields.error.flatten().fieldErrors,
 				message: 'Missing Fields. Failed to Create Review.'
@@ -66,7 +78,7 @@ export async function createServerReview(prevState: State, formData: FormData) {
 			}
 		}
 		revalidatePath('/beers')
-		redirect(`/beers/${formData.get('beer')}`)
+		redirect(`/beers/${formData.get('beer_id')}`)
 }
 
 export async function editServerReview(
@@ -81,7 +93,8 @@ export async function editServerReview(
 	const validatedFields = UpdateReview.safeParse({
 		beer_id: formData.get('beer_id'),
 		review: formData.get('review'),
-		rating: formData.get('rating')
+		rating: formData.get('rating'),
+		photos: formData.get('photos')
 	})
 
 	if (token == undefined) {
@@ -94,7 +107,8 @@ export async function editServerReview(
 		return {
 			review: {
 				review: formData.get('review')?.toString() ?? '',
-				rating: Number(formData.get('rating')) ?? ''
+				rating: Number(formData.get('rating')) ?? '',
+				photos: formData.get('photos') ?? ''
 			},
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: 'Missing Fields. Failed to Edit Review.'
