@@ -6,6 +6,8 @@ import { createBeer, updateBeer } from "../utils//requests/beerRequests";
 import { z } from 'zod'
 import { redirect } from "next/navigation";
 
+const fileSchema = z.custom<File>();
+
 const BeerFormSchema = z.object({
 	id: z.string(),
 	name: z
@@ -19,7 +21,7 @@ const BeerFormSchema = z.object({
 	color: z.string(),
 	date_updated: z.date(),
 	date_created: z.date(),
-	cover_image: z.any()
+	cover_image: z.any(fileSchema)
 	
 })
 
