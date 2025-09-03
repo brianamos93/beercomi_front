@@ -7,7 +7,7 @@ import { ArrowRightIcon } from "@heroicons/react/20/solid"
 export default function BreweryCard({ entry }: { entry: Brewery}) {
 	return (
 			<div className="md:max-w-lg max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-				<div className="flex justify-center items-center flex-col">
+				<div className="flex justify-center items-center flex-col m-5">
 					<Link href={`/breweries/${entry.id}`}>
 					<CoverImage cover_image={entry.cover_image} name={entry.name} />
 					</Link>
