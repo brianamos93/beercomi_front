@@ -15,14 +15,9 @@ export const createReview = async (newReviewData: FormData, token: string) => {
 		method: "POST",
 		headers: {
 			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
 
 		},
-		body: JSON.stringify({
-			review: newReviewData.get('review'),
-			rating: newReviewData.get('rating'),
-			beer_id: newReviewData.get('beer_id'),
-		})
+		body: newReviewData
 	})
 	return res.json()
 }
@@ -32,13 +27,8 @@ export const editReview = async (id: string, formData: FormData, token: string) 
 		method: "PUT",
 		headers: {
 			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
 		},
-		body: JSON.stringify({
-			review: formData.get('review'),
-			rating: formData.get('rating'),
-			beer_id: formData.get('beer_id'),
-		})
+		body: formData
 	})
 	return res.json()
 }
