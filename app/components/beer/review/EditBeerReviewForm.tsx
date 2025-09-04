@@ -19,6 +19,15 @@ export default function EditBeerReviewForm({
 		<form action={formAction}>
 			<input type="hidden" name="beer_id" value={review.beer_id} />
 			<div>
+				<label htmlFor="photos">Upload photos:</label>
+				<input type="file" name="photos" id="photos" accept="image/png image/jpeg" multiple />
+				<div id="photos-error" aria-live="polite" aria-atomic="true">
+					{state?.errors?.photos && state.errors.photos.map((error: string) => (
+						<p className="mt-2 text-sm text-red-500" key={error}>{error}</p>
+					))}
+				</div>
+			</div>
+			<div>
 				<label htmlFor="review">Review:</label>
 				<textarea name="review" id="review" defaultValue={review.review}></textarea>
 				<div id="review-error" aria-live="polite" aria-atomic="true">
