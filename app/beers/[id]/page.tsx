@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import BeerCardDetailed from "@/app/components/beer/BeerCardDetailed";
 import CreateBeerReviewForm from "@/app/components/beer/review/CreateBeerReviewForm";
+import { getLoggedInUsersData } from "@/app/utils/requests/userRequests";
 
 export async function generateStaticParams() {
 	const beers = await getBeersList()
@@ -15,9 +16,10 @@ export async function generateStaticParams() {
 
 export default async function BeerPage({params}:{params: Promise<{ id: string }> 
 }) {
-	const userData = await (await cookies()).get('userData')?.value
+	const token = await (await cookies()).get('token')?.value
 	let userId = null
-	if(userData) {
+	if(token) {
+		const userData = await getLoggedInUsersData(token)
 		userId = userData.id
 	}
 
