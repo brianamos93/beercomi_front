@@ -11,7 +11,6 @@ export default async function NavCTA() {
 		const token = cookieStore.get('token')?.value
 		if(token) {
 			const userData = await getLoggedInUsersData(token)
-			console.log("userData:", userData)
 					
 			displayName = userData.display_name
 			profile_img_url = userData.profile_img_url
