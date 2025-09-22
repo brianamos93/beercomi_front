@@ -34,7 +34,7 @@ export default async function BeerPage({params}:{params: Promise<{ id: string }>
 						)}
 					<div>
 						<h2 className="text-2xl font-bold mt-6 mb-4">Reviews</h2>
-						{userId !== null && (
+						{userId !== null && !beer.reviews.some((review: Review) => review.author_id === userId) && (
 							<CreateBeerReviewForm beer={beer} />
 							)}
 						{beer.reviews.map((review: Review) => (
