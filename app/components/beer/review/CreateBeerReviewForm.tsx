@@ -6,17 +6,17 @@ import { Beer } from "@/app/utils/def";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-	fileSchema,
-	ReviewInput,
-	ReviewSchema,
+	createNewfileSchema,
+	CreateReviewInput,
+	CreateReviewSchema,
 } from "@/app/utils/schemas/reviewSchema";
 import Dropzone from "react-dropzone";
 import { useEffect, useState } from "react";
 
 export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 	const [dropError, setDropError] = useState<string[]>([]);
-	const form = useForm<ReviewInput>({
-		resolver: zodResolver(ReviewSchema),
+	const form = useForm<CreateReviewInput>({
+		resolver: zodResolver(CreateReviewSchema),
 		defaultValues: { photos: [], rating: undefined, review: "" },
 		resetOptions: {
 			keepDirtyValues: false,
@@ -38,7 +38,7 @@ export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 		}
 	}, [isSubmitSuccessful, reset]);
 
-	const onSubmitForm: SubmitHandler<ReviewInput> = async (data) => {
+	const onSubmitForm: SubmitHandler<CreateReviewInput> = async (data) => {
 		// Convert data to FormData
 		const formData = new FormData();
 		formData.append("beer_id", data.beer_id);
@@ -51,7 +51,7 @@ export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 		}
 		const res = await createServerReview(formData);
 		if(res.error) {
-			setError('root.serverError', res.error)
+			setError('root', { type: "server", message: res.error })
 		}
 	
 	};
@@ -95,7 +95,7 @@ export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 									// Zod validation for accepted files
 									const zodErrors: string[] = [];
 									acceptedFiles.forEach((file) => {
-										const result = fileSchema.safeParse(file);
+										const result = createNewfileSchema.safeParse(file);
 										if (!result.success) {
 											zodErrors.push(
 												...result.error.errors.map((err) => err.message)
