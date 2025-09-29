@@ -8,22 +8,52 @@ const ACCEPTED_IMAGE_TYPES = [
   'image/webp'
 ];
 
-export const fileSchema = z
+export const createNewfileSchema = z
   .instanceof(File)
-  .refine((f) => f.size <= MAX_FILE_SIZE, "Max file size is 2MB")
+  .refine((f) => f.size <= MAX_FILE_SIZE, "Max file size is 1MB")
   .refine(
     (f) => ACCEPTED_IMAGE_TYPES.includes(f.type),
     "Only JPG, PNG, WEBP are allowed")
 
-export const ReviewSchema = z.object({
+const existingFileSchemaForEdit = z.object({
+  id: z.string(),
+  url: z.string().url(),
+  type: z.literal("existing"),
+  markedForDelete: z.boolean().optional(),
+});
+
+const newFileSchemaForEdit = z.object({
+  file: createNewfileSchema,
+  preview: z.string(),
+  type: z.literal("new"),
+});
+
+
+export const CreateReviewSchema = z.object({
   review: z
     .string()
     .trim()
     .min(10, { message: "Review must be at least 10 character long." }),
   rating: z.coerce.number(),
   beer_id: z.string(),
-  photos: z.array(fileSchema).max(4, "You can upload up to 4 files.")
+  photos: z.array(createNewfileSchema).max(4, "You can upload up to 4 files.")
+});
+
+export const EditReviewSchema = z.object({
+  review: z
+    .string()
+    .trim()
+    .min(10, { message: "Review must be at least 10 character long." }),
+  rating: z.coerce.number(),
+  beer_id: z.string(),
+  photos: z.array(z.union([newFileSchemaForEdit, existingFileSchemaForEdit])).max(4, "You can upload up to 4 files.")
 });
 
 
-export type ReviewInput = z.infer<typeof ReviewSchema>;
+export type CreateReviewInput = z.infer<typeof CreateReviewSchema>;
+
+export type EditReviewInput = z.infer<typeof EditReviewSchema>;
+
+export type ExistingFile = z.infer<typeof existingFileSchemaForEdit>;
+export type NewFile = z.infer<typeof newFileSchemaForEdit>;
+export type FileItem = ExistingFile | NewFile;
