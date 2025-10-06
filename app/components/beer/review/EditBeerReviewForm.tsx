@@ -29,7 +29,7 @@ export default function EditBeerReviewForm({
 		defaultValues: {
 			beer_id: beer.id,
 			review: review.review,
-			rating: Number(review.rating),
+			rating: String(Math.floor(review.rating)),
 			photos: review.photos.map((p: any) => ({
 				id: p.id,
 				url: "http://localhost:3005" + p.photo_url,
@@ -112,6 +112,7 @@ export default function EditBeerReviewForm({
 		"file-too-large": "This file exceeds the 1 MB limit.",
 		"file-invalid-type": "Only JPG, PNG, WEBP are allowed.",
 	};
+	const selectedRating = Number(watch("rating"));
 
 	return (
 		<form onSubmit={handleSubmit(onSubmitForm)}>
@@ -181,11 +182,19 @@ export default function EditBeerReviewForm({
 							{value && value.length > 0 && (
 								<ul className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-4">
 									{value
-										.filter((file) => !(file.type === "existing" && file.markedForDelete))
+										.filter(
+											(file) =>
+												!(file.type === "existing" && file.markedForDelete)
+										)
 										.map((file, idx) => (
-											<li key={idx} className="relative group border rounded p-1">
+											<li
+												key={idx}
+												className="relative group border rounded p-1"
+											>
 												<Image
-													src={file.type === "existing" ? file.url : file.preview}
+													src={
+														file.type === "existing" ? file.url : file.preview
+													}
 													alt="uploaded"
 													width={150}
 													height={150}
@@ -248,13 +257,15 @@ export default function EditBeerReviewForm({
 							<input
 								type="radio"
 								id={`star${star}`}
-								value={star}
+								value={String(star)}
 								className="peer hidden"
 								{...register("rating")}
 							/>
 							<label
 								htmlFor={`star${star}`}
-								className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300"
+								className={`cursor-pointer text-2xl 
+          ${selectedRating >= star ? "text-yellow-400" : "text-gray-300"} 
+          hover:text-yellow-300`}
 							>
 								★
 							</label>
