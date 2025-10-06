@@ -7,9 +7,11 @@ import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	ExistingFile,
-	fileSchema,
+	NewFile,
+	FileItem,
 	EditReviewInput,
 	EditReviewSchema,
+	createNewfileSchema,
 } from "@/app/utils/schemas/reviewSchema";
 import Dropzone from "react-dropzone";
 import { useEffect, useState } from "react";
@@ -27,10 +29,10 @@ export default function EditBeerReviewForm({
 		defaultValues: {
 			beer_id: beer.id,
 			review: review.review,
-			rating: review.rating,
+			rating: Number(review.rating),
 			photos: review.photos.map((p: any) => ({
 				id: p.id,
-				url: p.url,
+				url: "http://localhost:3005" + p.photo_url,
 				type: "existing" as const,
 				markedForDelete: false,
 			})),
@@ -64,16 +66,14 @@ export default function EditBeerReviewForm({
 		if (isSubmitSuccessful) reset();
 	}, [isSubmitSuccessful, reset]);
 
-	const onSubmitForm: SubmitHandler<EditReviewInput> = async (
-		data: EditReviewInput
-	) => {
+	const onSubmitForm: SubmitHandler<EditReviewInput> = async (data) => {
 		try {
 			const formData = new FormData();
 			formData.append("beer_id", data.beer_id);
 			formData.append("review", data.review);
 			formData.append("rating", String(data.rating));
 
-			// Separate files
+			// Split photos
 			const kept = data.photos.filter(
 				(p): p is ExistingFile => p.type === "existing" && !p.markedForDelete
 			);
@@ -81,8 +81,8 @@ export default function EditBeerReviewForm({
 				(p): p is ExistingFile => p.type === "existing" && p.markedForDelete
 			);
 			const newFiles = data.photos
-				.filter((p) => p.type === "new")
-				.map((p: any) => p.file);
+				.filter((p): p is NewFile => p.type === "new")
+				.map((p) => p.file);
 
 			formData.append("kept", JSON.stringify(kept.map((f) => f.id)));
 			formData.append("deleted", JSON.stringify(deleted.map((f) => f.id)));
@@ -110,7 +110,7 @@ export default function EditBeerReviewForm({
 
 	const errorMessages: Record<string, string> = {
 		"file-too-large": "This file exceeds the 1 MB limit.",
-		"file-invalid-type": "Only image files are allowed.",
+		"file-invalid-type": "Only JPG, PNG, WEBP are allowed.",
 	};
 
 	return (
@@ -144,7 +144,7 @@ export default function EditBeerReviewForm({
 									// Zod validation
 									const zodErrors: string[] = [];
 									acceptedFiles.forEach((file) => {
-										const result = fileSchema.safeParse(file);
+										const result = createNewfileSchema.safeParse(file);
 										if (!result.success) {
 											zodErrors.push(
 												...result.error.errors.map((err) => err.message)
@@ -157,15 +157,13 @@ export default function EditBeerReviewForm({
 										return;
 									}
 
-									// Append files
-									onChange([
-										...(value || []),
-										...acceptedFiles.map((f) => ({
-											type: "new" as const,
-											file: f,
-											preview: URL.createObjectURL(f),
-										})),
-									]);
+									// Append new files
+									const newItems: FileItem[] = acceptedFiles.map((f) => ({
+										file: f,
+										preview: URL.createObjectURL(f),
+										type: "new",
+									}));
+									onChange([...(value || []), ...newItems]);
 								}}
 							>
 								{({ getRootProps, getInputProps }) => (
@@ -182,31 +180,38 @@ export default function EditBeerReviewForm({
 							{/* Preview */}
 							{value && value.length > 0 && (
 								<ul className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-4">
-									{value.map((file, idx) => (
-										<li key={idx} className="relative group border rounded p-1">
-											<Image
-												src={
-													file.type === "existing"
-														? file.url
-														: file.preview
-												}
-												alt="uploaded"
-												width={150}
-												height={150}
-												className="object-scale-down w-full h-32 rounded"
-											/>
-											<button
-												type="button"
-												className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-80 hover:opacity-100"
-												onClick={() => {
-													const newFiles = value.filter((_, i) => i !== idx);
-													onChange(newFiles);
-												}}
-											>
-												✕
-											</button>
-										</li>
-									))}
+									{value
+										.filter((file) => !(file.type === "existing" && file.markedForDelete))
+										.map((file, idx) => (
+											<li key={idx} className="relative group border rounded p-1">
+												<Image
+													src={file.type === "existing" ? file.url : file.preview}
+													alt="uploaded"
+													width={150}
+													height={150}
+													className="object-scale-down w-full h-32 rounded"
+												/>
+												<button
+													type="button"
+													className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-80 hover:opacity-100"
+													onClick={() => {
+														let updated: FileItem[];
+														if (file.type === "existing") {
+															updated = value.map((f, j) =>
+																j === idx && f.type === "existing"
+																	? { ...f, markedForDelete: true }
+																	: f
+															);
+														} else {
+															updated = value.filter((_, j) => j !== idx);
+														}
+														onChange([...updated]);
+													}}
+												>
+													✕
+												</button>
+											</li>
+										))}
 								</ul>
 							)}
 
