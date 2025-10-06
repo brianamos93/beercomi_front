@@ -7,7 +7,8 @@ const protectedRoutePatterns = [
   /^\/beers\/new$/,
   /^\/breweries\/new$/,
   /^\/stores\/new$/,
-  /^\/beers\/[^\/]+\/edit$/
+  /^\/beers\/[^\/]+\/edit$/,
+  /^\/beers\/[^\/]+\/review\/[^\/]+\/edit$/
 ]
 const publicRoutes = ['/users/login', '/users/signup', '/', '/beers', '/breweries', '/stores']
  
