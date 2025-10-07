@@ -1,9 +1,16 @@
-import { z } from 'zod'
+import { z } from "zod";
 
 export interface Entry {
 	id: string;
 	table_name: string;
 	date_updated: Date;
+}
+
+export interface Photo {
+	id: string;
+	photo_url: string;
+	date_updated: string;
+	position: number;
 }
 
 export interface Review {
@@ -18,11 +25,8 @@ export interface Review {
 	brewery_name: string;
 	beer_name: string;
 	photos: [
-		id: string,
-		photo_url: string,
-		date_updated: string,
-		position: number
-	]
+		Photo
+	];
 }
 
 export interface Beer {
@@ -40,8 +44,7 @@ export interface Beer {
 	author_name: string;
 	reviews: Review[];
 	date_created: Date;
-	date_updated: Date
- 
+	date_updated: Date;
 }
 
 export interface Brewery {
@@ -51,7 +54,7 @@ export interface Brewery {
 	date_of_founding: string;
 	cover_image: string;
 	date_created: Date;
-	date_updated: Date
+	date_updated: Date;
 }
 
 export interface Store {
@@ -75,29 +78,28 @@ export interface User {
 
 export const SignupFormSchema = z.object({
 	display_name: z
-	  .string()
-	  .min(5, { message: 'Display Name must be at least 5 characters long.' })
-	  .trim(),
-	email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
+		.string()
+		.min(5, { message: "Display Name must be at least 5 characters long." })
+		.trim(),
+	email: z.string().email({ message: "Please enter a valid email." }).trim(),
 	password: z
-	  .string()
-	  .min(8, { message: 'Be at least 8 characters long' })
-	  .regex(/[a-zA-Z]/, { message: 'Contain at least one letter.' })
-	  .regex(/[0-9]/, { message: 'Contain at least one number.' })
-	  .regex(/[^a-zA-Z0-9]/, {
-		message: 'Contain at least one special character.',
-	  })
-	  .trim(),
-  })
-   
-  export type SignupFormState =
-	| {
-		errors?: {
-		  display_name?: string[]
-		  email?: string[]
-		  password?: string[]
-		}
-		message?: string
-	  }
-	| undefined
+		.string()
+		.min(8, { message: "Be at least 8 characters long" })
+		.regex(/[a-zA-Z]/, { message: "Contain at least one letter." })
+		.regex(/[0-9]/, { message: "Contain at least one number." })
+		.regex(/[^a-zA-Z0-9]/, {
+			message: "Contain at least one special character.",
+		})
+		.trim(),
+});
 
+export type SignupFormState =
+	| {
+			errors?: {
+				display_name?: string[];
+				email?: string[];
+				password?: string[];
+			};
+			message?: string;
+	  }
+	| undefined;
