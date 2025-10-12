@@ -4,14 +4,6 @@ import { cookies } from "next/headers";
 import { createReview, editReview } from "../utils/requests/reviewRequests";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import z from "zod";
-
-export async function transformZodErrors(error: z.ZodError) {
-	return error.issues.map((issue) => ({
-		path: issue.path.join("."),
-		message: issue.message,
-	}));
-}
 
 export async function createServerReview(formData: FormData) {
 	const token = (await cookies()).get("token")?.value;
