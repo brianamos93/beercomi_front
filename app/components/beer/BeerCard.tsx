@@ -1,20 +1,56 @@
 import { Beer } from "@/app/utils/def";
 import Link from "next/link";
+import Image from 'next/image'
+import { ArrowRightIcon } from "@heroicons/react/20/solid"
+import { NewspaperIcon } from "@heroicons/react/24/outline";
 
 export default function BeerCard({ entry }: { entry: Beer }) {
 	return (
+
 		<>
-		<Link
-		href={`/beers/${entry.id}`}
-		>
-	  		<div className="border p-4 rounded-lg shadow-md bg-yellow-50">
-				<h2 className="text-lg font-semibold">{entry.name} 🍺</h2>
-				<p><strong>Style:</strong> {entry.style}</p>
-				<p><strong>ABV:</strong> {entry.abv}%</p>
-				<p><strong>Brewery:</strong> {entry.brewery_name}</p>
-				<p><strong>Updated:</strong> {new Date(entry.date_updated).toLocaleString()}</p>
-	  		</div>
-	  </Link>
-	  </>
+			<div className="md:max-w-lg max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+				<div className="flex flex-col items-center justify-center mx-5 mb-5">{
+					entry.cover_image ? (
+						<>
+							<Link
+								href={`/beers/${entry.id}`}
+							>
+								<Image
+								src={`http://localhost:3005${entry.cover_image}`}
+								width={200}
+								height={200}
+								alt={`${entry.name} photo`}
+								className="object-cover rounded-lg mb-2"
+								/>
+							</Link>
+						</>
+					
+						): (
+							<Link
+								href={`/beers/${entry.id}`}
+							>
+								<NewspaperIcon className="w-48 h-48 text-gray-500"/>
+							</Link>	
+						)}
+					<h2 className="text-lg font-semibold">
+						{entry.brewery_name}&apos;s {entry.name}
+					</h2>
+					<div>
+						<p><strong>Style:</strong> {entry.style}</p>
+						<p><strong>ABV:</strong> {entry.abv}%</p>
+						<p><strong>Author:</strong> {entry.author_name}</p>
+						<p><strong>Updated:</strong> {new Date(entry.date_updated).toLocaleString()}</p>
+						<Link
+							href={`/beers/${entry.id}`}
+							className="mt-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+						>
+							Read More
+							<ArrowRightIcon className="h-5 w-5"/>
+						</Link>
+					</div>
+				</div>
+			</div>
+			
+		</>
 	);
   }
