@@ -32,7 +32,7 @@ export default async function BeerPage({
 	return (
 		<main className="max-w-2xl mx-auto p-4">
 			<BeerCardDetailed beer={beer} />
-			{beer.author === userId && (
+			{beer.author_id === userId && (
 				<span>
 					<Link
 						href={`/beers/${beer.id}/edit`}
