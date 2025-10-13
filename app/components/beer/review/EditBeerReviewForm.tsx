@@ -15,6 +15,7 @@ import {
 } from "@/app/utils/schemas/reviewSchema";
 import Dropzone from "react-dropzone";
 import { useEffect, useState } from "react";
+import url from "@/app/utils/utils";
 
 export default function EditBeerReviewForm({
 	beer,
@@ -32,7 +33,7 @@ export default function EditBeerReviewForm({
 			rating: String(Math.floor(review.rating)),
 			photos: review.photos.map((p: any) => ({
 				id: p.id,
-				url: "http://localhost:3005" + p.photo_url,
+				url: url + p.photo_url,
 				type: "existing" as const,
 				markedForDelete: false,
 			})),
@@ -78,7 +79,7 @@ export default function EditBeerReviewForm({
 				(p): p is ExistingFile => p.type === "existing" && !p.markedForDelete
 			);
 			const deleted = data.photos.filter(
-				(p): p is ExistingFile => p.type === "existing" && p.markedForDelete
+				(p): p is ExistingFile => p.type === "existing" && p.markedForDelete === true
 			);
 			const newFiles = data.photos
 				.filter((p): p is NewFile => p.type === "new")
@@ -182,45 +183,43 @@ export default function EditBeerReviewForm({
 							{value && value.length > 0 && (
 								<ul className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-4">
 									{value
-										.filter(
-											(file) =>
-												!(file.type === "existing" && file.markedForDelete)
-										)
-										.map((file, idx) => (
-											<li
-												key={idx}
-												className="relative group border rounded p-1"
-											>
-												<Image
-													src={
-														file.type === "existing" ? file.url : file.preview
-													}
-													alt="uploaded"
-													width={150}
-													height={150}
-													className="object-scale-down w-full h-32 rounded"
-												/>
-												<button
-													type="button"
-													className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-80 hover:opacity-100"
-													onClick={() => {
-														let updated: FileItem[];
-														if (file.type === "existing") {
-															updated = value.map((f, j) =>
-																j === idx && f.type === "existing"
-																	? { ...f, markedForDelete: true }
-																	: f
-															);
-														} else {
-															updated = value.filter((_, j) => j !== idx);
-														}
-														onChange([...updated]);
-													}}
+										.map((file, idx) =>
+											!(file.type === "existing" && file.markedForDelete) ? (
+												<li
+													key={idx}
+													className="relative group border rounded p-1"
 												>
-													✕
-												</button>
-											</li>
-										))}
+													<Image
+														src={
+															file.type === "existing" ? file.url : file.preview
+														}
+														alt="uploaded"
+														width={150}
+														height={150}
+														className="object-scale-down w-full h-32 rounded"
+													/>
+													<button
+														type="button"
+														className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-80 hover:opacity-100"
+														onClick={() => {
+															let updated: FileItem[];
+															if (file.type === "existing") {
+																updated = value.map((f, j) =>
+																	j === idx && f.type === "existing"
+																		? { ...f, markedForDelete: true }
+																		: f
+																);
+															} else {
+																updated = value.filter((_, j) => j !== idx);
+															}
+															onChange([...updated]);
+														}}
+													>
+														✕
+													</button>
+												</li>
+											) : null
+										)}
 								</ul>
 							)}
 
