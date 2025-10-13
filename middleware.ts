@@ -36,7 +36,7 @@ export default async function middleware(req: NextRequest) {
 
     try {
       const beer = await getBeer(beerId)
-      if (beer.author !== user.id) {
+      if (beer.author_id !== user.id) {
         return NextResponse.redirect(new URL('/unauthorized', req.nextUrl)) // Or show 403 page
       }
     } catch (error) {
