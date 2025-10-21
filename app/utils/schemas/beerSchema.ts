@@ -49,7 +49,6 @@ export const CreateBeerSchema = z.object({
 	description: z
 		.string()
 		.min(1, "Description is required."),
-	deleteCoverImage: z.boolean(),
 	cover_image: newCoverImageSchema
 		
 })
