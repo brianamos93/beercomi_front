@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import { createServerBeer } from "../../actions/beer";
+import { createServerBeer, updateServerBeer } from "../../actions/beer";
 import { Beer, Brewery } from "../../utils/def";
 import {
 	EditBeerInput,
@@ -22,11 +22,11 @@ export default function EditBeerForm({
 	beer: Beer;
 	breweries: Brewery[];
 }) {
-	let coverImageUrl
+	let coverImageUrl;
 	if (!beer.cover_image) {
-		coverImageUrl = null
+		coverImageUrl = null;
 	} else {
-			coverImageUrl = url + beer.cover_image
+		coverImageUrl = url + beer.cover_image;
 	}
 	const [dropError, setDropError] = useState<string[]>([]);
 	const [hasMounted, setHasMounted] = useState(false);
@@ -42,7 +42,7 @@ export default function EditBeerForm({
 			description: beer.description,
 			cover_image: {
 				url: coverImageUrl,
-				type: "existing" as const
+				type: "existing" as const,
 			},
 			deleteCoverImage: false,
 		},
@@ -95,7 +95,7 @@ export default function EditBeerForm({
 		// Always send deleteCoverImage (as "true" or "false")
 		formData.append("deleteCoverImage", String(data.deleteCoverImage));
 
-		const res = await createServerBeer(formData);
+		const res = await updateServerBeer(beer.id, formData);
 
 		if (res.error) {
 			setError("root", { type: "server", message: res.error });
@@ -176,13 +176,13 @@ export default function EditBeerForm({
 							</Dropzone>
 
 							{value &&
-								(
-									(value.type === "existing" && value.url) ||
-									(value.type !== "existing" && value.preview)
-								) && (
+								((value.type === "existing" && value.url) ||
+									(value.type !== "existing" && value.preview)) && (
 									<div className="mt-2 relative group border rounded p-1 w-fit">
 										<Image
-											src={value.type === "existing" ? value.url : value.preview}
+											src={
+												value.type === "existing" ? value.url : value.preview
+											}
 											alt="uploaded"
 											width={150}
 											height={150}
@@ -250,13 +250,14 @@ export default function EditBeerForm({
 						control={control}
 						rules={{ required: "Brewery is required" }}
 						render={({ field }) => {
-							const selectedOption = breweryOptions.find(opt => opt.value === field.value) || null;
+							const selectedOption =
+								breweryOptions.find((opt) => opt.value === field.value) || null;
 							return (
 								<Select
 									{...field}
 									options={breweryOptions}
 									value={selectedOption}
-									onChange={option => field.onChange(option?.value)}
+									onChange={(option) => field.onChange(option?.value)}
 									placeholder="Select a Brewery"
 								/>
 							);
@@ -295,9 +296,14 @@ export default function EditBeerForm({
 					<p className="mt-2 text-sm text-red-500">{errors.color.message}</p>
 				)}
 			</div>
+			<div id="server-error" aria-live="polite" aria-atomic="true">
+				{errors?.root && (
+					<p className="mt-2 text-sm text-red-500">{errors?.root?.message}</p>
+				)}
+			</div>
 			<button type="submit" disabled={isSubmitting}>
-					{isSubmitting ? "Loading" : "Update"}
-				</button>
+				{isSubmitting ? "Loading" : "Update"}
+			</button>
 		</form>
 	);
 }
