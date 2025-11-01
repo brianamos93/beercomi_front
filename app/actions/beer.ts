@@ -37,7 +37,7 @@ export async function createServerBeer(formData: FormData) {
 }
 
 export async function updateServerBeer(id: string, formData: FormData) {
-	const token = (await cookies()).get("session")?.value;
+	const token = (await cookies()).get("token")?.value;
 
 	if (!token) {
 		return { error: "Not Logged In", status: 401 };
