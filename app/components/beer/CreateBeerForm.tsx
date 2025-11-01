@@ -250,9 +250,16 @@ export default function CreateBeerForm({
 					<p className="mt-2 text-sm text-red-500">{errors.color.message}</p>
 				)}
 			</div>
-			<button type="submit" disabled={isSubmitting}>
+			<div id="server-error" aria-live="polite" aria-atomic="true">
+				{errors?.root && (
+					<p className="mt-2 text-sm text-red-500">{errors?.root?.message}</p>
+				)}
+			</div>
+			<div>
+				<button type="submit" disabled={isSubmitting}>
 					{isSubmitting ? "Loading" : "Submit"}
 				</button>
+			</div>
 		</form>
 	);
 }
