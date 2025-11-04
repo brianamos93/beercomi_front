@@ -188,7 +188,7 @@ export default function CreateBeerForm() {
 				<input
 					type="text"
 					id="date_of_founding"
-					{...register("location", {
+					{...register("date_of_founding", {
 						required: "Date of founding is required.",
 					})}
 				/>
