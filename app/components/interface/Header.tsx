@@ -2,8 +2,8 @@
 
 type Props = {
   user: {
-    display_name: string;
-    profile_img_url: string;
+    display_name: string | null;
+    profile_img_url: string | null;
     isAuthenticated: boolean;
   }
 }
@@ -11,6 +11,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+
+
 
 export default function Header({ user }: Props) {
   const [isNavOpen, setIsNavOpen] = useState(false);
