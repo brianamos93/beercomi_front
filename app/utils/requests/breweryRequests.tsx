@@ -25,14 +25,9 @@ export const createBrewery = async (newBreweryData:FormData, token: string) => {
 		method: "POST",
 		headers: {
 			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
 
 		},
-		body: JSON.stringify({
-			name: newBreweryData.get('name'),
-			location: newBreweryData.get('location'),
-			date_of_founding: newBreweryData.get('date_of_founding'),
-		})
+		body: newBreweryData
 	})
 	return res.json()
 }
@@ -42,14 +37,9 @@ export const updateBrewery = async (id: string, updatedBreweryData: FormData, to
 		method: "PUT",
 		headers: {
 			Authorization: `Bearer ${token}`,
-			"Content-Type": "application/json",
 
 		},
-		body: JSON.stringify({
-			name: updatedBreweryData.get('name'),
-			location: updatedBreweryData.get('location'),
-			date_of_founding: updatedBreweryData.get('date_of_founding'),
-		})
+		body: updatedBreweryData
 	})
 	return res.json()
 }
