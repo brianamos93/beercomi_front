@@ -3,34 +3,36 @@ import Header from "./Header";
 import { cookies } from "next/headers";
 
 export default async function NavCTA() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  
 
-	let displayName = null
-	let profile_img_url = null
-	let auth = false
-		const cookieStore = await cookies()
-		const token = cookieStore.get('token')?.value
-		if(token) {
-			const userData = await getLoggedInUsersData(token)
-					
-			displayName = userData.display_name
-			profile_img_url = userData.profile_img_url
-			auth = true
-		}
-	
-	if (!token) {
-		const user = {
-			display_name: null,
-			profile_img_url: null,
-			isAuthenticated: false,
-		}
-		return <Header user={user} />
-	} else {
-	const user = {
-		display_name: displayName,
-		profile_img_url: profile_img_url,
-		isAuthenticated: auth,
-	}
+  if (!token) {
+    const user = {
+      display_name: null,
+      profile_img_url: null,
+      isAuthenticated: false,
+    };
+    return <Header user={user} />;
+  }
 
-	return <Header user={user} />
-	}
+  const userData = await getLoggedInUsersData(token);
+
+  if (!userData) {
+    // token invalid or no user found
+    const user = {
+      display_name: null,
+      profile_img_url: null,
+      isAuthenticated: false,
+    };
+    return <Header user={user} />;
+  }
+
+  const user = {
+    display_name: userData.display_name,
+    profile_img_url: userData.profile_img_url,
+    isAuthenticated: true,
+  };
+
+  return <Header user={user} />;
 }
