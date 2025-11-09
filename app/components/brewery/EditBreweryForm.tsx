@@ -74,7 +74,7 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 
 		formData.append("name", data.name);
 		formData.append("location", data.location);
-		formData.append("data_of_founding", data.date_of_founding);
+		formData.append("date_of_founding", data.date_of_founding);
 
 		formData.append("deleteCoverImage", String(data.deleteCoverImage));
 		const res = await updateServerBrewery(brewery.id, formData);
