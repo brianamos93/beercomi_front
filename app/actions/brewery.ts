@@ -27,9 +27,9 @@ export async function createServerBrewery(formData: FormData) {
 		};
 	}
 
-	if (res.error) {
+	if (res.errors) {
 		return {
-			error: res.error,
+			error: res.errors,
 			status: res.status ?? 400,
 		};
 	}
@@ -57,6 +57,7 @@ export async function updateServerBrewery(id: string, formData: FormData) {
 			status: 500,
 		};
 	}
+	console.log(res)
 	if (res.error) {
 		return {
 			error: res.error,
