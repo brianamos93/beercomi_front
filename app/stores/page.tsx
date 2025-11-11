@@ -13,7 +13,7 @@ export default async function stores() {
 			<main>
 				<div className="max-w-2xl mx-auto p-4">
 					<h1 className="text-2xl font-bold mb-4">Stores</h1>
-					{token !== null && (
+					{token !== undefined && (
 							<Link href="/stores/new"><h2>New Store</h2></Link>
 						)}
 					<ul className="space-y-4">
