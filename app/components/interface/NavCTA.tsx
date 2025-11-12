@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 export default async function NavCTA() {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
-  
 
   if (!token) {
     const user = {
