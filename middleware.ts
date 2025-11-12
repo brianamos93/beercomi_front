@@ -8,8 +8,10 @@ const protectedRoutePatterns = [
   /^\/breweries\/new$/,
   /^\/stores\/new$/,
   /^\/beers\/[^\/]+\/edit$/,
-  /^\/beers\/[^\/]+\/review\/[^\/]+\/edit$/
-]
+  /^\/beers\/[^\/]+\/review\/[^\/]+\/edit$/,
+  /^\/users\/profile$/
+];
+
 const publicRoutes = ['/users/login', '/users/signup', '/', '/beers', '/breweries', '/stores']
  
 export default async function middleware(req: NextRequest) {
