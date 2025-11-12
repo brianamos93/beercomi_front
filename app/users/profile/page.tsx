@@ -6,14 +6,19 @@ import Image from 'next/image'
 import Link from "next/link"
 
 export default async function Profile() {
-	const userData = await (await cookies()).get('userData')?.value
-	let userId
-	if(userData) {
-		userId = await getLoggedInUsersData(userData.id)
+	const token = await (await cookies()).get("token")?.value;
+	let userId = null;
+	let userImg = null;
+	let userDisplayName = null;
+	if (token) {
+		const userData = await getLoggedInUsersData(token);
+		userId = userData.id;
+		userImg = userData.profile_img_url
+		userDisplayName = userData.display_name
 	}
 
-	const pictureurl = user.profile_img_url ? `http://localhost:3005/uploads/${user.profile_img_url}` : "http://localhost:3005/uploads/defaultavatar.png";
-	const altText = user.profile_img_url ? `${user.display_name}'s avatar` : "Default Avatar";
+	const pictureurl = userImg ? `http://localhost:3005${userImg}` : "http://localhost:3005/uploads/defaultavatar.png";
+	const altText = userDisplayName ? `${userDisplayName}'s avatar` : "Default Avatar";
 	const recentActivity = await getRecentActivityOneUser(userId)
 
     // Fetch all entry data in parallel
@@ -52,7 +57,7 @@ export default async function Profile() {
 					</div>
 				</div>
 				<div className="p-4">
-					<h2 className="text-2xl">{user.display_name}</h2>
+					<h2 className="text-2xl">{userDisplayName}</h2>
 					<div className="flex flex-row">
 						<MapPinIcon className="size-5 text-blue-600"/>
 						<p className="text-base">Osaka, Japan</p>
