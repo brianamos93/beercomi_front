@@ -1,6 +1,6 @@
 import url from "../utils";
 
-export const getBeers = async ({ limit, page }) => {
+export const getBeers = async ({ limit, page }: {limit: number, page: number}) => {
 	const res = await fetch(
 		url + "/beers?" + "limit=" + limit + "&page=" + page,
 		{ cache: "no-store" }
