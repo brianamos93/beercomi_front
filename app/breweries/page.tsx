@@ -4,27 +4,72 @@ import { getBreweries } from "../utils/requests/breweryRequests";
 import { Brewery } from "../utils/def";
 import { cookies } from "next/headers";
 
-export default async function brewerys() {
-	const data = await getBreweries()
+export default async function BreweriesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const page = params.page;
 
-	const token = await (await cookies()).get('token')?.value
+  const formattedPage = Number(page) || 1;
+  const limit = 10;
 
-	
-	return (
-			<main>
-				<div className="max-w-2xl mx-auto p-4">
-					<h1 className="text-2xl font-bold mb-4">Breweries</h1>
-					{token !== undefined && (
-							<Link href="/breweries/new"><h2>New Brewery</h2></Link>
-						)}
-					<ul className="space-y-4">
-					{data.map((brewery: Brewery) => (
-						<li key={brewery.id}>
-							<BreweryCard entry={brewery} />
-						</li>
-					))}
-					</ul>
-				</div>
-			</main>
-	)
+  // Call API with pagination
+  const { data, pagination } = await getBreweries({
+    page: formattedPage,
+    limit,
+  });
+
+	const token = await (await cookies()).get("token")?.value;
+  const totalPages = Math.ceil(pagination.total / limit);
+
+  return (
+    <main>
+      <div className="max-w-2xl mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Breweries</h1>
+
+        {token && (
+          <Link href="/breweries/new">
+            <h2>New Brewery</h2>
+          </Link>
+        )}
+
+        <ul className="space-y-4">
+          {data.map((brewery: Brewery) => (
+            <li key={brewery.id}>
+              <BreweryCard entry={brewery} />
+            </li>
+          ))}
+        </ul>
+
+        {/* Pagination */}
+        <div className="flex justify-between mt-6">
+          <Link
+            href={`/breweries?page=${formattedPage - 1}`}
+            className={`px-3 py-2 border rounded ${
+              formattedPage <= 1 ? "opacity-50 pointer-events-none" : ""
+            }`}
+          >
+            Previous
+          </Link>
+
+          <span>
+            Page {formattedPage} of {totalPages}
+          </span>
+
+          <Link
+            href={`/breweries?page=${formattedPage + 1}`}
+            className={`px-3 py-2 border rounded ${
+              formattedPage >= totalPages
+                ? "opacity-50 pointer-events-none"
+                : ""
+            }`}
+          >
+            Next
+          </Link>
+        </div>
+      </div>
+    </main>
+  );
 }

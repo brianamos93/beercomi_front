@@ -1,9 +1,16 @@
 import url from "../utils"
 
-export const getBreweries = async () => {
-	const res = await fetch(url + '/breweries')
-	return res.json()
-}
+export const getBreweries = async ({ limit, page }: { limit: number; page: number }) => {
+  const res = await fetch(
+    url + "/breweries?" + "limit=" + limit + "&page=" + page,
+    { cache: "no-store" }
+  );
+
+  if (!res.ok) throw new Error("Failed to fetch breweries");
+
+  return res.json();
+};
+
 
 export const getBreweriesOneUser = async (id: string) => {
 	const res = await fetch(`${url}/user/${id}/breweryies`)
