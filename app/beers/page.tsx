@@ -39,7 +39,6 @@ export default async function beers({
 					))}
 				</ul>
 
-				{/* Pagination */}
 				<div className="flex justify-between mt-6">
 					<Link
 						href={`/beers?page=${formattedPage - 1}`}
