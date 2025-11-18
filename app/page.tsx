@@ -1,72 +1,111 @@
-"use client"
+"use client";
 
-import TableComponents from "./components/TableComponents"
-import { useEffect, useState } from "react";
-
+import TableComponents from "./components/TableComponents";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 export default function Home() {
+	type Entry = {
+		id: number | string;
+		table_name: string;
+		[key: string]: unknown;
+	};
 
-    type Entry = {
-      id: number | string;
-      table_name: string;
-      [key: string]: unknown;
-    };
+	const [entries, setEntries] = useState<Entry[]>([]);
+	const [entryDetails, setEntryDetails] = useState<
+		Record<string | number, unknown>
+	>({});
+	const [cursor, setCursor] = useState<string | null>(null);
+	const [loading, setLoading] = useState(false);
+	const loaderRef = useRef<HTMLDivElement | null>(null);
 
-    const [entries, setEntries] = useState<Entry[]>([])
-    const [entryDetails, setEntryDetails] = useState<Record<string | number, unknown>>({})
+	// ---- Fetch paginated /recent ----
+	const loadMore = useCallback(async () => {
+		if (loading) return;
+		setLoading(true);
 
-    useEffect(() => {
-      async function fetchData() {
-        const res = await fetch("http://localhost:3005/recent")
-        const data = await res.json()
-        setEntries(data)
-      }
-      fetchData()
-    }, [])
+		const url = cursor
+			? `http://localhost:3005/recent?cursor=${cursor}`
+			: `http://localhost:3005/recent`;
 
-    useEffect(() => {
-      entries.forEach((entry) => {
-        if (!entryDetails[entry.id]) {
-          let url = `http://localhost:3005/${entry.table_name}/${entry.id}`
-          if (entry.table_name == 'beer_reviews') {
-            url = `http://localhost:3005/beers/review/${entry.id}`
-          }
-          fetch(url)
-          .then((res) => res.json())
-          .then((data) => {
-            setEntryDetails((prev) => ({ ...prev, [entry.id]: data}))
-          })
-        }
-      })
-    }, [entries, entryDetails])
+		const res = await fetch(url);
+		const json = await res.json();
 
-  return (
-      <main className="">
-        <div className="max-w-auto mx-auto p-4 bg-yellow-300 m-5 rounded-md">
-          <div className="mx-auto max-w-2xl p-20">
-          <h3 className="text-center focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-4xl px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">登録</h3>
-          <h3 className="text-center text-4xl p-4 bg-gray-400">ログイン</h3>
-          </div>
-        </div>
-          <div className="max-w-2xl mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Recent Entries</h1>
-              {entries.length === 0 ? (
-              <p className="text-gray-500">Loading...</p>
-            ) : (
-            <div className="space-y-4">
-                {entries.map((entry) => {
-              type TableComponentKey = keyof typeof TableComponents;
-              const componentKey = entry.table_name as TableComponentKey;
-              const Component = TableComponents[componentKey] || TableComponents.default;
-                return (
-                  <div key={entry.id}>
-                    <Component key={entry.id} entry={entryDetails[entry.id] || entry} />
-                  </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-      </main>
-  );
+		setEntries((prev) => [...prev, ...json.data]);
+		setCursor(json.nextCursor);
+		setLoading(false);
+	}, [cursor, loading]);
+
+	// ---- IntersectionObserver Trigger ----
+	useEffect(() => {
+		if (!loaderRef.current) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) loadMore();
+			},
+			{ threshold: 1 }
+		);
+
+		observer.observe(loaderRef.current);
+
+		return () => observer.disconnect();
+	}, [loadMore, loaderRef]);
+
+	// ---- Fetch details for each entry (only once per ID) ----
+	const fetchedIdsRef = useRef<Set<string | number>>(new Set());
+	useEffect(() => {
+		entries.forEach((entry) => {
+			if (!fetchedIdsRef.current.has(entry.id)) {
+				fetchedIdsRef.current.add(entry.id);
+
+				let url = `http://localhost:3005/${entry.table_name}/${entry.id}`;
+				if (entry.table_name === "beer_reviews") {
+					url = `http://localhost:3005/beers/review/${entry.id}`;
+				}
+
+				fetch(url)
+					.then((res) => res.json())
+					.then((data) => {
+						setEntryDetails((prev) => ({
+							...prev,
+							[entry.id]: data,
+						}));
+					});
+			}
+		});
+	}, [entries]);
+
+	return (
+		<main>
+			<div className="max-w-2xl mx-auto p-4">
+				<h1 className="text-2xl font-bold mb-4">Recent Entries</h1>
+
+				<div className="space-y-4">
+					{entries.map((entry) => {
+						const componentKey =
+							entry.table_name as keyof typeof TableComponents;
+						const Component =
+							TableComponents[componentKey] || TableComponents.default;
+
+						return (
+							<Component
+								key={entry.id}
+								entry={entryDetails[entry.id] || entry}
+							/>
+						);
+					})}
+				</div>
+
+				{/* Loader Trigger */}
+				<div ref={loaderRef} className="h-12 flex items-center justify-center">
+					{loading ? <p>Loading…</p> : <p></p>}
+				</div>
+
+				{/* No more pages */}
+				{cursor === null && entries.length > 0 && (
+					<p className="text-center text-gray-500 py-4">No more entries</p>
+				)}
+			</div>
+		</main>
+	);
 }
