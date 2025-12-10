@@ -10,7 +10,7 @@ export default function SignupForm() {
 				<input type="text" name="display_name" id="display_name" placeholder="Display Name" />
 				{state?.errors?.display_name && <p>{state.errors.display_name}</p>}
 				<br />
-				<input type="email" name="email" id="email" placeholder="emal@email.com" />
+				<input type="email" name="email" id="email" placeholder="email@email.com" />
 				{state?.errors?.email && <p>{state.errors.email}</p>}
 				<br />
 				<input type="password" name="password" id="password" placeholder="password" />
