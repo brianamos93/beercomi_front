@@ -42,7 +42,6 @@ export default async function BeerPage({
 			beer.favorited = false;
 			beer.favoriteDetail = null;
 		}
-		console.log(beer);
 	}
 	return (
 		<main className="max-w-2xl mx-auto p-4">

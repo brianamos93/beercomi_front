@@ -60,3 +60,13 @@ export const deleteBrewery = async (id: string, token: string) => {
 		}
 	})
 }
+
+export const favoriteBreweries = async (token: string) => {
+	const res = await fetch(`${url}/favorites/brewereies`, {
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${token}`
+		},
+	})
+	return res.json()
+}
