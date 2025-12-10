@@ -14,7 +14,7 @@ const protectedRoutePatterns = [
 
 const publicRoutes = ['/users/login', '/users/signup', '/', '/beers', '/breweries', '/stores']
  
-export default async function middleware(req: NextRequest) {
+export default async function proxy(req: NextRequest) {
   // 2. Check if the current route is protected or public
   const path = req.nextUrl.pathname
   const isProtectedRoute = protectedRoutePatterns.some(pattern => pattern.test(path))
