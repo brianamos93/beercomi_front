@@ -26,7 +26,6 @@ export const getBeer = async (id: string) => {
 };
 
 export const createBeer = async (newBeerData: FormData, token: string) => {
-	console.log(newBeerData);
 	const res = await fetch(url + "/beers", {
 		method: "POST",
 		headers: {
@@ -61,3 +60,13 @@ export const deleteBeer = async (id: string, token: string) => {
 		},
 	});
 };
+
+export const favoriteBeers = async (token: string) => {
+	const res = await fetch(`${url}/favorites/beers`, {
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${token}`
+		},
+	})
+	return res.json()
+}
