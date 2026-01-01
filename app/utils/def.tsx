@@ -76,6 +76,16 @@ export interface User {
 	profile_img_url: string;
 }
 
+export interface Favorite {
+	id: string;
+	name: string;
+	target_id: string;
+	date_created: Date;
+	brewery_id: string;
+	brewery_name: string;
+	source_table: string;
+}
+
 export const SignupFormSchema = z.object({
 	display_name: z
 		.string()

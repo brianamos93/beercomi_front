@@ -24,3 +24,13 @@ export const removeFromFavorites = async(id: string, table: string, token: strin
 	})
 	return res.json()
 }
+
+export const checkFavorite = async(id: string, table: string, token: string) => {
+	const res = await fetch(url + "/favorites/" + table + "/" + id, {
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${token}`,
+		}
+	})
+	return res.json()
+}

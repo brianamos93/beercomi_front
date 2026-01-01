@@ -1,10 +1,6 @@
 "use client";
 
-import { useOptimistic, useTransition } from "react";
-import {
-	addToFavoritesServer,
-	removeFromFavroritesServer,
-} from "@/app/actions/favorites";
+import { useToggleFavorite } from "@/app/hooks/useToggleFavorite";
 
 type FavoriteType = "beers" | "breweries";
 
@@ -12,53 +8,27 @@ export default function ToggleFavoriteButton({
 	type,
 	id,
 	initialFavorite,
-  	object,
+	favorite_id,
 }: {
 	type: FavoriteType;
 	id: string;
 	initialFavorite: boolean;
-  	object: any;
+	favorite_id?: string;
 }) {
-	const [isPending, startTransition] = useTransition();
-
-	const [optimisticFav, setOptimisticFav] = useOptimistic(
+	const { isFavorited, isPending, toggle } = useToggleFavorite({
+		type,
+		targetId: id,
 		initialFavorite,
-		(_, next: boolean) => next
-	);
-
-	function onClick() {
-		// Compute the next state once
-		const next = !optimisticFav;
-
-		startTransition(async () => {
-			// Optimistic update (now inside transition → ✔️ no error)
-			const prev = optimisticFav; // store previous state
-
-			setOptimisticFav(next);
-			let res
-			console.log(optimisticFav)
-			try {
-				if(optimisticFav === false) {
-					res = await addToFavoritesServer(type, id)
-				} else {
-					res = await removeFromFavroritesServer(object.favorite_detail.id, type, object.id)
-				}
-				console.log(res)
-				setOptimisticFav(res);
-			} catch (err) {
-				console.error(err);
-				setOptimisticFav(prev); // rollback to previous state
-			}
-		});
-	}
+		initialFavoriteId: favorite_id,
+	});
 
 	return (
 		<button
-			onClick={onClick}
+			onClick={toggle}
 			disabled={isPending}
 			className="px-3 py-2 border rounded"
 		>
-			{optimisticFav ? "★ Favorited" : "☆ Favorite"}
+			{isFavorited ? "★ Favorited" : "☆ Favorite"}
 		</button>
 	);
 }

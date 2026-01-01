@@ -112,3 +112,9 @@ export const getLoggedInUsersData = async (token: string) => {
   }
 };
 
+export const getUserFavorites = async (user_id: string, limit: number, offset: number) => {
+	const res = await fetch(`${url}/favorites/all/user/${user_id}?=limit=${limit}&offset=${offset}`, {
+		method: "GET",
+	})
+	return res.json()
+}
