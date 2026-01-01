@@ -1,16 +1,15 @@
 import {
 	getBrewery,
 	getBreweriesList,
-	favoriteBreweries,
 } from "@/app/utils/requests/breweryRequests";
 import { Beer, Brewery } from "@/app/utils/def";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import BeerCard from "@/app/components/beer/BeerCard";
 import { getLoggedInUsersData } from "@/app/utils/requests/userRequests";
-import Image from "next/image";
 import CoverImage from "@/app/components/interface/coverImage";
 import ToggleFavoriteButton from "@/app/components/interface/buttons/FavoriteToggleClient";
+import { checkFavorite } from "@/app/utils/requests/favoriteRequests";
 
 export async function generateStaticParams() {
 	const breweries = await getBreweriesList();
@@ -27,22 +26,18 @@ export default async function BreweryPage({
 }) {
 	const token = await (await cookies()).get("token")?.value;
 	let userId = null;
+	let favorited = false;
+	let favorite_id: string | undefined = undefined;
 	const brewery = await getBrewery((await params).id);
 
 	if (token) {
 		const userData = await getLoggedInUsersData(token);
 		userId = userData.id;
-		const favorites = await favoriteBreweries(token);
-		if (favorites) {
-			brewery.favorited = favorites.some((fav) => fav.beer_id === brewery.id);
-			const favorite_detail = favorites.find(
-				(fav) => fav.brewery_id === brewery.id
-			);
-			brewery.favorite_detail = favorite_detail || null;
-		} else {
-			brewery.favorited = false;
-			brewery.favoriteDetail = null;
-		}
+		const favoriteRes = await checkFavorite(brewery.id, "breweries", token);
+		
+		favorited = Boolean(favoriteRes.favorited);
+		favorite_id = favoriteRes.favorited ? favoriteRes.favorite_id : undefined;
+
 	}
 
 	return (
@@ -71,12 +66,14 @@ export default async function BreweryPage({
 						</li>
 					)}
 					<li>
-						<ToggleFavoriteButton
-							type="beers"
-							id={brewery.id}
-							initialFavorite={brewery.favorited}
-							object={brewery}
-						/>
+						{token ? (
+							<ToggleFavoriteButton
+								type="breweries"
+								id={brewery.id}
+								initialFavorite={favorited}
+								favorite_id={favorite_id}
+							/>
+						) : null}
 					</li>
 				</ul>
 				<div className="mt-6 flex flex-col space-y-4">
