@@ -17,21 +17,18 @@ export async function addToFavoritesServer(table: string, target_id: string) {
 	try {
 		const res = await addToFavorites(table, target_id, token);
 
-		if (res.status === 200) {
+		if (res.status === 200 || res.status === 201) {
 			console.log("pos",res);
-			return { status: 200, isFavorite: true };
+			const favorite_id = res.id
+			return favorite_id;
 		} else {
 			console.log("neg",res[0].errors);
 
-			return { status: 500, isFavorite: false };
+			return null;
 		}
 	} catch (error) {
 		console.log(error);
-		return {
-			error: "Unexpected server error",
-			status: 500,
-			isFavorite: false,
-		};
+		return null;
 	} finally {
 		revalidatePath(`/${table}/${target_id}`);
 	}
@@ -57,11 +54,7 @@ export async function removeFromFavroritesServer(
 		}
 	} catch (error) {
 		console.log(error);
-		return {
-			error: "Unexpected server error",
-			status: 500,
-			isFavorite: true,
-		};
+		return { status: 500, isFavorite: true };
 	} finally {
 		revalidatePath(`/${table}/${target_id}`);
 	}
