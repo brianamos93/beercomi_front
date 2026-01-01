@@ -1,5 +1,4 @@
 import {
-	favoriteBeers,
 	getBeer,
 	getBeersList,
 } from "@/app/utils/requests/beerRequests";
@@ -12,6 +11,7 @@ import { getLoggedInUsersData } from "@/app/utils/requests/userRequests";
 import url from "@/app/utils/utils";
 import Image from "next/image";
 import ToggleFavoriteButton from "@/app/components/interface/buttons/FavoriteToggleClient";
+import { checkFavorite } from "@/app/utils/requests/favoriteRequests";
 
 export async function generateStaticParams() {
 	const beers = await getBeersList();
@@ -28,20 +28,18 @@ export default async function BeerPage({
 }) {
 	const token = await (await cookies()).get("token")?.value;
 	let userId = null;
+	let favorited = false;
+	let favorite_id: string | undefined = undefined;
 	const beer = await getBeer((await params).id);
 
 	if (token) {
 		const userData = await getLoggedInUsersData(token);
 		userId = userData.id;
-		const favorites = await favoriteBeers(token);
-		if (favorites) {
-			beer.favorited = favorites.some((fav) => fav.beer_id === beer.id);
-			const favorite_detail = favorites.find((fav) => fav.beer_id === beer.id);
-			beer.favorite_detail = favorite_detail || null;
-		} else {
-			beer.favorited = false;
-			beer.favoriteDetail = null;
-		}
+
+		const favoriteRes = await checkFavorite(beer.id, "beers", token);
+
+		favorited = Boolean(favoriteRes.favorited);
+		favorite_id = favoriteRes.favorited ? favoriteRes.favorite_id : undefined;
 	}
 	return (
 		<main className="max-w-2xl mx-auto p-4">
@@ -57,12 +55,17 @@ export default async function BeerPage({
 				</span>
 			)}
 			<div>
-				<ToggleFavoriteButton
-					type="beers"
-					id={beer.id}
-					initialFavorite={beer.favorited}
-					object={beer}
-				/>
+				{token ? (
+					<ToggleFavoriteButton
+						type="beers"
+						id={beer.id}
+						initialFavorite={favorited}
+						favorite_id={favorite_id}
+					/>
+				) : (
+					null
+				)}
+
 				<h2 className="text-2xl font-bold mt-6 mb-4">Reviews</h2>
 				{userId !== null &&
 					!beer.reviews.some(
