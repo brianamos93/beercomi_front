@@ -1,8 +1,8 @@
 import url from "../utils";
 
-export const getBeers = async ({ limit, page }: {limit: number, page: number}) => {
+export const getBeers = async ({ limit, offset }: {limit: number, offset: number}) => {
 	const res = await fetch(
-		url + "/beers?" + "limit=" + limit + "&page=" + page,
+		url + "/beers?" + "limit=" + limit + "&offset=" + offset,
 		{ cache: "no-store" }
 	);
 	if (!res.ok) throw new Error("Failed to fetch beers");

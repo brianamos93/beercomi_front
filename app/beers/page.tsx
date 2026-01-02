@@ -10,14 +10,14 @@ export default async function beers({
 	searchParams: Promise<{ page?: string }>;
 }) {
 	const params = await searchParams;
-	const page = params.page; 
 
-	const formattedPage = Number(page) || 1;
+	const page = Number(params.page) || 1;
 	const limit = 10;
+	const offset = (page - 1) * limit;
 
-	const { data, pagination } = await getBeers({ page: formattedPage, limit });
+	const { data, pagination } = await getBeers({ offset, limit });
 
-	const token = await (await cookies()).get("token")?.value;
+	const token = (await cookies()).get("token")?.value;
 	const totalPages = Math.ceil(pagination.total / limit);
 
 	return (
@@ -41,24 +41,22 @@ export default async function beers({
 
 				<div className="flex justify-between mt-6">
 					<Link
-						href={`/beers?page=${formattedPage - 1}`}
+						href={`/beers?page=${page - 1}`}
 						className={`px-3 py-2 border rounded ${
-							formattedPage <= 1 ? "opacity-50 pointer-events-none" : ""
+							page <= 1 ? "opacity-50 pointer-events-none" : ""
 						}`}
 					>
 						Previous
 					</Link>
 
 					<span>
-						Page {formattedPage} of {totalPages}
+						Page {page} of {totalPages}
 					</span>
 
 					<Link
-						href={`/beers?page=${formattedPage + 1}`}
+						href={`/beers?page=${page + 1}`}
 						className={`px-3 py-2 border rounded ${
-							formattedPage >= totalPages
-								? "opacity-50 pointer-events-none"
-								: ""
+							page >= totalPages ? "opacity-50 pointer-events-none" : ""
 						}`}
 					>
 						Next
