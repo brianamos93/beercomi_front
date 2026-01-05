@@ -1,19 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
+  async rewrites() {
+    return [
       {
-        protocol: "https",
-        hostname: "placehold.jp",
+        source: "/uploads/:path*",
+        destination: "http://localhost:3005/uploads/:path*",
       },
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "3005",
-        pathname: "/uploads/**",
-      },
-    ],
+    ];
   },
 };
 

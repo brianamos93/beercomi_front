@@ -16,7 +16,7 @@ export default function BeerCard({ entry }: { entry: Beer }) {
 								href={`/beers/${entry.id}`}
 							>
 								<Image
-								src={`http://localhost:3005${entry.cover_image}`}
+								src={`${entry.cover_image}`}
 								width={200}
 								height={200}
 								alt={`${entry.name} photo`}
