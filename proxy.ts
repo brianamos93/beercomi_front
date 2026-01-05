@@ -9,16 +9,20 @@ const protectedRoutePatterns = [
   /^\/stores\/new$/,
   /^\/beers\/[^\/]+\/edit$/,
   /^\/beers\/[^\/]+\/review\/[^\/]+\/edit$/,
-  /^\/users\/profile$/
+  /^\/users\/profile$/,
+  /^\/users\/admin(?:\/.*)?$/, // ← added
 ];
 
-const publicRoutes = ['/users/login', '/users/signup', '/', '/beers', '/breweries', '/stores']
+
+const adminRoutePatterns = [
+  /^\/users\/admin\/?$/
+]
  
 export default async function proxy(req: NextRequest) {
   // 2. Check if the current route is protected or public
   const path = req.nextUrl.pathname
   const isProtectedRoute = protectedRoutePatterns.some(pattern => pattern.test(path))
-  const isPublicRoute = publicRoutes.includes(path)
+  const isAdminRoute = adminRoutePatterns.some(pattern => pattern.test(path))
  
   // 3. Get the token
   const token = req.cookies.get('token')?.value
@@ -31,6 +35,14 @@ export default async function proxy(req: NextRequest) {
   if (isProtectedRoute && !token) {
     return NextResponse.redirect(new URL('/users/login', req.nextUrl))
   }
+
+  if (isAdminRoute && user.role !== 'admin') {
+      return NextResponse.redirect(new URL('/unauthorized', req.nextUrl))
+  }
+
+  
+
+  
 
   const match = req.nextUrl.pathname.match(/^\/beers\/([^\/]+)\/edit$/)
   if (match && token) {
