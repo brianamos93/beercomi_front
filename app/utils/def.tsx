@@ -86,6 +86,28 @@ export interface Favorite {
 	source_table: string;
 }
 
+export interface Pagination {
+	totalItems: number;
+	limit: number;
+	offset: number;
+}
+
+export interface ActivityLogData {
+	id: string;
+	user_id: string;
+	display_name: string;
+	action: string;
+	entity_type: string;
+	entity_id: string;
+	metadata: string;
+	created_at: string;
+}
+
+export interface ActivityLogResponse {
+	pagination: Pagination;
+	data: ActivityLogData[];
+}
+
 export const SignupFormSchema = z.object({
 	display_name: z
 		.string()
