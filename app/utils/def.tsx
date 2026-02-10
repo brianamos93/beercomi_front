@@ -92,6 +92,13 @@ export interface Pagination {
 	offset: number;
 }
 
+export interface SearchResult {
+	id: string;
+	name: string;
+	description: string;
+	type: string;
+}
+
 export interface ActivityLogData {
 	id: string;
 	user_id: string;
