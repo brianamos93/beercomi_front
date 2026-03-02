@@ -9,6 +9,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3005",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
