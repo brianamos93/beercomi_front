@@ -1,10 +1,10 @@
 "use client";
 
 import { useForm, Controller } from "react-hook-form";
-import Select from "react-select";
+import { GroupBase, OptionsOrGroups } from "react-select";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import { createServerBeer, updateServerBeer } from "../../actions/beer";
+import { updateServerBeer } from "../../actions/beer";
 import { Beer, Brewery } from "../../utils/def";
 import {
 	EditBeerInput,
@@ -13,21 +13,12 @@ import {
 } from "@/app/utils/schemas/beerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import url from "@/app/utils/utils";
+import { getBreweries } from "@/app/utils/requests/breweryRequests";
+import { AsyncPaginate, LoadOptions } from "react-select-async-paginate";
 
-export default function EditBeerForm({
-	beer,
-	breweries,
-}: {
-	beer: Beer;
-	breweries: Brewery[];
-}) {
-	let coverImageUrl;
-	if (!beer.cover_image) {
-		coverImageUrl = null;
-	} else {
-		coverImageUrl = url + beer.cover_image;
-	}
+export default function EditBeerForm({ beer }: { beer: Beer }) {
+	// use undefined when there's no image so the form type matches
+	const coverImageUrl = beer.cover_image ?? undefined;
 	const [dropError, setDropError] = useState<string[]>([]);
 	const [hasMounted, setHasMounted] = useState(false);
 	const form = useForm<EditBeerInput>({
@@ -40,10 +31,9 @@ export default function EditBeerForm({
 			color: beer.color,
 			ibu: beer.ibu,
 			description: beer.description,
-			cover_image: {
-				url: coverImageUrl,
-				type: "existing" as const,
-			},
+			cover_image: coverImageUrl
+				? { url: coverImageUrl, type: "existing" as const }
+				: null,
 			deleteCoverImage: false,
 		},
 		resetOptions: {
@@ -68,8 +58,25 @@ export default function EditBeerForm({
 	}, [isSubmitSuccessful, reset]);
 
 	useEffect(() => {
-		setHasMounted(true);
+		const id = setTimeout(() => setHasMounted(true), 0);
+		return () => clearTimeout(id);
 	}, []);
+
+	useEffect(() => {
+		reset({
+			name: beer.name,
+			style: beer.style,
+			abv: beer.abv,
+			brewery_id: beer.brewery_id,
+			color: beer.color,
+			ibu: beer.ibu,
+			description: beer.description,
+			cover_image: coverImageUrl
+				? { url: coverImageUrl, type: "existing" as const }
+				: null,
+			deleteCoverImage: false,
+		});
+	}, [beer.id, beer.name, beer.style, beer.abv, beer.brewery_id, beer.color, beer.ibu, beer.description, coverImageUrl, reset]);
 
 	const onSubmit = async (data: EditBeerInput) => {
 		const formData = new FormData();
@@ -102,14 +109,43 @@ export default function EditBeerForm({
 		}
 	};
 
-	const breweryOptions = breweries.map((brewery) => ({
-		value: brewery.id,
-		label: brewery.name,
-	}));
-
 	const errorMessages: Record<string, string> = {
 		"file-too-large": "This file exceeds the 1 MB limit.",
 		"file-invalid-type": "Only image files are allowed.",
+	};
+
+  type BreweryOption = {
+		value: string;
+		label: string;
+	};
+
+	type Additional = {
+		offset: number;
+	};
+
+	const loadOptions: LoadOptions<
+		BreweryOption,
+		GroupBase<BreweryOption>,
+		Additional
+	> = async (
+		search: string,
+		loadedOptions: OptionsOrGroups<BreweryOption, GroupBase<BreweryOption>>,
+		additional?: Additional,
+	) => {
+		const offset = additional?.offset ?? 0;
+		const res = await getBreweries({ limit: 20, offset: offset, q: search });
+
+		return {
+			options: res.data.map((brewery: Brewery) => ({
+				value: brewery.id,
+				label: brewery.name,
+			})),
+			hasMore:
+				res.pagination.offset + res.pagination.limit < res.pagination.total,
+			additional: {
+				offset: res.pagination.offset + res.pagination.limit,
+			},
+		};
 	};
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -128,7 +164,7 @@ export default function EditBeerForm({
 
 									if (rejectedFiles.length > 0) {
 										const customErrors = rejectedFiles.flatMap((r) =>
-											r.errors.map((e) => errorMessages[e.code] || e.message)
+											r.errors.map((e) => errorMessages[e.code] || e.message),
 										);
 										setDropError(customErrors);
 										return;
@@ -138,11 +174,11 @@ export default function EditBeerForm({
 									const zodErrors: string[] = [];
 									if (acceptedFiles[0]) {
 										const result = newCoverImageSchema.safeParse(
-											acceptedFiles[0]
+											acceptedFiles[0],
 										);
 										if (!result.success) {
 											zodErrors.push(
-												...result.error.errors.map((err) => err.message)
+												...result.error.errors.map((err) => err.message),
 											);
 										}
 									}
@@ -249,19 +285,26 @@ export default function EditBeerForm({
 						name="brewery_id"
 						control={control}
 						rules={{ required: "Brewery is required" }}
-						render={({ field }) => {
-							const selectedOption =
-								breweryOptions.find((opt) => opt.value === field.value) || null;
-							return (
-								<Select
-									{...field}
-									options={breweryOptions}
-									value={selectedOption}
-									onChange={(option) => field.onChange(option?.value)}
-									placeholder="Select a Brewery"
-								/>
-							);
-						}}
+						render={({ field }) => (
+							<AsyncPaginate<
+								BreweryOption,
+								GroupBase<BreweryOption>,
+								Additional
+							>
+								instanceId="brewery-select"
+								value={
+									field.value
+										? { value: field.value, label: field.value }
+										: null
+								}
+								loadOptions={loadOptions}
+								onChange={(option) => field.onChange(option?.value)}
+								additional={{ offset: 0 }}
+								debounceTimeout={300}
+								isSearchable={true}
+								placeholder="Search breweries..."
+							/>
+						)}
 					/>
 				)}
 				{errors.brewery_id && (

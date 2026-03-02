@@ -15,7 +15,6 @@ import { getBreweries } from "@/app/utils/requests/breweryRequests";
 import { AsyncPaginate, LoadOptions } from "react-select-async-paginate";
 import { GroupBase, OptionsOrGroups } from "react-select";
 
-
 type FormValues = {
 	cover_image?: File | null;
 	name: string;
@@ -88,26 +87,30 @@ export default function CreateBeerForm() {
 		offset: number;
 	};
 
-	const loadOptions: LoadOptions<BreweryOption, GroupBase<BreweryOption>, Additional> = async (
+	const loadOptions: LoadOptions<
+		BreweryOption,
+		GroupBase<BreweryOption>,
+		Additional
+	> = async (
 		search: string,
 		loadedOptions: OptionsOrGroups<BreweryOption, GroupBase<BreweryOption>>,
-		additional?: Additional
+		additional?: Additional,
 	) => {
 		const offset = additional?.offset ?? 0;
-		const res = await getBreweries({limit: 20, offset: offset, q: search})
+		const res = await getBreweries({ limit: 20, offset: offset, q: search });
 
 		return {
 			options: res.data.map((brewery: Brewery) => ({
-			value: brewery.id,
-			label: brewery.name,
+				value: brewery.id,
+				label: brewery.name,
 			})),
-			hasMore: res.pagination.offset + res.pagination.limit < res.pagination.total,
+			hasMore:
+				res.pagination.offset + res.pagination.limit < res.pagination.total,
 			additional: {
-			offset: res.pagination.offset + res.pagination.limit,
+				offset: res.pagination.offset + res.pagination.limit,
 			},
 		};
-		};
-
+	};
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -237,7 +240,9 @@ export default function CreateBeerForm() {
 					render={({ field }) => (
 						<AsyncPaginate<BreweryOption, GroupBase<BreweryOption>, Additional>
 							instanceId="brewery-select"
-							value={field.value ? { value: field.value, label: field.value } : null}
+							value={
+								field.value ? { value: field.value, label: field.value } : null
+							}
 							loadOptions={loadOptions}
 							onChange={(option) => field.onChange(option?.value)}
 							additional={{ offset: 0 }}
