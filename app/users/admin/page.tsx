@@ -1,13 +1,10 @@
-import ActivityLogTable from "@/app/components/user/ActivityLogger";
-import { cookies } from "next/headers";
 
-export default async function activityTable() {
-	const token = await (await cookies()).get("token")?.value;
+
+export default async function AdminLanding() {
 
 	return (
 		<div>
-			<ActivityLogTable
-			token={token}/>
+			<span>Select from the left</span>
 		</div>
 	)
 
