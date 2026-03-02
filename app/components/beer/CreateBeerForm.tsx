@@ -1,7 +1,6 @@
 "use client";
 
 import { useForm, Controller } from "react-hook-form";
-import Select from "react-select";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { createServerBeer } from "../../actions/beer";
@@ -12,6 +11,10 @@ import {
 } from "@/app/utils/schemas/beerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import { getBreweries } from "@/app/utils/requests/breweryRequests";
+import { AsyncPaginate, LoadOptions } from "react-select-async-paginate";
+import { GroupBase, OptionsOrGroups } from "react-select";
+
 
 type FormValues = {
 	cover_image?: File | null;
@@ -24,12 +27,9 @@ type FormValues = {
 	color: string;
 };
 
-export default function CreateBeerForm({
-	breweries,
-}: {
-	breweries: Brewery[];
-}) {
+export default function CreateBeerForm() {
 	const [dropError, setDropError] = useState<string[]>([]);
+
 	const form = useForm<FormValues>({
 		resolver: zodResolver(CreateBeerSchema),
 		defaultValues: {},
@@ -73,15 +73,41 @@ export default function CreateBeerForm({
 		}
 	};
 
-	const breweryOptions = breweries.map((brewery) => ({
-		value: brewery.id,
-		label: brewery.name,
-	}));
-
 	const errorMessages: Record<string, string> = {
 		"file-too-large": "This file exceeds the 1 MB limit.",
 		"file-invalid-type": "Only image files are allowed.",
 	};
+
+	//brewery form
+	type BreweryOption = {
+		value: string;
+		label: string;
+	};
+
+	type Additional = {
+		offset: number;
+	};
+
+	const loadOptions: LoadOptions<BreweryOption, GroupBase<BreweryOption>, Additional> = async (
+		search: string,
+		loadedOptions: OptionsOrGroups<BreweryOption, GroupBase<BreweryOption>>,
+		additional?: Additional
+	) => {
+		const offset = additional?.offset ?? 0;
+		const res = await getBreweries({limit: 20, offset: offset, q: search})
+
+		return {
+			options: res.data.map((brewery: Brewery) => ({
+			value: brewery.id,
+			label: brewery.name,
+			})),
+			hasMore: res.pagination.offset + res.pagination.limit < res.pagination.total,
+			additional: {
+			offset: res.pagination.offset + res.pagination.limit,
+			},
+		};
+		};
+
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -100,7 +126,7 @@ export default function CreateBeerForm({
 
 									if (rejectedFiles.length > 0) {
 										const customErrors = rejectedFiles.flatMap((r) =>
-											r.errors.map((e) => errorMessages[e.code] || e.message)
+											r.errors.map((e) => errorMessages[e.code] || e.message),
 										);
 										setDropError(customErrors);
 										return;
@@ -110,11 +136,11 @@ export default function CreateBeerForm({
 									const zodErrors: string[] = [];
 									if (acceptedFiles[0]) {
 										const result = newCoverImageSchema.safeParse(
-											acceptedFiles[0]
+											acceptedFiles[0],
 										);
 										if (!result.success) {
 											zodErrors.push(
-												...result.error.errors.map((err) => err.message)
+												...result.error.errors.map((err) => err.message),
 											);
 										}
 									}
@@ -209,12 +235,15 @@ export default function CreateBeerForm({
 					control={control}
 					rules={{ required: "Brewery is required" }}
 					render={({ field }) => (
-						<Select
-							{...field}
-							options={breweryOptions}
+						<AsyncPaginate<BreweryOption, GroupBase<BreweryOption>, Additional>
+							instanceId="brewery-select"
+							value={field.value ? { value: field.value, label: field.value } : null}
+							loadOptions={loadOptions}
 							onChange={(option) => field.onChange(option?.value)}
-							value={breweryOptions.find((opt) => opt.value === field.value)}
-							placeholder="Select a Brewery"
+							additional={{ offset: 0 }}
+							debounceTimeout={300}
+							isSearchable={true}
+							placeholder="Search breweries..."
 						/>
 					)}
 				/>
