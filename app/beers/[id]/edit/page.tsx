@@ -1,6 +1,5 @@
 import EditBeerForm from "@/app/components/beer/EditBeerForm";
 import { getBeer } from "@/app/utils/requests/beerRequests";
-import { getBreweries } from "@/app/utils/requests/breweryRequests";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -11,10 +10,7 @@ export const metadata: Metadata = {
 export default async function editBeerPage(props: { params: Promise<{ id: string }> }) {
 	const params = await props.params;
 	const id = params.id
-	const [beer, breweries] = await Promise.all([
-		getBeer(id),
-		getBreweries(),
-	])
+	const beer = await getBeer(id);
 
 	if (!beer) {
 		notFound()
@@ -22,7 +18,7 @@ export default async function editBeerPage(props: { params: Promise<{ id: string
 
 	return (
 		<main>
-			<EditBeerForm beer={beer} breweries={breweries} />
+			<EditBeerForm beer={beer} />
 		</main>
 	)
 }
