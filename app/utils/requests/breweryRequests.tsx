@@ -1,8 +1,12 @@
 import url from "../utils"
 
-export const getBreweries = async ({ limit, page }: { limit: number; page: number }) => {
+export const getBreweries = async ({ limit, offset, q }: { limit: number; offset: number; q?: string }) => {
+  let queryString = "limit=" + limit + "&offset=" + offset;
+  if (q) {
+    queryString += "&q=" + encodeURIComponent(q);
+  }
   const res = await fetch(
-    url + "/breweries?" + "limit=" + limit + "&page=" + page,
+    url + "/breweries?" + queryString,
     { cache: "no-store" }
   );
 
