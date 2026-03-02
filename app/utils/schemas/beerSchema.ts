@@ -28,8 +28,7 @@ const newEditCoverImageSchema = z.object({
 
 })
 
-
-export const CreateBeerSchema = z.object({
+const beerBase = z.object({
 	name: z
 		.string()
 		.trim()
@@ -48,15 +47,21 @@ export const CreateBeerSchema = z.object({
 	ibu: z.coerce.number().min(0, "IBU must be a positive number."),
 	description: z
 		.string()
-		.min(1, "Description is required."),
-	cover_image: newCoverImageSchema
-		
+		.min(1, "Description is required.")
 })
 
-export const EditBeerSchema = CreateBeerSchema.extend({
-	cover_image: z.union([newEditCoverImageSchema, existingCoverImageSchema]).nullable().optional(),
-	deleteCoverImage: z.boolean()
-		
+
+export const CreateBeerSchema = beerBase.extend({
+	cover_image: newCoverImageSchema	
+})
+
+export const EditBeerSchema = beerBase.extend({
+	cover_image: z.union([
+		existingCoverImageSchema,
+		newEditCoverImageSchema,
+		z.null()
+	]).optional(),
+	deleteCoverImage: z.boolean(),
 })
 
 export type EditBeerInput = z.infer<typeof EditBeerSchema>;
