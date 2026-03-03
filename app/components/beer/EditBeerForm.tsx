@@ -27,7 +27,10 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 			name: beer.name,
 			style: beer.style,
 			abv: beer.abv,
-			brewery_id: beer.brewery_id,
+			brewery_id: {
+				label: beer.brewery_name,
+				value: beer.brewery_id,
+			},
 			color: beer.color,
 			ibu: beer.ibu,
 			description: beer.description,
@@ -67,7 +70,10 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 			name: beer.name,
 			style: beer.style,
 			abv: beer.abv,
-			brewery_id: beer.brewery_id,
+			brewery_id: {
+				label: beer.brewery_name,
+				value: beer.brewery_id,
+			},
 			color: beer.color,
 			ibu: beer.ibu,
 			description: beer.description,
@@ -76,7 +82,7 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 				: null,
 			deleteCoverImage: false,
 		});
-	}, [beer.id, beer.name, beer.style, beer.abv, beer.brewery_id, beer.color, beer.ibu, beer.description, coverImageUrl, reset]);
+	}, [beer.id, beer.name, beer.style, beer.abv, beer.brewery_id, beer.color, beer.ibu, beer.description, coverImageUrl, reset, beer.brewery_name]);
 
 	const onSubmit = async (data: EditBeerInput) => {
 		const formData = new FormData();
@@ -94,7 +100,7 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 		formData.append("name", data.name);
 		formData.append("style", data.style);
 		formData.append("abv", String(data.abv));
-		formData.append("brewery_id", data.brewery_id);
+		formData.append("brewery_id", data.brewery_id?.value ?? "");
 		formData.append("description", data.description);
 		formData.append("ibu", String(data.ibu));
 		formData.append("color", data.color);
@@ -285,20 +291,15 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 						name="brewery_id"
 						control={control}
 						rules={{ required: "Brewery is required" }}
-						render={({ field }) => (
-							<AsyncPaginate<
-								BreweryOption,
-								GroupBase<BreweryOption>,
-								Additional
-							>
+						render={({ field: { onChange, value, ref } }) => (
+							<AsyncPaginate
 								instanceId="brewery-select"
-								value={
-									field.value
-										? { value: field.value, label: field.value }
-										: null
-								}
+								value={value}
+								selectRef={ref}
 								loadOptions={loadOptions}
-								onChange={(option) => field.onChange(option?.value)}
+								getOptionValue={(option: BreweryOption) => option.value}
+        						getOptionLabel={(option: BreweryOption) => option.label}
+								onChange={onChange}
 								additional={{ offset: 0 }}
 								debounceTimeout={300}
 								isSearchable={true}

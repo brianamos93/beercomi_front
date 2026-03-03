@@ -38,9 +38,10 @@ const beerBase = z.object({
 		.trim()
 		.min(1, "Style is required."),
 	abv: z.coerce.number().min(0, "ABV must be a positive number."),
-	brewery_id: z
-		.string()
-		.min(1, "A brewery is required."),
+	brewery_id: z.object({
+		value: z.string(),
+		label: z.string()
+	}),
 	color: z
 		.string()
 		.min(1, "Color is required."),

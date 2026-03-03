@@ -20,7 +20,10 @@ type FormValues = {
 	name: string;
 	style: string;
 	abv: number;
-	brewery_id: string;
+	brewery_id: {
+		label: string,
+		value: string,
+	};
 	description: string;
 	ibu: number;
 	color: string;
@@ -54,23 +57,27 @@ export default function CreateBeerForm() {
 
 	const onSubmit = async (data: FormValues) => {
 		const formData = new FormData();
-		if (data.cover_image) {
-			formData.append("cover_image", data.cover_image);
-		}
-		formData.append("name", data.name);
-		formData.append("style", data.style);
-		formData.append("abv", String(data.abv));
-		formData.append("brewery_id", data.brewery_id);
-		formData.append("description", data.description);
-		formData.append("ibu", String(data.ibu));
-		formData.append("color", data.color);
 
-		const res = await createServerBeer(formData);
+	if (data.cover_image) {
+		formData.append("cover_image", data.cover_image);
+	}
 
-		if (res.error) {
-			setError("root", { type: "server", message: res.error });
-		}
-	};
+	formData.append("name", data.name);
+	formData.append("style", data.style);
+	formData.append("abv", String(data.abv));
+
+	formData.append("brewery_id", data.brewery_id?.value ?? "");
+
+	formData.append("description", data.description);
+	formData.append("ibu", String(data.ibu));
+	formData.append("color", data.color);
+
+	const res = await createServerBeer(formData);
+
+	if (res.error) {
+		setError("root", { type: "server", message: res.error });
+	}
+};
 
 	const errorMessages: Record<string, string> = {
 		"file-too-large": "This file exceeds the 1 MB limit.",
@@ -237,14 +244,15 @@ export default function CreateBeerForm() {
 					name="brewery_id"
 					control={control}
 					rules={{ required: "Brewery is required" }}
-					render={({ field }) => (
-						<AsyncPaginate<BreweryOption, GroupBase<BreweryOption>, Additional>
+					render={({ field: { onChange, value, ref } }) => (
+						<AsyncPaginate
 							instanceId="brewery-select"
-							value={
-								field.value ? { value: field.value, label: field.value } : null
-							}
+							value={value}
+							selectRef={ref}
 							loadOptions={loadOptions}
-							onChange={(option) => field.onChange(option?.value)}
+							getOptionValue={(option: BreweryOption) => option.value}
+        					getOptionLabel={(option: BreweryOption) => option.label}
+							onChange={onChange}
 							additional={{ offset: 0 }}
 							debounceTimeout={300}
 							isSearchable={true}
