@@ -14,10 +14,11 @@ export default async function BreweriesPage({
 
   const formattedPage = Number(page) || 1;
   const limit = 10;
+  const offset = (formattedPage - 1) * limit;
 
   // Call API with pagination
   const { data, pagination } = await getBreweries({
-    page: formattedPage,
+    offset: offset,
     limit,
   });
 
