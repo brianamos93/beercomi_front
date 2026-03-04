@@ -28,8 +28,8 @@ export default async function Profile() {
 	}
 
 	const pictureurl = userImg
-		? `http://localhost:3005${userImg}`
-		: "/public/defaultavatar.png";
+		? userImg
+		: "/defaultavatar.png";
 	
 	const altText = userDisplayName
 		? `${userDisplayName}'s avatar`
