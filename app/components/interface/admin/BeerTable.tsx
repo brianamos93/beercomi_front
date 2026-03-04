@@ -17,6 +17,8 @@ import {
 	CheckIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { Column, DataTable } from "../table/DataTable";
+import { Pagination } from "../Pagination";
 
 const LIMIT = 10;
 
@@ -124,6 +126,82 @@ export default function BeerTable({ token }: { token: string | undefined }) {
 		}
 	};
 
+	const renderActions = (log: BeerLog) => (
+		<div className="flex items-center justify-center gap-2">
+			<Link
+				href={`/beers/${log.id}/edit`}
+				className="p-2 rounded-lg hover:bg-gray-200 transition"
+				title="Edit"
+			>
+				<PencilSquareIcon className="h-5 w-5 text-gray-600 hover:text-blue-600" />
+			</Link>
+			{pendingDelete === log.id ? (
+				<div className="flex gap-2">
+					<button
+						onClick={() =>
+							log.deleted_at
+								? handleHardDelete(log.id)
+								: handleSoftDelete(log.id)
+						}
+						className="p-2 rounded-lg hover:bg-gray-200 transition"
+					>
+						<CheckIcon className="h-5 w-5 text-green-600 hover:text-green-800 transition" />
+					</button>
+
+					<button
+						onClick={() => setPendingDelete(null)}
+						className="p-2 rounded-lg hover:bg-gray-200 transition"
+					>
+						<XMarkIcon className="h-5 w-5 text-gray-500 hover:text-gray-900 transition" />
+					</button>
+				</div>
+			) : (
+				<button
+					onClick={() => setPendingDelete(log.id)}
+					className="p-2 rounded-lg hover:bg-gray-200 transition"
+					title={log.deleted_at ? "Hard Delete" : "Soft Delete"}
+				>
+					{log.deleted_at ? (
+						<TrashIcon className="h-5 w-5 text-red-600 hover:text-red-800" />
+					) : (
+						<ArchiveBoxIcon className="h-5 w-5 text-gray-600 hover:text-yellow-600" />
+					)}
+				</button>
+			)}
+			{log.deleted_at && (
+				<button
+					onClick={() => handleUndoSoftDelete(log.id)}
+					className="p-1 rounded hover:bg-gray-100 transition"
+					title="Undelete"
+				>
+					<ArrowUturnLeftIcon className="h-5 w-5 text-gray-600 hover:text-green-600" />
+				</button>
+			)}
+		</div>
+	);
+
+	const columns: Column<BeerLog>[] = [
+		{ header: "Name", accessor: (row) => row.name },
+		{ header: "Brewery", accessor: (row) => row.brewery_name },
+		{ header: "Style", accessor: (row) => row.style },
+		{ header: "ABV", accessor: (row) => `${row.abv.toFixed(1)}%` },
+		{ header: "IBU", accessor: (row) => row.ibu },
+		{ header: "Color", accessor: (row) => row.color },
+		{
+			header: "Date Created",
+			accessor: (row) => new Date(row.date_created).toLocaleString(),
+		},
+		{
+			header: "Date Updated",
+			accessor: (row) => new Date(row.date_updated).toLocaleString(),
+		},
+		{
+			header: "Date Deleted",
+			accessor: (row) =>
+				row.deleted_at ? new Date(row.deleted_at).toLocaleString() : "-",
+		},
+	];
+
 	return (
 		<div>
 			<h2 className="text-xl font-semibold mb-4">Beer Log</h2>
@@ -141,131 +219,20 @@ export default function BeerTable({ token }: { token: string | undefined }) {
 
 			{error && <p className="text-red-500 mb-2">{error}</p>}
 
-			<table className="w-full border-collapse border">
-				<thead>
-					<tr className="bg-gray-100">
-						<th className="border px-3 py-2">Name</th>
-						<th className="border px-3 py-2">Brewery</th>
-						<th className="border px-3 py-2">Style</th>
-						<th className="border px-3 py-2">ABV</th>
-						<th className="border px-3 py-2">IBU</th>
-						<th className="border px-3 py-2">Color</th>
-						<th className="border px-3 py-2">Date Created</th>
-						<th className="border px-3 py-2">Date Updated</th>
-						<th className="border px-3 py-2">Date Deleted</th>
-						<th className="border px-3 py-2">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{loading && (
-						<tr>
-							<td colSpan={10} className="text-center py-4">
-								Loading...
-							</td>
-						</tr>
-					)}
+			<DataTable
+				columns={columns}
+				data={displayData}
+				loading={loading}
+				renderActions={renderActions}
+			/>
 
-					{displayData.map((log) => (
-						<tr key={log.id}>
-							<td className="border px-3 py-2">{log.name}</td>
-							<td className="border px-3 py-2">{log.brewery_name}</td>
-							<td className="border px-3 py-2">{log.style}</td>
-							<td className="border px-3 py-2">
-								{Number(log.abv.toFixed(1))}%
-							</td>
-							<td className="border px-3 py-2">{log.ibu}</td>
-							<td className="border px-3 py-2">{log.color}</td>
-							<td className="border px-3 py-2">
-								{new Date(log.date_created).toLocaleString()}
-							</td>
-							<td className="border px-3 py-2">
-								{new Date(log.date_updated).toLocaleString()}
-							</td>
-							<td className="border px-3 py-2">
-								{log.deleted_at
-									? new Date(log.deleted_at).toLocaleString()
-									: "-"}
-							</td>
-							<td className="border px-3 py-2 min-w-[10rem]">
-								<div className="flex items-center justify-center gap-2">
-									<Link
-										href={`/beers/${log.id}/edit`}
-										className="p-2 rounded-lg hover:bg-gray-200 transition"
-										title="Edit"
-									>
-										<PencilSquareIcon className="h-5 w-5 text-gray-600 hover:text-blue-600" />
-									</Link>
-									{pendingDelete === log.id ? (
-										<div className="flex gap-2">
-											<button
-												onClick={() =>
-													log.deleted_at
-														? handleHardDelete(log.id)
-														: handleSoftDelete(log.id)
-												}
-												className="p-2 rounded-lg hover:bg-gray-200 transition"
-											>
-												<CheckIcon className="h-5 w-5 text-green-600 hover:text-green-800 transition" />
-											</button>
-
-											<button
-												onClick={() => setPendingDelete(null)}
-												className="p-2 rounded-lg hover:bg-gray-200 transition"
-											>
-												<XMarkIcon className="h-5 w-5 text-gray-500 hover:text-gray-900 transition" />
-											</button>
-										</div>
-									) : (
-										<button
-											onClick={() => setPendingDelete(log.id)}
-											className="p-2 rounded-lg hover:bg-gray-200 transition"
-											title={log.deleted_at ? "Hard Delete" : "Soft Delete"}
-										>
-											{log.deleted_at ? (
-												<TrashIcon className="h-5 w-5 text-red-600 hover:text-red-800" />
-											) : (
-												<ArchiveBoxIcon className="h-5 w-5 text-gray-600 hover:text-yellow-600" />
-											)}
-										</button>
-									)}
-									{log.deleted_at && (
-										<button
-											onClick={() => handleUndoSoftDelete(log.id)}
-											className="p-1 rounded hover:bg-gray-100 transition"
-											title="Undelete"
-										>
-											<ArrowUturnLeftIcon className="h-5 w-5 text-gray-600 hover:text-green-600" />
-										</button>
-									)}
-								</div>
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-
-			{/* Pagination */}
-			<div className="flex items-center justify-between mt-4">
-				<button
-					onClick={() => setOffset((o) => Math.max(0, o - LIMIT))}
-					disabled={offset === 0 || loading}
-					className="px-3 py-1 border rounded disabled:opacity-50"
-				>
-					Previous
-				</button>
-
-				<span>
-					Page {currentPage} of {totalPages}
-				</span>
-
-				<button
-					onClick={() => setOffset((o) => o + LIMIT)}
-					disabled={offset + LIMIT >= total || loading}
-					className="px-3 py-1 border rounded disabled:opacity-50"
-				>
-					Next
-				</button>
-			</div>
+			<Pagination
+				currentPage={currentPage}
+				totalPages={totalPages}
+				onPrevious={() => setOffset((o) => Math.max(0, o - LIMIT))}
+				onNext={() => setOffset((o) => o + LIMIT)}
+				disabled={loading}
+			/>
 		</div>
 	);
 }
