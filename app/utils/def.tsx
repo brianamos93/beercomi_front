@@ -142,3 +142,6 @@ export type SignupFormState =
 			message?: string;
 	  }
 	| undefined;
+
+
+export type DeletedFilter = "true" | "false" | "all";
