@@ -37,7 +37,7 @@ type BeerLog = {
 
 type Category = "all" | "deleted";
 
-export default function BeerTable({ token }: { token: string | undefined }) {
+export default function BeerTable({ token }: { token: string }) {
 	const [offset, setOffset] = useState(0);
 	const [total, setTotal] = useState(0);
 	const [loading, setLoading] = useState(false);
