@@ -18,7 +18,7 @@ export const getBreweries = async ({ limit, offset, q }: { limit: number; offset
 
 
 export const getBreweriesOneUser = async (id: string) => {
-	const res = await fetch(`${url}/user/${id}/breweryies`)
+	const res = await fetch(`${url}/user/${id}/breweries`)
 	return res.json()
 }
 
@@ -67,7 +67,7 @@ export const deleteBrewery = async (id: string, token: string) => {
 }
 
 export const adminBreweryGet = async ( {token, limit, offset, deleted}: {token: string, limit: string, offset: string, deleted: DeletedFilter}) => {
-	const res = await fetch(url + `/breweries/admin?limit=${limit}&offset=${offset}&deleted=${deleted}`, {
+	const res = await fetch(url + `/breweries/admin/view?limit=${limit}&offset=${offset}&deleted=${deleted}`, {
 		method: "GET",
 		headers: {
 			Authorization: `Bearer ${token}`,
@@ -118,7 +118,7 @@ export const hardDeleteBrewery = async (id: string, token: string) => {
 export const undoSoftDeleteBrewery = async(id: string, token: string) => {
 	const res = await fetch(
 		url + "/breweries/admin/undo/delete/" + id, {
-			method: "POST",
+			method: "PUT",
 			headers: {
 				Authorization: `Bearer ${token}`
 			},
