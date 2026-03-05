@@ -1,3 +1,4 @@
+import { DeletedFilter } from "../def";
 import url from "../utils"
 
 export const getBreweries = async ({ limit, offset, q }: { limit: number; offset: number; q?: string }) => {
@@ -65,6 +66,17 @@ export const deleteBrewery = async (id: string, token: string) => {
 	})
 }
 
+export const adminBreweryGet = async ( {token, limit, offset, deleted}: {token: string, limit: string, offset: string, deleted: DeletedFilter}) => {
+	const res = await fetch(url + `/breweries/admin?limit=${limit}&offset=${offset}&deleted=${deleted}`, {
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${token}`,
+
+		},
+	})
+	return res.json()
+}
+
 export const favoriteBreweries = async (token: string) => {
 	const res = await fetch(`${url}/favorites/brewereies`, {
 		method: "GET",
@@ -72,5 +84,46 @@ export const favoriteBreweries = async (token: string) => {
 			Authorization: `Bearer ${token}`
 		},
 	})
+	return res.json()
+}
+
+export const softDeleteBrewery = async (id: string, token: string) => {
+	const res = await fetch(
+		url + "/breweries/" + id,
+		{
+			method: "DELETE",
+			headers: {
+				Authorization: `Bearer ${token}`
+			},
+		}
+	)
+	if(!res.ok) throw new Error("Failed to soft delete beer")
+	return res.json()
+}
+
+export const hardDeleteBrewery = async (id: string, token: string) => {
+	const res = await fetch(
+		url + "/breweries/admin/hard-delete/" + id,
+		{
+		method: "DELETE",
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+		}
+	)
+	if(!res.ok) throw new Error("Failed to hard delete beer")
+	return res.json()
+}
+
+export const undoSoftDeleteBrewery = async(id: string, token: string) => {
+	const res = await fetch(
+		url + "/breweries/admin/undo/delete/" + id, {
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${token}`
+			},
+		}
+	)
+	if(!res.ok) throw new Error("Failed to undo soft delete")
 	return res.json()
 }
