@@ -91,7 +91,7 @@ export default function BreweryTable({ token }: { token: string }) {
 				),
 			);
 		} catch (err) {
-			setError("Failed to delete beer.");
+			setError("Failed to delete brewery.");
 		} finally {
 			setPendingDelete(null);
 		}
@@ -117,7 +117,7 @@ export default function BreweryTable({ token }: { token: string }) {
 			await hardDeleteBrewery(id, token);
 			setDisplayData((prev) => prev.filter((brewery) => brewery.id !== id));
 		} catch (err) {
-			setError("Failed to delete beer.");
+			setError("Failed to delete brewery.");
 		} finally {
 			setPendingDelete(null);
 		}
@@ -126,7 +126,7 @@ export default function BreweryTable({ token }: { token: string }) {
 	const renderActions = (log: BreweryLog) => (
 		<div className="flex items-center justify-center gap-2">
 			<Link
-				href={`/beers/${log.id}/edit`}
+				href={`/breweries/${log.id}/edit`}
 				className="p-2 rounded-lg hover:bg-gray-200 transition"
 				title="Edit"
 			>
@@ -206,18 +206,22 @@ export default function BreweryTable({ token }: { token: string }) {
 					onChange={handleTableChange}
 				>
 					<option value="all">All</option>
-					<option value="deleted">Deleted</option>
+					<option value="true">Deleted</option>
+					<option value="false">Active</option>
 				</select>
 			</div>
 
 			{error && <p className="text-red-500 mb-2">{error}</p>}
-
-			<DataTable
-				columns={columns}
-				data={displayData}
-				loading={loading}
-				renderActions={renderActions}
-			/>
+			<div className="w-full overflow-x-auto">
+				<div className="min-w-[700px]">
+					<DataTable
+						columns={columns}
+						data={displayData}
+						loading={loading}
+						renderActions={renderActions}
+					/>
+				</div>
+			</div>
 
 			<Pagination
 				currentPage={currentPage}
