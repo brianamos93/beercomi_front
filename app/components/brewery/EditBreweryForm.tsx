@@ -13,7 +13,6 @@ import { Brewery } from "../../utils/def";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import url from "@/app/utils/utils";
-import { EditBeerInput } from "@/app/utils/schemas/beerSchema";
 
 export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 	let coverImageUrl;
@@ -23,7 +22,6 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 		coverImageUrl = url + brewery.cover_image;
 	}
 	const [dropError, setDropError] = useState<string[]>([]);
-	const [hasMounted, setHasMounted] = useState(false);
 	const form = useForm<EditBreweryInput>({
 		resolver: zodResolver(EditBrewerySchema),
 		defaultValues: {
@@ -57,10 +55,6 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 		}
 	}, [isSubmitSuccessful, reset]);
 
-	useEffect(() => {
-		setHasMounted(true);
-	}, []);
-
 	const onSubmit = async (data: EditBreweryInput) => {
 		const formData = new FormData();
 		if (
@@ -89,8 +83,16 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 		"file-invalid-type": "Only image files are allowed.",
 	};
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="max-w-xl mx-auto p-4 space-y-6 bg-white rounded-xl shadow"
+		>
+			{/* Cover Image */}
 			<div>
+				<label className="block text-sm font-medium text-gray-700 mb-2">
+					Cover Image
+				</label>
+
 				<Controller
 					name="cover_image"
 					control={control}
@@ -105,21 +107,20 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 
 									if (rejectedFiles.length > 0) {
 										const customErrors = rejectedFiles.flatMap((r) =>
-											r.errors.map((e) => errorMessages[e.code] || e.message)
+											r.errors.map((e) => errorMessages[e.code] || e.message),
 										);
 										setDropError(customErrors);
 										return;
 									}
 
-									// Zod validation for accepted file
 									const zodErrors: string[] = [];
 									if (acceptedFiles[0]) {
 										const result = newCoverImageSchema.safeParse(
-											acceptedFiles[0]
+											acceptedFiles[0],
 										);
 										if (!result.success) {
 											zodErrors.push(
-												...result.error.errors.map((err) => err.message)
+												...result.error.errors.map((err) => err.message),
 											);
 										}
 									}
@@ -129,7 +130,6 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 										return;
 									}
 
-									// Only keep the first file, and wrap it with preview and type
 									if (acceptedFiles[0]) {
 										onChange({
 											file: acceptedFiles[0],
@@ -144,10 +144,15 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 								{({ getRootProps, getInputProps }) => (
 									<div
 										{...getRootProps()}
-										className="p-6 border-2 border-dashed rounded cursor-pointer"
+										className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-sky-500 transition"
 									>
 										<input {...getInputProps()} />
-										<p>Drag & drop a cover image here, or click to select</p>
+										<p className="text-sm text-gray-500 text-center">
+											Drag & drop an image here
+										</p>
+										<p className="text-xs text-gray-400 mt-1">
+											or click to select (max 1MB)
+										</p>
 									</div>
 								)}
 							</Dropzone>
@@ -155,7 +160,7 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 							{value &&
 								((value.type === "existing" && value.url) ||
 									(value.type !== "existing" && value.preview)) && (
-									<div className="mt-2 relative group border rounded p-1 w-fit">
+									<div className="mt-3 relative border rounded-lg p-2 w-40">
 										<Image
 											src={
 												value.type === "existing" ? value.url : value.preview
@@ -163,11 +168,11 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 											alt="uploaded"
 											width={150}
 											height={150}
-											className="object-scale-down w-full h-32 rounded"
+											className="object-contain w-full h-32 rounded"
 										/>
 										<button
 											type="button"
-											className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-80 hover:opacity-100"
+											className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
 											onClick={() => {
 												onChange(null);
 												form.setValue("deleteCoverImage", true);
@@ -177,8 +182,9 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 										</button>
 									</div>
 								)}
+
 							{dropError.length > 0 && (
-								<ul className="text-red-500 mt-2">
+								<ul className="text-red-500 mt-2 text-sm space-y-1">
 									{dropError.map((err, idx) => (
 										<li key={idx}>{err}</li>
 									))}
@@ -187,64 +193,90 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 						</div>
 					)}
 				/>
+
 				{errors.cover_image && (
 					<p className="mt-2 text-sm text-red-500">
 						{errors.cover_image.message as string}
 					</p>
 				)}
 			</div>
+
+			{/* Name */}
 			<div>
-				<label htmlFor="name">Name:</label>
+				<label
+					htmlFor="name"
+					className="block text-sm font-medium text-gray-700 mb-1"
+				>
+					Name
+				</label>
 				<input
+					id="name"
 					type="text"
 					placeholder="Name"
+					className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
 					{...register("name", { required: "Name is required." })}
 				/>
-				<div id="name-error" aria-live="polite" aria-atomic="true">
-					{errors.name && (
-						<p className="mt-2 text-sm text-red-500">{errors.name.message}</p>
-					)}
-				</div>
+				{errors.name && (
+					<p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+				)}
 			</div>
+
+			{/* Location */}
 			<div>
-				<label htmlFor="location">Location:</label>
+				<label
+					htmlFor="location"
+					className="block text-sm font-medium text-gray-700 mb-1"
+				>
+					Location
+				</label>
 				<input
+					id="location"
 					type="text"
 					placeholder="Location"
+					className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
 					{...register("location", { required: "Location is required." })}
 				/>
-				<div id="location-error" aria-live="polite" aria-atomic="true">
-					{errors.location && (
-						<p className="mt-2 text-sm text-red-500">
-							{errors.location.message}
-						</p>
-					)}
-				</div>
+				{errors.location && (
+					<p className="mt-1 text-sm text-red-500">{errors.location.message}</p>
+				)}
 			</div>
+
+			{/* Date of Founding */}
 			<div>
-				<label htmlFor="date_of_founding">Date of Founding:</label>
+				<label
+					htmlFor="date_of_founding"
+					className="block text-sm font-medium text-gray-700 mb-1"
+				>
+					Date of Founding
+				</label>
 				<input
-					type="text"
 					id="date_of_founding"
+					type="text"
+					placeholder="YYYY"
+					className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
 					{...register("date_of_founding", {
 						required: "Date of founding is reqired.",
 					})}
 				/>
-				<div id="color-error" aria-live="polite" aria-atomic="true">
-					{errors.date_of_founding && (
-						<p className="mt-2 text-sm text-red-500">
-							{errors.date_of_founding.message}
-						</p>
-					)}
-				</div>
-			</div>
-			<div id="server-error" aria-live="polite" aria-atomic="true">
-				{errors?.root && (
-					<p className="mt-2 text-sm text-red-500">{errors?.root?.message}</p>
+				{errors.date_of_founding && (
+					<p className="mt-1 text-sm text-red-500">
+						{errors.date_of_founding.message}
+					</p>
 				)}
 			</div>
-			<button type="submit" disabled={isSubmitting}>
-				{isSubmitting ? "Loading" : "Update"}
+
+			{/* Server Error */}
+			{errors?.root && (
+				<p className="text-sm text-red-500">{errors?.root?.message}</p>
+			)}
+
+			{/* Submit */}
+			<button
+				type="submit"
+				disabled={isSubmitting}
+				className="w-full bg-sky-600 text-white font-medium py-2.5 rounded-lg hover:bg-sky-700 disabled:opacity-50"
+			>
+				{isSubmitting ? "Loading..." : "Update"}
 			</button>
 		</form>
 	);

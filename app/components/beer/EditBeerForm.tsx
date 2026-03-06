@@ -82,7 +82,19 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 				: null,
 			deleteCoverImage: false,
 		});
-	}, [beer.id, beer.name, beer.style, beer.abv, beer.brewery_id, beer.color, beer.ibu, beer.description, coverImageUrl, reset, beer.brewery_name]);
+	}, [
+		beer.id,
+		beer.name,
+		beer.style,
+		beer.abv,
+		beer.brewery_id,
+		beer.color,
+		beer.ibu,
+		beer.description,
+		coverImageUrl,
+		reset,
+		beer.brewery_name,
+	]);
 
 	const onSubmit = async (data: EditBeerInput) => {
 		const formData = new FormData();
@@ -120,7 +132,7 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 		"file-invalid-type": "Only image files are allowed.",
 	};
 
-  type BreweryOption = {
+	type BreweryOption = {
 		value: string;
 		label: string;
 	};
@@ -154,8 +166,18 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 		};
 	};
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md space-y-6"
+		>
+			<h2 className="text-xl font-semibold text-sky-700">Update Beer</h2>
+
+			{/* Cover Image */}
 			<div>
+				<label className="block text-sm font-medium text-sky-800 mb-2">
+					Cover Image
+				</label>
+
 				<Controller
 					name="cover_image"
 					control={control}
@@ -176,12 +198,13 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 										return;
 									}
 
-									// Zod validation for accepted file
 									const zodErrors: string[] = [];
+
 									if (acceptedFiles[0]) {
 										const result = newCoverImageSchema.safeParse(
 											acceptedFiles[0],
 										);
+
 										if (!result.success) {
 											zodErrors.push(
 												...result.error.errors.map((err) => err.message),
@@ -194,7 +217,6 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 										return;
 									}
 
-									// Only keep the first file, and wrap it with preview and type
 									if (acceptedFiles[0]) {
 										onChange({
 											file: acceptedFiles[0],
@@ -209,10 +231,20 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 								{({ getRootProps, getInputProps }) => (
 									<div
 										{...getRootProps()}
-										className="p-6 border-2 border-dashed rounded cursor-pointer"
+										className="p-6 border-2 border-dashed border-sky-400 rounded-lg text-center cursor-pointer bg-sky-50 hover:bg-sky-100 transition"
 									>
-										<input {...getInputProps()} />
-										<p>Drag & drop a cover image here, or click to select</p>
+										<input
+											{...getInputProps()}
+											aria-label="Upload cover image"
+										/>
+
+										<p className="text-sm text-sky-700">
+											Drag & drop a cover image or tap to upload
+										</p>
+
+										<p className="text-xs text-gray-500 mt-1">
+											Max file size 1MB
+										</p>
 									</div>
 								)}
 							</Dropzone>
@@ -220,30 +252,33 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 							{value &&
 								((value.type === "existing" && value.url) ||
 									(value.type !== "existing" && value.preview)) && (
-									<div className="mt-2 relative group border rounded p-1 w-fit">
+									<div className="mt-3 relative w-fit">
 										<Image
 											src={
 												value.type === "existing" ? value.url : value.preview
 											}
-											alt="uploaded"
+											alt="Uploaded cover image"
 											width={150}
 											height={150}
-											className="object-scale-down w-full h-32 rounded"
+											className="rounded-lg object-cover border"
 										/>
+
 										<button
 											type="button"
-											className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-80 hover:opacity-100"
+											className="absolute top-1 right-1 bg-yellow-400 hover:bg-yellow-500 text-black rounded-full w-7 h-7 flex items-center justify-center"
 											onClick={() => {
 												onChange(null);
 												form.setValue("deleteCoverImage", true);
 											}}
+											aria-label="Remove cover image"
 										>
 											✕
 										</button>
 									</div>
 								)}
+
 							{dropError.length > 0 && (
-								<ul className="text-red-500 mt-2">
+								<ul className="text-red-600 text-sm mt-2">
 									{dropError.map((err, idx) => (
 										<li key={idx}>{err}</li>
 									))}
@@ -252,40 +287,77 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 						</div>
 					)}
 				/>
+
 				{errors.cover_image && (
-					<p className="mt-2 text-sm text-red-500">
+					<p className="text-red-600 text-sm mt-2">
 						{errors.cover_image.message as string}
 					</p>
 				)}
 			</div>
+
+			{/* Name */}
 			<div>
+				<label
+					htmlFor="name"
+					className="block text-sm font-medium text-sky-800"
+				>
+					Name
+				</label>
+
 				<input
+					id="name"
 					type="text"
-					placeholder="Name"
 					{...register("name", { required: "Name is required" })}
+					className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
 				/>
+
 				{errors.name && (
-					<p className="mt-2 text-sm text-red-500">{errors.name.message}</p>
+					<p className="text-red-600 text-sm mt-2">{errors.name.message}</p>
 				)}
 			</div>
+
+			{/* Style */}
 			<div>
-				<input type="text" placeholder="Style" {...register("style")} />
-				{errors.style && (
-					<p className="mt-2 text-sm text-red-500">{errors.style.message}</p>
-				)}
-			</div>
-			<div>
+				<label
+					htmlFor="style"
+					className="block text-sm font-medium text-sky-800"
+				>
+					Style
+				</label>
+
 				<input
+					id="style"
+					type="text"
+					{...register("style")}
+					className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500"
+				/>
+			</div>
+
+			{/* ABV */}
+			<div>
+				<label htmlFor="abv" className="block text-sm font-medium text-sky-800">
+					ABV (%)
+				</label>
+
+				<input
+					id="abv"
 					type="number"
 					step="0.1"
-					placeholder="ABV"
 					{...register("abv", { valueAsNumber: true })}
+					className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500"
 				/>
+
 				{errors.abv && (
-					<p className="mt-2 text-sm text-red-500">{errors.abv.message}</p>
+					<p className="text-red-600 text-sm mt-2">{errors.abv.message}</p>
 				)}
 			</div>
+
+			{/* Brewery */}
 			<div>
+				<label className="block text-sm font-medium text-sky-800 mb-2">
+					Brewery
+				</label>
+
 				{hasMounted && (
 					<Controller
 						name="brewery_id"
@@ -298,55 +370,103 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 								selectRef={ref}
 								loadOptions={loadOptions}
 								getOptionValue={(option: BreweryOption) => option.value}
-        						getOptionLabel={(option: BreweryOption) => option.label}
+								getOptionLabel={(option: BreweryOption) => option.label}
 								onChange={onChange}
 								additional={{ offset: 0 }}
 								debounceTimeout={300}
 								isSearchable={true}
 								placeholder="Search breweries..."
+								menuPortalTarget={document.body}
+								menuPosition="fixed"
 							/>
 						)}
 					/>
 				)}
+
 				{errors.brewery_id && (
-					<p className="mt-2 text-sm text-red-500">
+					<p className="text-red-600 text-sm mt-2">
 						{errors.brewery_id.message}
 					</p>
 				)}
 			</div>
+
+			{/* Description */}
 			<div>
-				<textarea placeholder="Description" {...register("description")} />
+				<label
+					htmlFor="description"
+					className="block text-sm font-medium text-sky-800"
+				>
+					Description
+				</label>
+
+				<textarea
+					id="description"
+					rows={4}
+					{...register("description")}
+					className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500"
+				/>
+
 				{errors.description && (
-					<p className="mt-2 text-sm text-red-500">
+					<p className="text-red-600 text-sm mt-2">
 						{errors.description.message}
 					</p>
 				)}
 			</div>
+
+			{/* IBU */}
 			<div>
+				<label htmlFor="ibu" className="block text-sm font-medium text-sky-800">
+					IBU
+				</label>
+
 				<input
+					id="ibu"
 					type="number"
-					step="1.0"
-					placeholder="IBU"
+					step="1"
 					{...register("ibu", { valueAsNumber: true })}
+					className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500"
 				/>
+
 				{errors.ibu && (
-					<p className="mt-2 text-sm text-red-500">{errors.ibu.message}</p>
+					<p className="text-red-600 text-sm mt-2">{errors.ibu.message}</p>
 				)}
 			</div>
+
+			{/* Color */}
 			<div>
-				<label htmlFor="color">Color:</label>
-				<input type="text" id="color" {...register("color")} />
+				<label
+					htmlFor="color"
+					className="block text-sm font-medium text-sky-800"
+				>
+					Color
+				</label>
+
+				<input
+					id="color"
+					type="text"
+					{...register("color")}
+					className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500"
+				/>
+
 				{errors.color && (
-					<p className="mt-2 text-sm text-red-500">{errors.color.message}</p>
+					<p className="text-red-600 text-sm mt-2">{errors.color.message}</p>
 				)}
 			</div>
-			<div id="server-error" aria-live="polite" aria-atomic="true">
+
+			{/* Server Error */}
+			<div id="server-error" aria-live="polite">
 				{errors?.root && (
-					<p className="mt-2 text-sm text-red-500">{errors?.root?.message}</p>
+					<p className="text-red-600 text-sm">{errors.root.message}</p>
 				)}
 			</div>
-			<button type="submit" disabled={isSubmitting}>
-				{isSubmitting ? "Loading" : "Update"}
+
+			{/* Submit */}
+			<button
+				type="submit"
+				disabled={isSubmitting}
+				className="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-3 rounded-lg transition disabled:opacity-50"
+			>
+				{isSubmitting ? "Loading..." : "Update"}
 			</button>
 		</form>
 	);
