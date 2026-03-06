@@ -16,7 +16,7 @@ export default function BeerCardDetailed({beer}: {beer:Beer}) {
 				<li>{beer.description}</li>
 				<li>Style: {beer.style}</li>
 				<li>IBU: {beer.ibu}</li>
-				<li>ABV: {beer.abv}%</li>
+				<li>ABV: {beer.abv.toFixed(1)}%</li>
 				<li>Color: {beer.color}</li>
 				<li>By: {beer.author_name}</li>
 			</ul>
