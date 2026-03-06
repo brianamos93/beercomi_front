@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from "react";
 import {
-	getAllBeers,
-	getDeletedBeers,
 	hardDeleteBeer,
 	softDeleteBeer,
 	undoSoftDeleteBeer,
+	getAdminBeers,
 } from "@/app/utils/requests/beerRequests";
 import Link from "next/link";
 import {
@@ -19,6 +18,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Column, DataTable } from "../table/DataTable";
 import { Pagination } from "../Pagination";
+import { DeletedFilter } from "@/app/utils/def";
 
 const LIMIT = 10;
 
@@ -35,15 +35,13 @@ type BeerLog = {
 	deleted_at?: string | null;
 };
 
-type Category = "all" | "deleted";
-
 export default function BeerTable({ token }: { token: string }) {
 	const [offset, setOffset] = useState(0);
 	const [total, setTotal] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [displayData, setDisplayData] = useState<BeerLog[]>([]);
-	const [category, setCategory] = useState<Category>("all");
+	const [deleted, setDeleted] = useState<DeletedFilter>("all");
 
 	const [pendingDelete, setPendingDelete] = useState<string | null>(null);
 
@@ -58,10 +56,12 @@ export default function BeerTable({ token }: { token: string }) {
 			setError(null);
 
 			try {
-				const res =
-					category === "all"
-						? await getAllBeers({ token, limit: LIMIT, offset })
-						: await getDeletedBeers({ token, limit: LIMIT, offset });
+				const res = await getAdminBeers({
+					token,
+					limit: LIMIT.toString(),
+					offset: offset.toString(),
+					deleted,
+				});
 
 				setDisplayData(res.data ?? []);
 				setTotal(res.pagination?.total ?? 0);
@@ -75,11 +75,11 @@ export default function BeerTable({ token }: { token: string }) {
 		};
 
 		fetchData();
-	}, [offset, category, token]);
+	}, [offset, deleted, token]);
 
 	const handleTableChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-		const newCategory = event.target.value as Category;
-		setCategory(newCategory);
+		const newCategory = event.target.value as DeletedFilter;
+		setDeleted(newCategory);
 		setOffset(0); // reset pagination when switching tables
 	};
 
@@ -213,18 +213,23 @@ export default function BeerTable({ token }: { token: string }) {
 					onChange={handleTableChange}
 				>
 					<option value="all">All</option>
-					<option value="deleted">Deleted</option>
+					<option value="true">Deleted</option>
+					<option value="false">Active</option>
 				</select>
 			</div>
 
 			{error && <p className="text-red-500 mb-2">{error}</p>}
 
-			<DataTable
-				columns={columns}
-				data={displayData}
-				loading={loading}
-				renderActions={renderActions}
-			/>
+			<div className="w-full overflow-x-auto">
+				<div className="min-w-[700px]">
+					<DataTable
+						columns={columns}
+						data={displayData}
+						loading={loading}
+						renderActions={renderActions}
+					/>
+				</div>
+			</div>
 
 			<Pagination
 				currentPage={currentPage}

@@ -1,3 +1,4 @@
+import { DeletedFilter } from "../def";
 import url from "../utils";
 
 export const getBeers = async ({ limit, offset }: {limit: number, offset: number}) => {
@@ -9,23 +10,9 @@ export const getBeers = async ({ limit, offset }: {limit: number, offset: number
 	return res.json();
 };
 
-export const getAllBeers = async ({ token, limit, offset }: {token: string, limit: number, offset: number}) => {
+export const getAdminBeers = async ({ token, limit, offset, deleted }: {token: string, limit: string, offset: string, deleted: DeletedFilter}) => {
 	const res = await fetch(
-		url + "/beers/admin/all?" + "limit=" + limit + "&offset=" + offset,
-		{ 
-			cache: "no-store", 
-			method: "GET",
-			headers: {
-				Authorization: `Bearer ${token}`
-			}, }
-	);
-	if (!res.ok) throw new Error("Failed to fetch beers");
-	return res.json();
-};
-
-export const getDeletedBeers = async ({ token, limit, offset }: {token: string, limit: number, offset: number}) => {
-	const res = await fetch(
-		url + "/beers/admin/deleted?" + "limit=" + limit + "&offset=" + offset,
+		url + `/beers/admin/beers?limit=${limit}&offset=${offset}&deleted=${deleted}`,
 		{ 
 			cache: "no-store", 
 			method: "GET",
