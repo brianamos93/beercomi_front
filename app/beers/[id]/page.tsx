@@ -1,7 +1,4 @@
-import {
-	getBeer,
-	getBeersList,
-} from "@/app/utils/requests/beerRequests";
+import { getBeer, getBeersList } from "@/app/utils/requests/beerRequests";
 import { Beer, Photo, Review } from "@/app/utils/def";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -11,6 +8,7 @@ import { getLoggedInUsersData } from "@/app/utils/requests/userRequests";
 import Image from "next/image";
 import ToggleFavoriteButton from "@/app/components/interface/buttons/FavoriteToggleClient";
 import { checkFavorite } from "@/app/utils/requests/favoriteRequests";
+import { PaginationLinks } from "@/app/components/interface/ServerPagination";
 
 export async function generateStaticParams() {
 	const beers = await getBeersList();
@@ -22,14 +20,26 @@ export async function generateStaticParams() {
 
 export default async function BeerPage({
 	params,
+	searchParams,
 }: {
 	params: Promise<{ id: string }>;
+	searchParams: Promise<{ page?: string }>;
 }) {
 	const token = await (await cookies()).get("token")?.value;
 	let userId = null;
 	let favorited = false;
 	let favorite_id: string | undefined = undefined;
-	const beer = await getBeer((await params).id);
+
+	const searchParamsPage = await searchParams;
+	const page = searchParamsPage.page;
+
+	const formattedPage = Number(page) || 1;
+	const limit = 10;
+	const offset = (formattedPage - 1) * limit;
+
+	const beer = await getBeer((await params).id, limit, offset);
+
+	const totalPages = Math.max(1, Math.ceil(beer.pagination.total / limit));
 
 	if (token) {
 		const userData = await getLoggedInUsersData(token);
@@ -61,14 +71,12 @@ export default async function BeerPage({
 						initialFavorite={favorited}
 						favorite_id={favorite_id}
 					/>
-				) : (
-					null
-				)}
+				) : null}
 
 				<h2 className="text-2xl font-bold mt-6 mb-4">Reviews</h2>
 				{userId !== null &&
 					!beer.reviews.some(
-						(review: Review) => review.author_id === userId
+						(review: Review) => review.author_id === userId,
 					) && <CreateBeerReviewForm beer={beer} />}
 				{beer.reviews.map((review: Review) => (
 					<div id={review.id} key={review.id} className="border p-4 mb-4">
@@ -105,6 +113,12 @@ export default async function BeerPage({
 					</div>
 				))}
 			</div>
+
+			<PaginationLinks
+				currentPage={formattedPage}
+				totalPages={totalPages}
+				basePath={`/breweries/${(await params).id}`}
+			/>
 		</main>
 	);
 }

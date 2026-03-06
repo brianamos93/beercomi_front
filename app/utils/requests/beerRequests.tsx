@@ -75,8 +75,10 @@ export const getBeersList = async () => {
 	return res.json();
 };
 
-export const getBeer = async (id: string) => {
-	const res = await fetch(`${url}/beers/${id}`);
+export const getBeer = async (id: string, limit?: number, offset?: number) => {
+	const res = await fetch(`${url}/beers/${id}?limit=${limit}&offset=${offset}`, {
+		cache: "no-store",
+	});
 	if (!res.ok) throw new Error("Beer not found");
 	return res.json();
 };
