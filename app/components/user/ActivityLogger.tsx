@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getActivityLog } from "@/app/utils/requests/activityLogRequests";
 import { ActivityLogData } from "@/app/utils/def";
 import { Column, DataTable } from "../interface/table/DataTable";
-import { Pagination } from "../interface/Pagination";
+import { PaginationUI } from "../interface/paginationBase";
 
 const LIMIT = 10;
 
@@ -32,7 +32,7 @@ export default function ActivityLogTable({
 				});
 
 				setLogs(res.data);
-				setTotal(res.pagination.totalItems);
+				setTotal(res.pagination.total);
 			} catch (err) {
 				setError("Failed to load activity log");
 			} finally {
@@ -67,13 +67,11 @@ export default function ActivityLogTable({
 			<div className="w-full overflow-x-auto">
 				<div className="min-w-[700px]">
 					<DataTable columns={columns} data={logs} loading={loading} />
-
-					<Pagination
+					<PaginationUI 
 						currentPage={currentPage}
 						totalPages={totalPages}
-						onPrevious={() => setOffset((o) => Math.max(0, o - LIMIT))}
-						onNext={() => setOffset((o) => o + LIMIT)}
-						disabled={loading}
+						previousAction={() => setOffset((o) => Math.max(0, o - LIMIT))}
+						nextAction={() => setOffset((o) => o + LIMIT)}
 					/>
 				</div>
 			</div>

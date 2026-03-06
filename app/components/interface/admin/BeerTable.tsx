@@ -17,8 +17,8 @@ import {
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Column, DataTable } from "../table/DataTable";
-import { Pagination } from "../Pagination";
 import { DeletedFilter } from "@/app/utils/def";
+import { PaginationUI } from "../paginationBase";
 
 const LIMIT = 10;
 
@@ -231,12 +231,11 @@ export default function BeerTable({ token }: { token: string }) {
 				</div>
 			</div>
 
-			<Pagination
+			<PaginationUI
 				currentPage={currentPage}
 				totalPages={totalPages}
-				onPrevious={() => setOffset((o) => Math.max(0, o - LIMIT))}
-				onNext={() => setOffset((o) => o + LIMIT)}
-				disabled={loading}
+				previousAction={() => setOffset((o) => Math.max(0, o - LIMIT))}
+				nextAction={() => setOffset((o) => o + LIMIT)}
 			/>
 		</div>
 	);
