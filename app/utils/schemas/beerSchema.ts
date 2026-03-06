@@ -56,6 +56,8 @@ export const CreateBeerSchema = beerBase.extend({
 	cover_image: newCoverImageSchema	
 })
 
+export type BeerFormValues = z.infer<typeof CreateBeerSchema>;
+
 export const EditBeerSchema = beerBase.extend({
 	cover_image: z.union([
 		existingCoverImageSchema,
