@@ -17,7 +17,7 @@ export const createNewfileSchema = z
 
 const existingFileSchemaForEdit = z.object({
   id: z.string(),
-  url: z.string().url(),
+  url: z.string(),
   type: z.literal("existing"),
   markedForDelete: z.boolean().optional(),
 });
