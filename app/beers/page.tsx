@@ -3,6 +3,7 @@ import BeerCard from "../components/beer/BeerCard";
 import { getBeers } from "../utils/requests/beerRequests";
 import { Beer } from "../utils/def";
 import { cookies } from "next/headers";
+import { PaginationLinks } from "../components/interface/ServerPagination";
 
 export default async function beers({
 	searchParams,
@@ -39,29 +40,11 @@ export default async function beers({
 					))}
 				</ul>
 
-				<div className="flex justify-between mt-6">
-					<Link
-						href={`/beers?page=${page - 1}`}
-						className={`px-3 py-2 border rounded ${
-							page <= 1 ? "opacity-50 pointer-events-none" : ""
-						}`}
-					>
-						Previous
-					</Link>
-
-					<span>
-						Page {page} of {totalPages}
-					</span>
-
-					<Link
-						href={`/beers?page=${page + 1}`}
-						className={`px-3 py-2 border rounded ${
-							page >= totalPages ? "opacity-50 pointer-events-none" : ""
-						}`}
-					>
-						Next
-					</Link>
-				</div>
+				<PaginationLinks
+					currentPage={page}
+					totalPages={totalPages}
+					basePath={`/beers`}
+				/>
 			</div>
 		</main>
 	);
