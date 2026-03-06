@@ -15,7 +15,6 @@ import {
 } from "@/app/utils/schemas/reviewSchema";
 import Dropzone from "react-dropzone";
 import { useEffect, useState } from "react";
-import url from "@/app/utils/utils";
 
 export default function EditBeerReviewForm({
 	beer,
@@ -33,7 +32,7 @@ export default function EditBeerReviewForm({
 			rating: String(Math.floor(review.rating)),
 			photos: review.photos.map((p: any) => ({
 				id: p.id,
-				url: url + p.photo_url,
+				url: p.photo_url,
 				type: "existing" as const,
 				markedForDelete: false,
 			})),

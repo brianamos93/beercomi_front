@@ -8,7 +8,6 @@ import Link from "next/link";
 import BeerCardDetailed from "@/app/components/beer/BeerCardDetailed";
 import CreateBeerReviewForm from "@/app/components/beer/review/CreateBeerReviewForm";
 import { getLoggedInUsersData } from "@/app/utils/requests/userRequests";
-import url from "@/app/utils/utils";
 import Image from "next/image";
 import ToggleFavoriteButton from "@/app/components/interface/buttons/FavoriteToggleClient";
 import { checkFavorite } from "@/app/utils/requests/favoriteRequests";
@@ -78,7 +77,7 @@ export default async function BeerPage({
 								review.photos.map((photo: Photo) => (
 									<div key={photo.id}>
 										<Image
-											src={`${url}${photo.photo_url}`}
+											src={`${photo.photo_url}`}
 											alt="uploaded"
 											width={150}
 											height={150}
