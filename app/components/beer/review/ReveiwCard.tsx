@@ -17,7 +17,7 @@ export default function ReviewCard({ entry }: { entry: Review}) {
 								href={`/beers/${entry.beer_id}#${entry.id}`}
 							>
 								<Image
-								src={`http://localhost:3005${firstPhoto.photo_url}`}
+								src={`${firstPhoto.photo_url}`}
 								width={200}
 								height={200}
 								alt={`${entry.beer_name} photo`}
