@@ -8,7 +8,7 @@ const links = [
 	{ name: 'Activity Log', href: '/users/admin/activity' },
 	{ name: 'Beers', href: '/users/admin/beers' },
 	{ name: 'Breweries', href: '/users/admin/breweries' },
-	{ name: 'Review Overview', href: '/users/admin/reviews' },
+	{ name: 'Reviews', href: '/users/admin/reviews' },
 ];
 
 export default function SideNav() {
