@@ -40,7 +40,7 @@ export const getBrewery = async (id: string, limit: number, offset: number) => {
 			cache: "no-store",
 		},
 	);
-
+	if (!res.ok) throw new Error("Brewery not found");
 	return res.json();
 };
 export const createBrewery = async (
