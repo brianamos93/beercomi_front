@@ -52,47 +52,85 @@ export default async function BreweryPage({
 	}
 
 	return (
-		<main>
-			<div className="max-w-2xl mx-auto p-4">
-				<div>
-					<CoverImage cover_image={brewery.cover_image} name={brewery.name} />
-				</div>
-				<h1 className="text-2xl font-bold mb-4">{brewery.name}</h1>
-				<ul>
-					<li>{brewery.location}</li>
-					<li>{brewery.date_of_founding}</li>
-					{brewery.author_id === userId && (
-						<li>
-							<Link
-								href={`/breweries/${brewery.id}/edit`}
-								className="text-blue-600 hover:underline font-semibold"
-							>
-								Edit
-							</Link>
-						</li>
-					)}
-					<li>
-						{token ? (
-							<ToggleFavoriteButton
-								type="breweries"
-								id={brewery.id}
-								initialFavorite={favorited}
-								favorite_id={favorite_id}
+		<main className="min-h-screen py-8">
+			<div className="max-w-3xl mx-auto px-4 space-y-6">
+				{/* Brewery Card */}
+				<div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+					<div className="flex flex-col md:flex-row gap-6">
+						{/* Cover Image */}
+						<div className="flex-shrink-0">
+							<CoverImage
+								cover_image={brewery.cover_image}
+								name={brewery.name}
 							/>
-						) : null}
-					</li>
-				</ul>
-				<div className="mt-6 flex flex-col space-y-4">
-					<h2 className="text-xl font-bold mb-2">Beers</h2>
-					{brewery.beers.map((beer: Beer) => (
-						<BeerCard type={"nobrewery"} entry={beer} key={beer.id} />
-					))}
+						</div>
 
-					<PaginationLinks
-						currentPage={formattedPage}
-						totalPages={totalPages}
-						basePath={`/breweries/${(await params).id}`}
-					/>
+						{/* Brewery Info */}
+						<div className="flex-1">
+							<h1 className="text-3xl font-bold text-gray-900 mb-2">
+								{brewery.name}
+							</h1>
+
+							<div className="grid grid-cols-2 gap-3 text-sm mb-4">
+								<div className="bg-gray-50 rounded-lg px-3 py-2">
+									<span className="text-gray-500">Location</span>
+									<p className="font-semibold text-gray-800">
+										{brewery.location}
+									</p>
+								</div>
+
+								<div className="bg-gray-50 rounded-lg px-3 py-2">
+									<span className="text-gray-500">Founded</span>
+									<p className="font-semibold text-gray-800">
+										{brewery.date_of_founding}
+									</p>
+								</div>
+							</div>
+
+							{/* Actions */}
+							<div className="flex items-center gap-4 mt-2">
+								{brewery.author_id === userId && (
+									<Link
+										href={`/breweries/${brewery.id}/edit`}
+										className="text-sm font-semibold text-yellow-600 hover:underline"
+									>
+										Edit Brewery
+									</Link>
+								)}
+
+								{token && (
+									<ToggleFavoriteButton
+										type="breweries"
+										id={brewery.id}
+										initialFavorite={favorited}
+										favorite_id={favorite_id}
+									/>
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{/* Beer List */}
+				<div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+					<h2 className="text-xl font-bold text-gray-900 mb-4">Beers</h2>
+
+					<div className="flex flex-col items-center gap-4">
+						{brewery.beers.map((beer: Beer) => (
+							<div key={beer.id} className="w-full max-w-lg">
+								<BeerCard type="nobrewery" entry={beer} />
+							</div>
+						))}
+					</div>
+
+					{/* Pagination */}
+					<div className="mt-6 flex justify-center">
+						<PaginationLinks
+							currentPage={formattedPage}
+							totalPages={totalPages}
+							basePath={`/breweries/${(await params).id}`}
+						/>
+					</div>
 				</div>
 			</div>
 		</main>
