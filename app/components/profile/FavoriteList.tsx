@@ -9,7 +9,10 @@ type Favorite = {
 	target_id: string;
 	name: string;
 	brewery_name: string;
+	brewery_id: string;
 	source_table: "beers" | "breweries";
+	date_created: Date;
+
 };
 
 type Props = {
@@ -59,7 +62,7 @@ export default function UserFavoriteList({ userId }: Props) {
 			<h2>Favorites</h2>
 
 			<ul>
-				{favorites.map((favorite) => {
+				{favorites.map((favorite: Favorite) => {
 					const href = `/${favorite.source_table}/${favorite.target_id}`;
 					const label =
 						favorite.source_table === "beers"
