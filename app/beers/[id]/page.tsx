@@ -51,68 +51,93 @@ export default async function BeerPage({
 		favorite_id = favoriteRes.favorited ? favoriteRes.favorite_id : undefined;
 	}
 	return (
-		<main className="max-w-2xl mx-auto p-4">
+		<main className="max-w-2xl mx-auto p-4 space-y-8">
 			<BeerCardDetailed beer={beer} />
+
 			{beer.author_id === userId && (
-				<span>
+				<div>
 					<Link
 						href={`/beers/${beer.id}/edit`}
-						className="text-yellow-600 hover:underline font-semibold"
+						className="inline-block px-4 py-2 text-sm font-semibold text-yellow-800 bg-yellow-100 rounded-lg hover:bg-yellow-200"
 					>
-						Edit
+						Edit Beer
 					</Link>
-				</span>
+				</div>
 			)}
-			<div>
-				{token ? (
+
+			{token && (
+				<div>
 					<ToggleFavoriteButton
 						type="beers"
 						id={beer.id}
 						initialFavorite={favorited}
 						favorite_id={favorite_id}
 					/>
-				) : null}
+				</div>
+			)}
 
-				<h2 className="text-2xl font-bold mt-6 mb-4">Reviews</h2>
+			<section>
+				<h2 className="text-2xl font-bold mb-6 border-b pb-2">Reviews</h2>
+
 				{userId !== null &&
 					!beer.reviews.some(
 						(review: Review) => review.author_id === userId,
-					) && <CreateBeerReviewForm beer={beer} />}
-				{beer.reviews.map((review: Review) => (
-					<div id={review.id} key={review.id} className="border p-4 mb-4">
-						<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-							{review.photos ? (
-								review.photos.map((photo: Photo) => (
-									<div key={photo.id}>
+					) && (
+						<div className="mb-6">
+							<CreateBeerReviewForm beer={beer} />
+						</div>
+					)}
+
+				<div className="space-y-6">
+					{beer.reviews.map((review: Review) => (
+						<div
+							id={review.id}
+							key={review.id}
+							className="border rounded-xl p-5 bg-white shadow-sm"
+						>
+							{/* Photos */}
+							{review.photos && review.photos.length > 0 && (
+								<div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+									{review.photos.map((photo: Photo) => (
 										<Image
-											src={`${photo.photo_url}`}
-											alt="uploaded"
+											key={photo.id}
+											src={photo.photo_url}
+											alt="Review photo"
 											width={150}
 											height={150}
-											className="h-auto max-w-full rounded-lg"
+											className="rounded-lg object-cover w-full h-32"
 										/>
-									</div>
-								))
-							) : (
-								<div></div>
+									))}
+								</div>
 							)}
+
+							{/* Review text */}
+							<p className="text-gray-800 mb-4 leading-relaxed">
+								{review.review}
+							</p>
+
+							{/* Metadata */}
+							<div className="flex items-center justify-between text-sm">
+								<div className="space-x-4">
+									<span className="text-yellow-600 font-semibold">
+										⭐ {review.rating}
+									</span>
+									<span className="text-gray-500">by {review.author_name}</span>
+								</div>
+
+								{review.author_id === userId && (
+									<Link
+										href={`/beers/${beer.id}/review/${review.id}/edit`}
+										className="text-blue-600 hover:underline font-semibold"
+									>
+										Edit
+									</Link>
+								)}
+							</div>
 						</div>
-						<p className="text-gray-700">{review.review}</p>
-						<p className="text-yellow-500">Rating: {review.rating}</p>
-						<p className="text-gray-500">By: {review.author_name}</p>
-						{review.author_id === userId && (
-							<span>
-								<Link
-									href={`/beers/${beer.id}/review/${review.id}/edit`}
-									className="text-blue-600 hover:underline font-semibold"
-								>
-									Edit
-								</Link>
-							</span>
-						)}
-					</div>
-				))}
-			</div>
+					))}
+				</div>
+			</section>
 
 			<PaginationLinks
 				currentPage={formattedPage}
