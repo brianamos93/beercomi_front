@@ -1,16 +1,15 @@
 import { Beer } from "@/app/utils/def";
 import Link from "next/link";
-import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import CoverImage from "../interface/coverImage";
 
 import {
-	Card,
+	CardBase,
 	CardImage,
 	CardContent,
 	CardTitle,
 	CardMeta,
 	CardAction,
-} from "@/app/components/interface/cards";
+} from "@/app/components/interface/CardLibrary";
 
 type BeerCardType = "brewery" | "nobrewery";
 
@@ -23,7 +22,7 @@ export default function BeerCard({
 }) {
 	const fixedAbv = Number(entry.abv).toFixed(1);
 	return (
-		<Card>
+		<CardBase>
 			<Link href={`/beers/${entry.id}`}>
 				<CardImage>
 					<CoverImage cover_image={entry.cover_image} name={entry.name} />
@@ -53,6 +52,6 @@ export default function BeerCard({
 
 				<CardAction link={`/beers/${entry.id}`} type={"beer"} />
 			</CardContent>
-		</Card>
+		</CardBase>
 	);
 }

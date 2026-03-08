@@ -2,7 +2,7 @@ import ArrowRightIcon from "@heroicons/react/20/solid/ArrowRightIcon";
 import Link from "next/link";
 import { ReactNode } from "react";
 
-export function Card({ children }: { children: ReactNode }) {
+export function CardBase({ children }: { children: ReactNode }) {
 	return (
 		<div className="max-w-sm md:max-w-lg bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 dark:bg-gray-800 dark:border-gray-700 flex flex-col overflow-hidden">
 			{children}

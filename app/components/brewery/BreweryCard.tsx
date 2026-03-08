@@ -3,17 +3,17 @@ import Link from "next/link";
 import CoverImage from "../interface/coverImage";
 
 import {
-	Card,
+	CardBase,
 	CardImage,
 	CardContent,
 	CardTitle,
 	CardMeta,
 	CardAction,
-} from "@/app/components/interface/cards";
+} from "@/app/components/interface/CardLibrary";
 
 export default function BreweryCard({ entry }: { entry: Brewery }) {
 	return (
-		<Card>
+		<CardBase>
 			<Link href={`/breweries/${entry.id}`}>
 				<CardImage>
 					<CoverImage cover_image={entry.cover_image} name={entry.name} />
@@ -39,6 +39,6 @@ export default function BreweryCard({ entry }: { entry: Brewery }) {
 
 				<CardAction link={`/breweries/${entry.id}`} type={"brewery"} />
 			</CardContent>
-		</Card>
+		</CardBase>
 	);
 }

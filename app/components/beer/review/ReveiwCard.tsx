@@ -1,15 +1,14 @@
 import { Review } from "@/app/utils/def";
 import Link from "next/link";
-import Image from "next/image";
-import { ArrowRightIcon } from "@heroicons/react/20/solid";
+
 import {
-	Card,
+	CardBase,
 	CardAction,
 	CardContent,
 	CardImage,
 	CardMeta,
 	CardTitle,
-} from "../../interface/cards";
+} from "../../interface/CardLibrary";
 import CoverImage from "../../interface/coverImage";
 import { StarIcon } from "@heroicons/react/20/solid";
 
@@ -28,7 +27,7 @@ export default function ReviewCard({ entry }: { entry: Review }) {
 				?.photo_url
 		: undefined;
 	return (
-		<Card>
+		<CardBase>
 			<Link href={`/beers/${entry.beer_id}#${entry.id}`}>
 				<CardImage>
 					<CoverImage
@@ -70,6 +69,6 @@ export default function ReviewCard({ entry }: { entry: Review }) {
 					type={"review"}
 				/>
 			</CardContent>
-		</Card>
+		</CardBase>
 	);
 }
