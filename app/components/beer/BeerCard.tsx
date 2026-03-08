@@ -1,8 +1,16 @@
 import { Beer } from "@/app/utils/def";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
-import { NewspaperIcon } from "@heroicons/react/24/outline";
+import CoverImage from "../interface/coverImage";
+
+import {
+	Card,
+	CardImage,
+	CardContent,
+	CardTitle,
+	CardMeta,
+	CardAction,
+} from "@/app/components/interface/cards";
 
 type BeerCardType = "brewery" | "nobrewery";
 
@@ -13,55 +21,38 @@ export default function BeerCard({
 	entry: Beer;
 	type?: BeerCardType;
 }) {
+	const fixedAbv = Number(entry.abv).toFixed(1);
 	return (
-		<div className="md:max-w-lg max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-			<div className="flex flex-col items-center justify-center mx-5 mb-5">
-				{entry.cover_image ? (
-					<Link href={`/beers/${entry.id}`}>
-						<Image
-							src={`${entry.cover_image}`}
-							width={200}
-							height={200}
-							alt={`${entry.name} photo`}
-							className="object-cover rounded-lg mb-2"
-						/>
-					</Link>
-				) : (
-					<Link href={`/beers/${entry.id}`}>
-						<NewspaperIcon className="w-48 h-48 text-gray-500" />
-					</Link>
-				)}
+		<Card>
+			<Link href={`/beers/${entry.id}`}>
+				<CardImage>
+					<CoverImage cover_image={entry.cover_image} name={entry.name} />
+				</CardImage>
+			</Link>
 
-				<h2 className="text-lg font-semibold">
-					{type === "brewery"
-						? `${entry.brewery_name}'s ${entry.name}`
-						: entry.name}
-				</h2>
+			<CardContent>
+				<Link href={`/beers/${entry.id}`}>
+					<CardTitle>{entry.name}</CardTitle>
+				</Link>
 
-				<div>
+				<CardMeta>
 					<p>
 						<strong>Style:</strong> {entry.style}
 					</p>
 					<p>
-						<strong>ABV:</strong> {entry.abv}%
+						<strong>ABV:</strong> {fixedAbv}%
 					</p>
 					<p>
-						<strong>Author:</strong> {entry.author_name}
+						<strong>IBU:</strong> {entry.ibu}
 					</p>
 					<p>
 						<strong>Updated:</strong>{" "}
-						{new Date(entry.date_updated).toLocaleString()}
+						{new Date(entry.date_updated).toLocaleDateString()}
 					</p>
+				</CardMeta>
 
-					<Link
-						href={`/beers/${entry.id}`}
-						className="mt-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-					>
-						Read More
-						<ArrowRightIcon className="h-5 w-5" />
-					</Link>
-				</div>
-			</div>
-		</div>
+				<CardAction link={`/beers/${entry.id}`} type={"beer"} />
+			</CardContent>
+		</Card>
 	);
 }
