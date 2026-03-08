@@ -50,10 +50,9 @@ export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 			});
 		}
 		const res = await createServerReview(formData);
-		if(res.error) {
-			setError('root', { type: "server", message: res.error })
+		if (res.error) {
+			setError("root", { type: "server", message: res.error });
 		}
-	
 	};
 
 	const errorMessages: Record<string, string> = {
@@ -61,15 +60,21 @@ export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 		"file-invalid-type": "Only image files are allowed.",
 	};
 	return (
-		<form onSubmit={handleSubmit(onSubmitForm)}>
+		<form
+			onSubmit={handleSubmit(onSubmitForm)}
+			className="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm p-6 space-y-6"
+		>
 			<input
 				{...register("beer_id")}
 				type="hidden"
 				name="beer_id"
 				value={beer.id}
 			/>
-			<div>
-				<label htmlFor="photos">Upload photos:</label>
+
+			{/* Photo Upload */}
+			<div className="space-y-2">
+				<label className="font-semibold text-gray-700">Photos</label>
+
 				<Controller
 					name="photos"
 					control={control}
@@ -80,25 +85,22 @@ export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 								maxSize={1 * 1024 * 1024}
 								maxFiles={4}
 								onDrop={(acceptedFiles, rejectedFiles) => {
-									// Clear previous errors
 									setDropError([]);
 
-									// Handle Dropzone errors first
 									if (rejectedFiles.length > 0) {
 										const customErrors = rejectedFiles.flatMap((r) =>
-											r.errors.map((e) => errorMessages[e.code] || e.message)
+											r.errors.map((e) => errorMessages[e.code] || e.message),
 										);
 										setDropError(customErrors);
 										return;
 									}
 
-									// Zod validation for accepted files
 									const zodErrors: string[] = [];
 									acceptedFiles.forEach((file) => {
 										const result = createNewfileSchema.safeParse(file);
 										if (!result.success) {
 											zodErrors.push(
-												...result.error.errors.map((err) => err.message)
+												...result.error.errors.map((err) => err.message),
 											);
 										}
 									});
@@ -108,45 +110,53 @@ export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 										return;
 									}
 
-									// Update RHF state if valid
 									onChange([...(value || []), ...acceptedFiles]);
 								}}
 							>
 								{({ getRootProps, getInputProps }) => (
 									<div
 										{...getRootProps()}
-										className="p-6 border-2 border-dashed rounded cursor-pointer"
+										className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-yellow-400 hover:bg-yellow-50 transition"
 									>
 										<input {...getInputProps()} />
-										<p>Drag & drop files here, or click to select</p>
+										<p className="text-gray-600 text-sm">
+											Drag & drop photos here or click to upload
+										</p>
+										<p className="text-xs text-gray-400 mt-1">
+											Up to 4 images • Max 1MB each
+										</p>
 									</div>
 								)}
 							</Dropzone>
 
+							{/* Image previews */}
 							{value && value.length > 0 && (
-								<ul className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-4">
+								<ul className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
 									{value.map((file, idx) => (
-										<li key={idx} className="relative group border rounded p-1">
+										<li
+											key={idx}
+											className="relative group border rounded-lg overflow-hidden"
+										>
 											<Image
 												src={URL.createObjectURL(file)}
 												alt={file.name}
 												width={150}
 												height={150}
-												className="object-scale-down w-full h-32 rounded"
+												className="object-cover w-full h-32"
 												onLoad={(e) => {
-													// Revoke the object URL after the image loads to free memory
 													URL.revokeObjectURL(
-														(e.target as HTMLImageElement).src
+														(e.target as HTMLImageElement).src,
 													);
 												}}
 											/>
+
 											<button
 												type="button"
-												className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-80 hover:opacity-100"
 												onClick={() => {
 													const newFiles = value.filter((_, i) => i !== idx);
 													onChange(newFiles);
 												}}
+												className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-80 hover:opacity-100"
 											>
 												✕
 											</button>
@@ -154,8 +164,9 @@ export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 									))}
 								</ul>
 							)}
+
 							{dropError.length > 0 && (
-								<ul className="text-red-500 mt-2">
+								<ul className="text-red-500 text-sm mt-2 space-y-1">
 									{dropError.map((err, idx) => (
 										<li key={idx}>{err}</li>
 									))}
@@ -164,120 +175,69 @@ export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 						</div>
 					)}
 				/>
-				<div id="photos-error" aria-live="polite" aria-atomic="true">
-					{errors?.photos && (
-						<p className="mt-2 text-sm text-red-500">
-							{errors?.photos?.message}
-						</p>
-					)}
-				</div>
 			</div>
-			<div>
-				<label htmlFor="review">Review:</label>
+
+			{/* Review */}
+			<div className="space-y-2">
+				<label htmlFor="review" className="font-semibold text-gray-700">
+					Review
+				</label>
+
 				<textarea
 					{...register("review")}
 					id="review"
-					cols={30}
-					rows={10}
-				></textarea>
-				<div id="review-error" aria-live="polite" aria-atomic="true">
-					{errors?.review && (
-						<p className="mt-2 text-sm text-red-500">
-							{errors?.review?.message}
-						</p>
-					)}
-				</div>
-			</div>
-			<div>
-				<fieldset className="flex flex-row-reverse justify-center gap-1">
-					<input
-						type="radio"
-						id="star5"
-						value="5"
-						className="peer hidden"
-						{...register("rating")}
-					/>
-					<label
-						htmlFor="star5"
-						className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300"
-					>
-						★
-					</label>
+					rows={5}
+					placeholder="What did you think about this beer?"
+					className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+				/>
 
-					<input
-						type="radio"
-						id="star4"
-						value="4"
-						className="peer hidden"
-						{...register("rating")}
-					/>
-					<label
-						htmlFor="star4"
-						className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label"
-					>
-						★
-					</label>
-
-					<input
-						type="radio"
-						id="star3"
-						value="3"
-						className="peer hidden"
-						{...register("rating")}
-					/>
-					<label
-						htmlFor="star3"
-						className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label"
-					>
-						★
-					</label>
-
-					<input
-						type="radio"
-						id="star2"
-						value="2"
-						className="peer hidden"
-						{...register("rating")}
-					/>
-					<label
-						htmlFor="star2"
-						className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label"
-					>
-						★
-					</label>
-
-					<input
-						type="radio"
-						id="star1"
-						value="1"
-						className="peer hidden"
-						{...register("rating")}
-					/>
-					<label
-						htmlFor="star1"
-						className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 peer-checked:~label"
-					>
-						★
-					</label>
-				</fieldset>
-				<div id="rating-error" aria-live="polite" aria-atomic="true">
-					{errors?.rating && (
-						<p className="mt-2 text-sm text-red-500">
-							{errors?.rating?.message}
-						</p>
-					)}
-				</div>
-			</div>
-			<div id="server-error" aria-live="polite" aria-atomic="true">
-				{errors?.root && (
-					<p className="mt-2 text-sm text-red-500">
-						{errors?.root?.message}
-					</p>
+				{errors?.review && (
+					<p className="text-sm text-red-500">{errors?.review?.message}</p>
 				)}
 			</div>
-			<div>
-				<button type="submit" disabled={isSubmitting}>
-					{isSubmitting ? "Loading" : "Submit"}
+
+			{/* Rating */}
+			<div className="space-y-2">
+				<label className="font-semibold text-gray-700">Rating</label>
+
+				<fieldset className="flex flex-row-reverse justify-end gap-1 text-3xl">
+					{[5, 4, 3, 2, 1].map((star) => (
+						<span key={star}>
+							<input
+								type="radio"
+								id={`star${star}`}
+								value={star}
+								className="peer hidden"
+								{...register("rating")}
+							/>
+							<label
+								htmlFor={`star${star}`}
+								className="cursor-pointer text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-300 transition"
+							>
+								★
+							</label>
+						</span>
+					))}
+				</fieldset>
+
+				{errors?.rating && (
+					<p className="text-sm text-red-500">{errors?.rating?.message}</p>
+				)}
+			</div>
+
+			{/* Server error */}
+			{errors?.root && (
+				<p className="text-sm text-red-500">{errors?.root?.message}</p>
+			)}
+
+			{/* Submit */}
+			<div className="pt-2">
+				<button
+					type="submit"
+					disabled={isSubmitting}
+					className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-lg transition disabled:opacity-50"
+				>
+					{isSubmitting ? "Submitting..." : "Submit Review"}
 				</button>
 			</div>
 		</form>
