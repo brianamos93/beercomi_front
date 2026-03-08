@@ -64,7 +64,7 @@ export default function UserFavoriteList({ userId }: Props) {
 					const label =
 						favorite.source_table === "beers"
 							? `${favorite.brewery_name}'s ${favorite.name}`
-							: favorite.brewery_name;
+							: favorite.name;
 
 					return (
 						<li key={favorite.id}>
