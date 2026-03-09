@@ -12,12 +12,11 @@ export function CardBase({ children }: { children: ReactNode }) {
 
 export function CardImage({ children }: { children: ReactNode }) {
 	return (
-		<div className="flex justify-center items-center p-6 bg-gray-50 dark:bg-gray-700">
+		<div className="relative w-full h-64 bg-gray-50 dark:bg-gray-700">
 			{children}
 		</div>
 	);
 }
-
 export function CardContent({ children }: { children: ReactNode }) {
 	return <div className="flex flex-col flex-grow p-5">{children}</div>;
 }
