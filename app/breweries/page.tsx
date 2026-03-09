@@ -4,6 +4,7 @@ import { getBreweries } from "../utils/requests/breweryRequests";
 import { Brewery } from "../utils/def";
 import { cookies } from "next/headers";
 import { PaginationLinks } from "../components/interface/ServerPagination";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 export default async function BreweriesPage({
 	searchParams,
@@ -29,27 +30,33 @@ export default async function BreweriesPage({
 	return (
 		<main>
 			<div className="max-w-2xl mx-auto p-4">
-				<h1 className="text-2xl font-bold mb-4">Breweries</h1>
+				<h1 className="text-2xl font-bold mb-4 text-center">Breweries</h1>
 
 				{token && (
-					<Link href="/breweries/new">
-						<h2>New Brewery</h2>
-					</Link>
+					<div className="flex justify-center my-6">
+						<Link href="/breweries/new"
+						className="inline-flex items-center gap-2 px-5 py-3 bg-amber-400 text-black font-semibold rounded-lg shadow hover:bg-amber-500 transition">
+							<PlusIcon className="w-5 h-5" />
+							Add Brewery
+						</Link>
+					</div>
 				)}
 
-				<ul className="space-y-4">
+				<ul className="space-y-4 flex flex-col items-center">
 					{data.map((brewery: Brewery) => (
-						<li key={brewery.id}>
+						<li key={brewery.id} className="w-full max-w-md">
 							<BreweryCard entry={brewery} />
 						</li>
 					))}
 				</ul>
 
-				<PaginationLinks
-					currentPage={formattedPage}
-					totalPages={totalPages}
-					basePath={`/breweries`}
-				/>
+				<div className="max-w-md mx-auto mt-6">
+					<PaginationLinks
+						currentPage={formattedPage}
+						totalPages={totalPages}
+						basePath={`/breweries`}
+					/>
+				</div>
 			</div>
 		</main>
 	);
