@@ -13,10 +13,10 @@ type LoginState =
   | { success?: undefined; error: { email?: string[]; password?: string[]; general?: string[] } };
 
 export async function Login(
-  prevState: LoginState, // 👈 required for useFormState
+  prevState: LoginState, 
   formData: FormData
 ): Promise<LoginState> {
-  // ✅ Validate input
+
   const parsed = LoginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -91,12 +91,16 @@ export const getRecentActivityOneUser = async (userId: string) => {
 	return res.json();
 };
 
-export const getLoggedInUsersData = async (token: string) => {
+export const getLoggedInUsersData = async () => {
+  const token = (await cookies()).get("token")?.value;
+  if (!token) return null
+  
   const res = await fetch(url + '/user', {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
+      cache: "no-store",
     },
   });
 
@@ -104,12 +108,7 @@ export const getLoggedInUsersData = async (token: string) => {
     // Return null or empty object instead of throwing
     return null;
   }
-
-  try {
-    return await res.json();
-  } catch {
-    return null;
-  }
+  return res.json()
 };
 
 export const getUserFavorites = async (user_id: string, limit: number, offset: number) => {

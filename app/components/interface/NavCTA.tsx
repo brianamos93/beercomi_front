@@ -1,24 +1,10 @@
-import { getLoggedInUsersData } from "@/app/utils/requests/userRequests";
 import Header from "./Header";
-import { cookies } from "next/headers";
+import { User } from "@/app/utils/def";
 
-export default async function NavCTA() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-
-  if (!token) {
-    const user = {
-      display_name: null,
-      profile_img_url: null,
-      isAuthenticated: false,
-    };
-    return <Header user={user} />;
-  }
-
-  const userData = await getLoggedInUsersData(token);
+export default async function NavCTA({ userData }: { userData: User | null }) {
+  
 
   if (!userData) {
-    // token invalid or no user found
     const user = {
       display_name: null,
       profile_img_url: null,

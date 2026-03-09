@@ -4,6 +4,7 @@ import "./globals.css";
 import Footer from "./components/interface/Footer";
 
 import NavCTA from "./components/interface/NavCTA";
+import { getLoggedInUsersData } from "./utils/requests/userRequests";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,17 +21,18 @@ export const metadata: Metadata = {
   description: "好きなビールを見つける",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getLoggedInUsersData()
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased container mx-auto mb-8 px-8`}
       >
-        <NavCTA />
+        <NavCTA userData={user} />
         {children}
         <Footer />
       </body>
