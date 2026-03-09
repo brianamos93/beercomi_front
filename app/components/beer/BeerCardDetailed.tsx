@@ -1,69 +1,93 @@
 import { Beer } from "@/app/utils/def";
 import Image from "next/image";
-import { NewspaperIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { StarIcon } from "@heroicons/react/20/solid";
 
-export default function BeerCardDetailed({ beer }: { beer: Beer }) {
+export default function BeerHeader({ beer }: { beer: Beer }) {
+
 	return (
-		<div className="max-w-2xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
-			<div className="flex flex-col md:flex-row gap-6">
-				{/* Image */}
-				<div className="flex-shrink-0 flex justify-center">
-					{beer.cover_image ? (
-						<Image
-							src={beer.cover_image}
-							alt={beer.name}
-							width={200}
-							height={200}
-							className="rounded-xl object-cover"
-						/>
-					) : (
-						<div className="w-[200px] h-[200px] flex items-center justify-center bg-gray-100 rounded-xl">
-							<NewspaperIcon className="w-20 h-20 text-gray-400" />
-						</div>
-					)}
+		<div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+
+			<div className="flex gap-6">
+
+				{/* Beer Label */}
+				<div className="flex-shrink-0">
+					<Image
+						src={beer.cover_image}
+						alt={beer.name}
+						width={240}
+						height={240}
+						className="w-36 h-36 md:w-48 md:h-48 rounded-xl object-cover"
+					/>
 				</div>
 
-				{/* Content */}
+				{/* Beer Info */}
 				<div className="flex-1">
-					<h1 className="text-3xl font-bold text-gray-900 mb-2">{beer.name}</h1>
 
-					<p className="text-sm text-gray-500 mb-4">
-						Brewed by{" "}
-						<span className="font-medium text-gray-700">
-							{beer.brewery_name}
+					{/* Name */}
+					<h1 className="text-3xl font-bold text-gray-900">
+						{beer.name}
+					</h1>
+
+					{/* Brewery */}
+					<Link
+						href={`/breweries/${beer.brewery_id}`}
+						className="text-gray-600 hover:text-amber-600"
+					>
+						{beer.brewery_name}
+					</Link>
+
+					{/* Rating */}
+					<div className="flex items-center gap-2 mt-2">
+						<div className="flex">
+							{[1,2,3,4,5].map((star) => (
+								<StarIcon
+									key={star}
+									className={`w-5 h-5 ${
+										star <= Math.round(beer.avg_rating)
+											? "text-yellow-400"
+											: "text-gray-300"
+									}`}
+								/>
+							))}
+						</div>
+
+						<span className="text-sm text-gray-600">
+							{beer.avg_rating}
 						</span>
-					</p>
-
-					<p className="text-gray-700 mb-4">{beer.description}</p>
-
-					{/* Beer stats */}
-					<div className="grid grid-cols-2 gap-3 text-sm">
-						<div className="bg-gray-50 rounded-lg px-3 py-2">
-							<span className="text-gray-500">Style</span>
-							<p className="font-semibold text-gray-800">{beer.style}</p>
-						</div>
-
-						<div className="bg-gray-50 rounded-lg px-3 py-2">
-							<span className="text-gray-500">IBU</span>
-							<p className="font-semibold text-gray-800">{beer.ibu}</p>
-						</div>
-
-						<div className="bg-gray-50 rounded-lg px-3 py-2">
-							<span className="text-gray-500">ABV</span>
-							<p className="font-semibold text-gray-800">
-								{beer.abv.toFixed(1)}%
-							</p>
-						</div>
-
-						<div className="bg-gray-50 rounded-lg px-3 py-2">
-							<span className="text-gray-500">Color</span>
-							<p className="font-semibold text-gray-800">{beer.color}</p>
-						</div>
+						<span className="text-sm text-gray-600">{beer.review_count} Review{beer.review_count !== 1 && "s"}</span>
 					</div>
 
-					<p className="text-xs text-gray-400 mt-4">
-						Added by {beer.author_name}
+					{/* Stats Row */}
+					<div className="flex flex-wrap gap-4 text-sm mt-3 text-gray-700">
+
+						<span className="bg-gray-100 px-3 py-1 rounded-full">
+							{beer.style}
+						</span>
+
+						<span className="bg-gray-100 px-3 py-1 rounded-full">
+							ABV {beer.abv?.toFixed(1)}%
+						</span>
+
+						{beer.ibu && (
+							<span className="bg-gray-100 px-3 py-1 rounded-full">
+								IBU {beer.ibu}
+							</span>
+						)}
+
+						{beer.color && (
+							<span className="bg-gray-100 px-3 py-1 rounded-full">
+								Color {beer.color}
+							</span>
+						)}
+
+					</div>
+
+					{/* Description */}
+					<p className="mt-4 text-gray-700 leading-relaxed">
+						{beer.description}
 					</p>
+
 				</div>
 			</div>
 		</div>

@@ -45,6 +45,8 @@ export interface Beer {
 	reviews: Review[];
 	date_created: Date;
 	date_updated: Date;
+	avg_rating: number;
+	review_count: number;
 }
 
 export interface Brewery {
