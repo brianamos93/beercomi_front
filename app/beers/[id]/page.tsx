@@ -54,25 +54,25 @@ export default async function BeerPage({
 		<main className="max-w-2xl mx-auto p-4 space-y-8">
 			<BeerCardDetailed beer={beer} />
 
-			{beer.author_id === userId && (
-				<div>
-					<Link
-						href={`/beers/${beer.id}/edit`}
-						className="inline-block px-4 py-2 text-sm font-semibold text-yellow-800 bg-yellow-100 rounded-lg hover:bg-yellow-200"
-					>
-						Edit Beer
-					</Link>
-				</div>
-			)}
+			{(beer.author_id === userId || token) && (
+				<div className="flex items-center gap-4">
+					{beer.author_id === userId && (
+						<Link
+							href={`/beers/${beer.id}/edit`}
+							className="px-4 py-2 text-sm font-semibold text-yellow-800 bg-yellow-100 rounded-lg hover:bg-yellow-200"
+						>
+							Edit Beer
+						</Link>
+					)}
 
-			{token && (
-				<div>
-					<ToggleFavoriteButton
-						type="beers"
-						id={beer.id}
-						initialFavorite={favorited}
-						favorite_id={favorite_id}
-					/>
+					{token && (
+						<ToggleFavoriteButton
+							type="beers"
+							id={beer.id}
+							initialFavorite={favorited}
+							favorite_id={favorite_id}
+						/>
+					)}
 				</div>
 			)}
 
