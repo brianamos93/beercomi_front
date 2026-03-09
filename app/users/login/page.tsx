@@ -3,36 +3,107 @@ import { useActionState } from "react";
 import { Login } from "../../utils/requests/userRequests";
 import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
+import Link from "next/link";
 
 const initialState = { error: {}, success: undefined };
 
 export default function LoginForm() {
-  const [state, formAction] = useActionState(Login, initialState);
+	const [state, formAction] = useActionState(Login, initialState);
 
-  if (state?.success) {
-    redirect("/");
-  }
+	if (state?.success) {
+		redirect("/");
+	}
 
-  return (
-    <form action={formAction} className="flex flex-col w-80 mx-auto mt-10 gap-2">
-      <input name="email" type="email" placeholder="Email" className="border p-2 rounded" />
-      {state?.error?.email && <p className="text-red-500">{state.error.email}</p>}
+	return (
+		<div className="flex items-center justify-center min-h-[60vh] px-4">
+			<form
+				action={formAction}
+				className="w-full max-w-sm bg-white border border-gray-200 rounded-2xl shadow-sm p-8 space-y-5"
+			>
+				<h2 className="text-2xl font-semibold text-center text-gray-800">
+					Log in
+				</h2>
 
-      <input name="password" type="password" placeholder="Password" className="border p-2 rounded" />
-      {state?.error?.password && <p className="text-red-500">{state.error.password}</p>}
+				{/* Email */}
+				<div className="space-y-1">
+					<label
+						htmlFor="email"
+						className="block text-sm font-medium text-gray-700"
+					>
+						Email
+					</label>
 
-      {state?.error?.general && <p className="text-red-500">{state.error.general}</p>}
+					<input
+						name="email"
+						id="email"
+						type="email"
+						placeholder="email@example.com"
+						className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+					/>
 
-      <SubmitButton />
-    </form>
-  );
+					{state?.error?.email && (
+						<p className="text-sm text-red-600">{state.error.email}</p>
+					)}
+				</div>
+
+				{/* Password */}
+				<div className="space-y-1">
+					<label
+						htmlFor="password"
+						className="block text-sm font-medium text-gray-700"
+					>
+						Password
+					</label>
+
+					<input
+						name="password"
+						id="password"
+						type="password"
+						placeholder="Enter your password"
+						className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+					/>
+
+					{state?.error?.password && (
+						<p className="text-sm text-red-600">{state.error.password}</p>
+					)}
+				</div>
+
+				{/* General error */}
+				{state?.error?.general && (
+					<div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-2">
+						{state.error.general}
+					</div>
+				)}
+
+				<SubmitButton />
+
+				{/* Optional signup link */}
+				<p className="text-center text-sm text-gray-600">
+					Don’t have an account?
+					<Link
+						href="/users/signup"
+						className="text-blue-600 hover:underline ml-1 font-medium"
+					>
+						Sign up
+					</Link>
+				</p>
+			</form>
+		</div>
+	);
 }
 
 function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button disabled={pending} className="bg-blue-500 text-white p-2 rounded">
-      {pending ? "Logging in..." : "Login"}
-    </button>
-  );
+	const { pending } = useFormStatus();
+
+	return (
+		<button
+			disabled={pending}
+			className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium
+                 hover:bg-blue-700 transition disabled:opacity-50"
+		>
+			{pending ? "Logging in..." : "Login"}
+		</button>
+	);
 }
