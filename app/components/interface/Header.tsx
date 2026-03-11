@@ -1,20 +1,16 @@
 "use client";
 
-type Props = {
-	user: {
-		display_name: string | null;
-		profile_img_url: string | null;
-		isAuthenticated: boolean;
-	};
-};
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { useAuth } from "../AuthProvider";
+import LogoutButton from "./logoutButton";
 
-export default function Header({ user }: Props) {
+export default function Header() {
 	const [isNavOpen, setIsNavOpen] = useState(false);
 	const pathname = usePathname();
+	const { user } = useAuth();
 
 	const links = [
 		{
@@ -28,10 +24,6 @@ export default function Header({ user }: Props) {
 		{
 			page: "Breweries",
 			route: "/breweries",
-		},
-		{
-			page: "Stores",
-			route: "/stores",
 		},
 		{
 			page: "Contact",
@@ -72,9 +64,14 @@ export default function Header({ user }: Props) {
 							</svg>
 						</div>
 						<ul className="flex flex-col items-center justify-between min-h-[250px]">
-							{user.isAuthenticated ? (
+							{user ? (
 								<>
-									<Link href="/users/profile">Profile</Link>
+									<li>
+										<Link href="/users/profile">Profile</Link>
+									</li>
+									<li className="flex items-center">
+										<LogoutButton />
+									</li>
 								</>
 							) : (
 								<>
@@ -121,26 +118,34 @@ export default function Header({ user }: Props) {
 							</Link>
 						</li>
 					))}
-					<li>
-						{user.isAuthenticated ? (
-							<div className="flex items-center gap-2">
-								<Link href="/users/profile">Profile</Link>
-							</div>
+
+						{user ? (
+							<>
+								<li>
+									<Link href="/users/profile">Profile</Link>
+								</li>
+								<li className="flex items-center">
+									<LogoutButton />
+								</li>
+							</>
 						) : (
-							<div className="flex gap-2">
-								<Link href="/users/login">
-									<span className="px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">
-										Login
-									</span>
-								</Link>
-								<Link href="/users/signup">
-									<span className="px-4 py-2 text-sm bg-gray-300 text-black rounded hover:bg-gray-400">
-										Sign Up
-									</span>
-								</Link>
-							</div>
+							<>
+								<li>
+									<Link href="/users/login">
+										<span className="px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">
+											Login
+										</span>
+									</Link>
+								</li>
+								<li>
+									<Link href="/users/signup">
+										<span className="px-4 py-2 text-sm bg-gray-300 text-black rounded hover:bg-gray-400">
+											Sign Up
+										</span>
+									</Link>
+								</li>
+							</>
 						)}
-					</li>
 				</ul>
 			</nav>
 			<style>{`

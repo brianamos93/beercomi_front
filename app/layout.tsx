@@ -3,39 +3,42 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "./components/interface/Footer";
 
-import NavCTA from "./components/interface/NavCTA";
 import { getLoggedInUsersData } from "./utils/requests/userRequests";
+import { AuthProvider } from "./components/AuthProvider";
+import Header from "./components/interface/Header";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+	variable: "--font-geist-sans",
+	subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+	variable: "--font-geist-mono",
+	subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Tsunagaru - クラフトビール　評価とメニュー",
-  description: "好きなビールを見つける",
+	title: "Tsunagaru - クラフトビール　評価とメニュー",
+	description: "好きなビールを見つける",
 };
 
 export default async function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  const user = await getLoggedInUsersData()
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased container mx-auto mb-8 px-8`}
-      >
-        <NavCTA userData={user} />
-        {children}
-        <Footer />
-      </body>
-    </html>
-  );
+	const user = await getLoggedInUsersData();
+	return (
+		<html lang="en">
+			<body
+				className={`${geistSans.variable} ${geistMono.variable} antialiased container mx-auto mb-8 px-8`}
+			>
+				<AuthProvider initialUser={user}>
+					<Header />
+					{children}
+					<Footer />
+				</AuthProvider>
+			</body>
+		</html>
+	);
 }
