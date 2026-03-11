@@ -4,12 +4,17 @@ import { SearchResult } from "../utils/def";
 import { getSearch } from "../utils/requests/searchRequests";
 
 type Props = {
-	searchParams?: Promise<{ 
-		query?: string;
-		page?: string;
-	 }>;};
+  searchParams?: {
+    query?: string;
+    page?: string;
+  };
+};
 
 export default async function SearchPage(props: Props) {
+	const routes: Record<string, string> = {
+		brewery: "breweries",
+		beer: "beers",
+	};
 	const searchParams = await props.searchParams;
 	const query = searchParams?.query || "";
 	const currentPage = Math.max(1, Number(searchParams?.page) || 1);
@@ -44,7 +49,9 @@ export default async function SearchPage(props: Props) {
 
 				<section>
 					{query === "" ? (
-						<p className="text-sm text-gray-600">Enter a search term to see results.</p>
+						<p className="text-sm text-gray-600">
+							Enter a search term to see results.
+						</p>
 					) : results.data.length === 0 ? (
 						<p className="text-sm text-gray-600">No results for “{query}”.</p>
 					) : (
@@ -54,9 +61,7 @@ export default async function SearchPage(props: Props) {
 									key={r.id}
 									className="rounded-md border border-gray-100 p-3 text-sm hover:bg-gray-50"
 								>
-									<Link href={`${r.type}s/${r.id}`}>
-									{r.name}
-									</Link>
+									<Link href={`/${routes[r.type]}/${r.id}`}>{r.name}</Link>
 								</li>
 							))}
 						</ul>
