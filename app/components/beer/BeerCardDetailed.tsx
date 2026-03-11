@@ -4,7 +4,7 @@ import Link from "next/link";
 import { StarIcon } from "@heroicons/react/20/solid";
 
 export default function BeerHeader({ beer }: { beer: Beer }) {
-
+	const coverImage = beer.cover_image ? beer.cover_image : "/file.svg";
 	return (
 		<div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
 
@@ -13,7 +13,7 @@ export default function BeerHeader({ beer }: { beer: Beer }) {
 				{/* Beer Label */}
 				<div className="flex-shrink-0">
 					<Image
-						src={beer.cover_image}
+						src={coverImage}
 						alt={beer.name}
 						width={240}
 						height={240}
