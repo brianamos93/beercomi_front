@@ -1,6 +1,10 @@
 import { logout } from "@/app/utils/requests/userRequests";
 
-export default function LogoutButton() {
+type logoutButtonProps = {
+  onClick?: () => void;
+};
+
+export default function LogoutButton({onClick}: logoutButtonProps) {
 	return (
 		<form action={logout}>
 			<button
