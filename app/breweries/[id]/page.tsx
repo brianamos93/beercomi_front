@@ -43,7 +43,7 @@ export default async function BreweryPage({
 	const totalPages = Math.max(1, Math.ceil(brewery.pagination.total / limit));
 
 	if (token) {
-		const userData = await getLoggedInUsersData(token);
+		const userData = await getLoggedInUsersData();
 		userId = userData.id;
 		const favoriteRes = await checkFavorite(brewery.id, "breweries", token);
 
@@ -58,7 +58,7 @@ export default async function BreweryPage({
 				<div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
 					<div className="flex flex-col md:flex-row gap-6">
 						{/* Cover Image */}
-						<div className="flex-shrink-0">
+						<div className="flex-shrink-0 w-40 h-40 relative">
 							<CoverImage
 								cover_image={brewery.cover_image}
 								name={brewery.name}
@@ -116,11 +116,15 @@ export default async function BreweryPage({
 					<h2 className="text-xl font-bold text-gray-900 mb-4">Beers</h2>
 
 					<div className="flex flex-col items-center gap-4">
-						{brewery.beers.map((beer: Beer) => (
+						{brewery.beers.length > 0 ? (
+						brewery.beers.map((beer: Beer) => (
 							<div key={beer.id} className="w-full max-w-lg">
 								<BeerCard type="nobrewery" entry={beer} />
 							</div>
-						))}
+						))
+					) : (
+						<p className="text-gray-500 text-center">No beers yet.</p>
+					)}
 					</div>
 
 					{/* Pagination */}

@@ -89,53 +89,59 @@ export default async function BeerPage({
 					)}
 
 				<div className="space-y-6">
-					{beer.reviews.map((review: Review) => (
-						<div
-							id={review.id}
-							key={review.id}
-							className="border rounded-xl p-5 bg-white shadow-sm"
-						>
-							{/* Photos */}
-							{review.photos && review.photos.length > 0 && (
-								<div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-									{review.photos.map((photo: Photo) => (
-										<Image
-											key={photo.id}
-											src={photo.photo_url}
-											alt="Review photo"
-											width={150}
-											height={150}
-											className="rounded-lg object-cover w-full h-32"
-										/>
-									))}
-								</div>
-							)}
-
-							{/* Review text */}
-							<p className="text-gray-800 mb-4 leading-relaxed">
-								{review.review}
-							</p>
-
-							{/* Metadata */}
-							<div className="flex items-center justify-between text-sm">
-								<div className="space-x-4">
-									<span className="text-yellow-600 font-semibold">
-										⭐ {review.rating}
-									</span>
-									<span className="text-gray-500">by {review.author_name}</span>
-								</div>
-
-								{review.author_id === userId && (
-									<Link
-										href={`/beers/${beer.id}/review/${review.id}/edit`}
-										className="text-blue-600 hover:underline font-semibold"
-									>
-										Edit
-									</Link>
+					{beer.reviews.length > 0 ? (
+						beer.reviews.map((review: Review) => (
+							<div
+								id={review.id}
+								key={review.id}
+								className="border rounded-xl p-5 bg-white shadow-sm"
+							>
+								{/* Photos */}
+								{review.photos && review.photos.length > 0 && (
+									<div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+										{review.photos.map((photo: Photo) => (
+											<Image
+												key={photo.id}
+												src={photo.photo_url}
+												alt="Review photo"
+												width={150}
+												height={150}
+												className="rounded-lg object-cover w-full h-32"
+											/>
+										))}
+									</div>
 								)}
+
+								{/* Review text */}
+								<p className="text-gray-800 mb-4 leading-relaxed">
+									{review.review}
+								</p>
+
+								{/* Metadata */}
+								<div className="flex items-center justify-between text-sm">
+									<div className="space-x-4">
+										<span className="text-yellow-600 font-semibold">
+											⭐ {review.rating}
+										</span>
+										<span className="text-gray-500">
+											by {review.author_name}
+										</span>
+									</div>
+
+									{review.author_id === userId && (
+										<Link
+											href={`/beers/${beer.id}/review/${review.id}/edit`}
+											className="text-blue-600 hover:underline font-semibold"
+										>
+											Edit
+										</Link>
+									)}
+								</div>
 							</div>
-						</div>
-					))}
+						))
+					) : (
+						<p className="text-gray-500 text-center">No reviews yet.</p>
+					)}
 				</div>
 			</section>
 
