@@ -93,22 +93,23 @@ export const getRecentActivityOneUser = async (userId: string) => {
 
 export const getLoggedInUsersData = async () => {
   const token = (await cookies()).get("token")?.value;
-  if (!token) return null
-  
-  const res = await fetch(url + '/user', {
+
+  if (!token) return null;
+
+  const res = await fetch(url + "/user", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
-      cache: "no-store",
     },
+    cache: "no-store",
   });
 
   if (!res.ok) {
-    // Return null or empty object instead of throwing
     return null;
   }
-  return res.json()
+
+  return res.json();
 };
 
 export const getUserFavorites = async (user_id: string, limit: number, offset: number) => {
