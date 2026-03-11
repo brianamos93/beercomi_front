@@ -4,7 +4,7 @@ export default function CoverImage({
 	cover_image,
 	name,
 }: {
-	cover_image: string | undefined;
+	cover_image?: string | undefined;
 	name: string;
 }) {
 	const coverImage = cover_image ? `${cover_image}` : "/file.svg";
