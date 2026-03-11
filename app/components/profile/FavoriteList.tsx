@@ -12,7 +12,6 @@ type Favorite = {
 	brewery_id: string;
 	source_table: "beers" | "breweries";
 	date_created: Date;
-
 };
 
 type Props = {
@@ -28,12 +27,9 @@ export default function UserFavoriteList({ userId }: Props) {
 	});
 	const [loading, setLoading] = useState(false);
 
-	const currentPage =
-		Math.floor(pagination.offset / pagination.limit) + 1;
+	const currentPage = Math.floor(pagination.offset / pagination.limit) + 1;
 
-	const totalPages = Math.ceil(
-		pagination.total / pagination.limit
-	);
+	const totalPages = Math.ceil(pagination.total / pagination.limit);
 
 	useEffect(() => {
 		if (!userId) return;
@@ -42,7 +38,8 @@ export default function UserFavoriteList({ userId }: Props) {
 			setLoading(true);
 
 			try {
-				const res = await getUserFavorites(userId, 
+				const res = await getUserFavorites(
+					userId,
 					pagination.limit,
 					pagination.offset,
 				);
@@ -56,6 +53,7 @@ export default function UserFavoriteList({ userId }: Props) {
 
 		fetchFavorites();
 	}, [userId, pagination.limit, pagination.offset]);
+
 
 	return (
 		<div>
