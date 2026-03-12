@@ -16,7 +16,6 @@ export default function TextField<T extends FieldValues>({
   errors,
   type = "text",
 }: Props<T>) {
-  const error = errors[name];
 
   return (
     <div>
