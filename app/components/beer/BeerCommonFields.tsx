@@ -1,6 +1,6 @@
 import { UseFormRegister, FieldErrors, Control } from "react-hook-form";
-import TextField from "./TextField";
-import NumberField from "./NumberField";
+import TextField from "../form/TextField";
+import NumberField from "../form/NumberField";
 import BrewerySelectField from "./BrewerySelectField";
 import { BeerBaseFields } from "./BeerFormType";
 
