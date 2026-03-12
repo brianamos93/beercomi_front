@@ -4,6 +4,7 @@ import {
 	Path,
 	UseFormRegister,
 } from "react-hook-form";
+import ErrorMessage from "./ErrorMessage";
 
 type Props<T extends FieldValues> = {
 	name: Path<T>;
@@ -18,7 +19,6 @@ export default function TextArea<T extends FieldValues>({
 	register,
 	errors,
 }: Props<T>) {
-	const error = errors[name];
 
 	return (
 		<div className="flex flex-col w-full">
@@ -33,9 +33,7 @@ export default function TextArea<T extends FieldValues>({
 				className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 			/>
 
-			{error && (
-				<p className="mt-1 text-sm text-red-500">{error.message as string}</p>
-			)}
+			<ErrorMessage name={name} errors={errors} />
 		</div>
 	);
 }
