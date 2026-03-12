@@ -9,6 +9,7 @@ import Image from "next/image";
 import ToggleFavoriteButton from "@/app/components/interface/buttons/FavoriteToggleClient";
 import { checkFavorite } from "@/app/utils/requests/favoriteRequests";
 import { PaginationLinks } from "@/app/components/interface/ServerPagination";
+import { notFound } from 'next/navigation'
 
 export async function generateStaticParams() {
 	const beers = await getBeersList();
@@ -38,11 +39,15 @@ export default async function BeerPage({
 	const offset = (formattedPage - 1) * limit;
 
 	const beer = await getBeer((await params).id, limit, offset);
+	
+	if(!beer) {
+		notFound()
+	}
 
 	const totalPages = Math.max(1, Math.ceil(beer.pagination.total / limit));
 
 	if (token) {
-		const userData = await getLoggedInUsersData(token);
+		const userData = await getLoggedInUsersData();
 		userId = userData.id;
 
 		const favoriteRes = await checkFavorite(beer.id, "beers", token);
@@ -50,6 +55,7 @@ export default async function BeerPage({
 		favorited = Boolean(favoriteRes.favorited);
 		favorite_id = favoriteRes.favorited ? favoriteRes.favorite_id : undefined;
 	}
+	
 	return (
 		<main className="max-w-2xl mx-auto p-4 space-y-8">
 			<BeerCardDetailed beer={beer} />

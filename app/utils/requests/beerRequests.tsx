@@ -98,7 +98,7 @@ export const getBeer = async (id: string, limit?: number, offset?: number) => {
 		cache: "no-store",
 	});
 
-	if (!res.ok) throw new Error("Beer not found");
+	if (!res.ok) return undefined;
 	return res.json();
 };
 export const createBeer = async (newBeerData: FormData, token: string) => {
