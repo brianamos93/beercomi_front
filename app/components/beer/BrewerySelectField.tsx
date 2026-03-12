@@ -61,6 +61,7 @@ export default function BrewerySelectField({
             loadOptions={loadOptions}
             additional={{ offset: 0 }}
             debounceTimeout={300}
+            instanceId="brewery-select"
             isSearchable
             placeholder="Search breweries..."
           />
