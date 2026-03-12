@@ -1,4 +1,5 @@
 import { FieldErrors, FieldValues, Path, UseFormRegister } from "react-hook-form";
+import ErrorMessage from "./ErrorMessage";
 
 type Props<T extends FieldValues> = {
   name: Path<T>;
@@ -28,12 +29,7 @@ export default function TextField<T extends FieldValues>({
         {...register(name)}
         className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500"
       />
-
-      {error && (
-        <p className="text-red-600 text-sm mt-2">
-          {error.message as string}
-        </p>
-      )}
+      <ErrorMessage name={name} errors={errors}/>
     </div>
   );
 }
