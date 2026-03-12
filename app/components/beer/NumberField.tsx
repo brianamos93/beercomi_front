@@ -1,20 +1,20 @@
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldErrors, FieldValues, Path, UseFormRegister } from "react-hook-form";
 
-type Props = {
-  name: string;
+type Props<T extends FieldValues> = {
+  name: Path<T>;
   label: string;
-  register: UseFormRegister<any>;
-  errors: FieldErrors;
+  register: UseFormRegister<T>;
+  errors: FieldErrors<T>;
   step?: string;
 };
 
-export default function NumberField({
+export default function NumberField<T extends FieldValues>({
   name,
   label,
   register,
   errors,
   step = "1",
-}: Props) {
+}: Props<T>) {
   const error = errors[name];
 
   return (

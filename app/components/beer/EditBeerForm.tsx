@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, UseFormRegister, FieldErrors, Control } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { updateServerBeer } from "../../actions/beer";
 import { Beer } from "../../utils/def";
@@ -8,6 +8,7 @@ import { EditBeerInput, EditBeerSchema } from "@/app/utils/schemas/beerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CoverImageField from "./CoverImageField";
 import BeerCommonFields from "./BeerCommonFields";
+import { BeerBaseFields } from "./BeerFormType";
 
 export default function EditBeerForm({ beer }: { beer: Beer }) {
 	// use undefined when there's no image so the form type matches
@@ -164,7 +165,11 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 				}}
 			/>
 
-			<BeerCommonFields register={register} errors={errors} control={control} />
+			<BeerCommonFields
+				register={register as unknown as UseFormRegister<BeerBaseFields>}
+				errors={errors as unknown as FieldErrors<BeerBaseFields>}
+				control={control as unknown as Control<BeerBaseFields>}
+			/>
 
 			{/* Server Error */}
 			<div id="server-error" aria-live="polite">

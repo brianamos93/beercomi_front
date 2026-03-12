@@ -1,12 +1,13 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, UseFormRegister, FieldErrors, Control } from "react-hook-form";
 import { useEffect } from "react";
 import { createServerBeer } from "../../actions/beer";
 import { CreateBeerSchema } from "@/app/utils/schemas/beerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CoverImageField from "./CoverImageField";
 import BeerCommonFields from "./BeerCommonFields";
+import { BeerBaseFields } from "./BeerFormType";
 
 type FormValues = {
 	cover_image?: File | null;
@@ -92,7 +93,11 @@ export default function CreateBeerForm() {
 				)}
 			/>
 
-			<BeerCommonFields register={register} errors={errors} control={control} />
+			<BeerCommonFields
+				register={register as unknown as UseFormRegister<BeerBaseFields>}
+				errors={errors as unknown as FieldErrors<BeerBaseFields>}
+				control={control as unknown as Control<BeerBaseFields>}
+			/>
 
 			{/* Server Error */}
 			<div id="server-error" aria-live="polite">

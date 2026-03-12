@@ -3,6 +3,7 @@ import { AsyncPaginate, LoadOptions } from "react-select-async-paginate";
 import { getBreweries } from "@/app/utils/requests/breweryRequests";
 import { Brewery } from "@/app/utils/def";
 import { GroupBase, OptionsOrGroups } from "react-select";
+import { BeerBaseFields } from "./BeerFormType";
 
 type BreweryOption = {
 	value: string;
@@ -42,8 +43,8 @@ export default function BrewerySelectField({
   control,
   errors,
 }: {
-  control: Control<any>;
-  errors: FieldErrors<any>;
+  control: Control<BeerBaseFields>;
+  errors: FieldErrors<BeerBaseFields>;
 }) {
   return (
     <div>
