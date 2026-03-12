@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm, Controller, UseFormRegister, FieldErrors, Control } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { updateServerBeer } from "../../actions/beer";
 import { Beer } from "../../utils/def";
 import { EditBeerInput, EditBeerSchema } from "@/app/utils/schemas/beerSchema";
@@ -14,7 +14,6 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 	// use undefined when there's no image so the form type matches
 	const coverImageUrl = beer.cover_image ?? undefined;
 
-	const [hasMounted, setHasMounted] = useState(false);
 	const form = useForm<EditBeerInput>({
 		resolver: zodResolver(EditBeerSchema),
 		defaultValues: {
@@ -54,10 +53,6 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 		}
 	}, [isSubmitSuccessful, reset]);
 
-	useEffect(() => {
-		const id = setTimeout(() => setHasMounted(true), 0);
-		return () => clearTimeout(id);
-	}, []);
 
 	useEffect(() => {
 		reset({
