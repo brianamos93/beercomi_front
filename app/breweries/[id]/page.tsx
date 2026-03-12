@@ -12,6 +12,7 @@ import CoverImage from "@/app/components/interface/coverImage";
 import ToggleFavoriteButton from "@/app/components/interface/buttons/FavoriteToggleClient";
 import { checkFavorite } from "@/app/utils/requests/favoriteRequests";
 import { PaginationLinks } from "@/app/components/interface/ServerPagination";
+import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
 	const breweries = await getBreweriesList();
@@ -39,6 +40,9 @@ export default async function BreweryPage({
 	const limit = 10;
 	const offset = (formattedPage - 1) * limit;
 	const brewery = await getBrewery((await params).id, limit, offset);
+	if(!brewery) {
+		notFound()
+	}
 
 	const totalPages = Math.max(1, Math.ceil(brewery.pagination.total / limit));
 
