@@ -1,8 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getUserFavorites } from "@/app/utils/requests/userRequests";
+import { getBeer } from "@/app/utils/requests/beerRequests";
+import { getBrewery } from "@/app/utils/requests/breweryRequests";
+import BeerCard from "../beer/BeerCard";
+import BreweryCard from "../brewery/BreweryCard";
+import { PaginationUI } from "../interface/paginationBase";
 
 type Favorite = {
 	id: string;
@@ -14,12 +18,12 @@ type Favorite = {
 	date_created: Date;
 };
 
-type Props = {
-	userId: string;
-};
+type Props = { userId: string };
 
 export default function UserFavoriteList({ userId }: Props) {
 	const [favorites, setFavorites] = useState<Favorite[]>([]);
+	const [favoriteData, setFavoriteData] = useState<any[]>([]); // resolved beer/brewery data
+	const [error, setError] = useState<string | null>(null);
 	const [pagination, setPagination] = useState({
 		total: 0,
 		limit: 10,
@@ -28,86 +32,87 @@ export default function UserFavoriteList({ userId }: Props) {
 	const [loading, setLoading] = useState(false);
 
 	const currentPage = Math.floor(pagination.offset / pagination.limit) + 1;
-
 	const totalPages = Math.ceil(pagination.total / pagination.limit);
 
-	useEffect(() => {
-		if (!userId) return;
+	const fetchFavorites = useCallback(
+		async (resetOffset = false) => {
+			if (!userId) return;
 
-		const fetchFavorites = async () => {
+			const offsetToUse = resetOffset ? 0 : pagination.offset;
 			setLoading(true);
+			if (resetOffset) setError(null);
 
 			try {
+				// Fetch the favorites list
 				const res = await getUserFavorites(
 					userId,
 					pagination.limit,
-					pagination.offset,
+					offsetToUse,
 				);
-
 				setFavorites(res.data);
-				setPagination(res.pagination);
+				setPagination((prev) => ({ ...res.pagination, offset: offsetToUse }));
+
+				// Fetch the actual beer/brewery data in parallel
+				const dataPromises = res.data.map((fav: Favorite) =>
+					fav.source_table === "beers"
+						? getBeer(fav.target_id)
+						: getBrewery(fav.target_id),
+				);
+				const resolvedData = await Promise.all(dataPromises);
+				setFavoriteData(resolvedData);
+			} catch (err) {
+				setError("Failed to load favorites");
 			} finally {
 				setLoading(false);
 			}
-		};
+		},
+		[userId, pagination.limit, pagination.offset],
+	);
 
+	useEffect(() => {
 		fetchFavorites();
-	}, [userId, pagination.limit, pagination.offset]);
-
+	}, [fetchFavorites]);
 
 	return (
-		<div>
-			<h2>Favorites</h2>
-
-			<ul>
-				{favorites.map((favorite: Favorite) => {
-					const href = `/${favorite.source_table}/${favorite.target_id}`;
-					const label =
-						favorite.source_table === "beers"
-							? `${favorite.brewery_name}'s ${favorite.name}`
-							: favorite.name;
-
+		<>
+			{/* Error Message */}
+			{error && (
+				<div className="w-full bg-red-100 text-red-700 border border-red-400 rounded-md p-4 flex flex-col items-center space-y-2">
+					<p>{error}</p>
+					<button
+						onClick={() => fetchFavorites(true)}
+						disabled={loading}
+						className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+					>
+						{loading ? "Retrying..." : "Retry"}
+					</button>
+				</div>
+			)}
+			{/* Loading State */}
+			{loading && (
+				<p className="text-gray-500 text-center">Loading favorites...</p>
+			)}
+			{/* Favorites List */}
+			<ul className="space-y-4 flex flex-col items-center">
+				{favoriteData.map((entry, index) => {
+					const fav = favorites[index];
 					return (
-						<li key={favorite.id}>
-							<Link href={href}>{label}</Link>
+						<li key={fav.id} className="w-full max-w-md">
+							{fav.source_table === "beers" ? (
+								<BeerCard entry={entry} />
+							) : (
+								<BreweryCard entry={entry} />
+							)}
 						</li>
 					);
 				})}
 			</ul>
-
+			{/* Pagination */}
 			{totalPages > 1 && (
-				<div style={{ marginTop: "1rem" }}>
-					<button
-						type="button"
-						disabled={pagination.offset === 0 || loading}
-						onClick={() =>
-							setPagination((p) => ({
-								...p,
-								offset: Math.max(p.offset - p.limit, 0),
-							}))
-						}
-					>
-						Previous
-					</button>
-
-					<span style={{ margin: "0 1rem" }}>
-						Page {currentPage} of {totalPages}
-					</span>
-
-					<button
-						type="button"
-						disabled={currentPage >= totalPages || loading}
-						onClick={() =>
-							setPagination((p) => ({
-								...p,
-								offset: p.offset + p.limit,
-							}))
-						}
-					>
-						Next
-					</button>
+				<div className="w-full flex justify-center mt-4">
+					<PaginationUI currentPage={currentPage} totalPages={totalPages} />
 				</div>
 			)}
-		</div>
+		</>
 	);
 }
