@@ -7,11 +7,9 @@ export default function BeerHeader({ beer }: { beer: Beer }) {
 	const coverImage = beer.cover_image ? beer.cover_image : "/file.svg";
 	return (
 		<div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
-
-			<div className="flex gap-6">
-
+			<div className="flex flex-col sm:flex-row gap-6">
 				{/* Beer Label */}
-				<div className="flex-shrink-0">
+				<div className="flex-shrink-0 flex justify-center sm:block">
 					<Image
 						src={coverImage}
 						alt={beer.name}
@@ -22,13 +20,9 @@ export default function BeerHeader({ beer }: { beer: Beer }) {
 				</div>
 
 				{/* Beer Info */}
-				<div className="flex-1">
-
+				<div className="flex-1 min-w-0 text-center sm:text-left">
 					{/* Name */}
-					<h1 className="text-3xl font-bold text-gray-900">
-						{beer.name}
-					</h1>
-
+					<h1 className="text-3xl font-bold text-gray-900">{beer.name}</h1>
 					{/* Brewery */}
 					<Link
 						href={`/breweries/${beer.brewery_id}`}
@@ -36,11 +30,10 @@ export default function BeerHeader({ beer }: { beer: Beer }) {
 					>
 						{beer.brewery_name}
 					</Link>
-
 					{/* Rating */}
 					<div className="flex items-center gap-2 mt-2">
 						<div className="flex">
-							{[1,2,3,4,5].map((star) => (
+							{[1, 2, 3, 4, 5].map((star) => (
 								<StarIcon
 									key={star}
 									className={`w-5 h-5 ${
@@ -52,15 +45,14 @@ export default function BeerHeader({ beer }: { beer: Beer }) {
 							))}
 						</div>
 
+						<span className="text-sm text-gray-600">{beer.avg_rating}</span>
 						<span className="text-sm text-gray-600">
-							{beer.avg_rating}
+							{beer.review_count} Review
+							{Number(beer.review_count) === 1 ? "" : "s"}
 						</span>
-						<span className="text-sm text-gray-600">{beer.review_count} Review{beer.review_count !== 1 && "s"}</span>
 					</div>
-
 					{/* Stats Row */}
 					<div className="flex flex-wrap gap-4 text-sm mt-3 text-gray-700">
-
 						<span className="bg-gray-100 px-3 py-1 rounded-full">
 							{beer.style}
 						</span>
@@ -80,14 +72,11 @@ export default function BeerHeader({ beer }: { beer: Beer }) {
 								Color {beer.color}
 							</span>
 						)}
-
 					</div>
-
 					{/* Description */}
 					<p className="mt-4 text-gray-700 leading-relaxed">
 						{beer.description}
 					</p>
-
 				</div>
 			</div>
 		</div>
