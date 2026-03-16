@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 export function CardBase({ children }: { children: ReactNode }) {
 	return (
-		<div className="max-w-sm md:max-w-lg bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 dark:bg-gray-800 dark:border-gray-700 flex flex-col overflow-hidden">
+		<div className="max-w-sm md:max-w-lg bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 dark:bg-gray-800 dark:border-gray-700 flex flex-col overflow-hidden break-words min-w-0">
 			{children}
 		</div>
 	);
