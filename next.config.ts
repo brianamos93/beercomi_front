@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
         port: "3005",
         pathname: "/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "loremflickr.com",
+        pathname: "/**",
+      },
     ],
   },
 };
