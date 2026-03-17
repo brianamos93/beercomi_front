@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/uploads/:path*",
-        destination: "http://localhost:3005/uploads/:path*",
+        destination: "https://beercomi.onrender.com/uploads/:path*",
       },
     ];
   },
