@@ -1,5 +1,5 @@
-import { getBeer, getBeersList } from "@/app/utils/requests/beerRequests";
-import { Beer, Photo, Review } from "@/app/utils/def";
+import { getBeer } from "@/app/utils/requests/beerRequests";
+import { Photo, Review } from "@/app/utils/def";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import BeerCardDetailed from "@/app/components/beer/BeerCardDetailed";
@@ -10,14 +10,7 @@ import ToggleFavoriteButton from "@/app/components/interface/buttons/FavoriteTog
 import { checkFavorite } from "@/app/utils/requests/favoriteRequests";
 import { PaginationLinks } from "@/app/components/interface/ServerPagination";
 import { notFound } from 'next/navigation'
-
-export async function generateStaticParams() {
-	const beers = await getBeersList();
-
-	return beers.map((beer: Beer) => ({
-		slug: beer.id,
-	}));
-}
+export const dynamic = "force-dynamic";
 
 export default async function BeerPage({
 	params,
