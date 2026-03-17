@@ -2,6 +2,7 @@
 
 import TableComponents from "./components/TableComponents";
 import { useEffect, useState, useRef, useCallback } from "react";
+import url from "./utils/utils";
 
 export default function Home() {
 	type Entry = {
@@ -23,11 +24,11 @@ export default function Home() {
 		if (loading) return;
 		setLoading(true);
 
-		const url = cursor
-			? `http://localhost:3005/recent?cursor=${cursor}`
-			: `http://localhost:3005/recent`;
+		const cursorurl = cursor
+			? `${url}/recent?cursor=${cursor}`
+			: `${url}/recent`;
 
-		const res = await fetch(url);
+		const res = await fetch(cursorurl);
 		const json = await res.json();
 
 		setEntries((prev) => [...prev, ...json.data]);
@@ -58,12 +59,12 @@ export default function Home() {
 			if (!fetchedIdsRef.current.has(entry.id)) {
 				fetchedIdsRef.current.add(entry.id);
 
-				let url = `http://localhost:3005/${entry.table_name}/${entry.id}`;
+				let urlRef = `${url}/${entry.table_name}/${entry.id}`;
 				if (entry.table_name === "beer_reviews") {
-					url = `http://localhost:3005/beers/review/${entry.id}`;
+					urlRef = `${url}/beers/review/${entry.id}`;
 				}
 
-				fetch(url)
+				fetch(urlRef)
 					.then((res) => res.json())
 					.then((data) => {
 						setEntryDetails((prev) => ({
