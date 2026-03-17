@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export interface Entry {
 	id: string;
+	name: string;
 	table_name: string;
 	date_updated: Date;
 }
