@@ -17,7 +17,7 @@ import url from "@/app/utils/utils";
 export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 	let coverImageUrl;
 	if (!brewery.cover_image) {
-		coverImageUrl = null;
+		coverImageUrl = undefined;
 	} else {
 		coverImageUrl = url + brewery.cover_image;
 	}
