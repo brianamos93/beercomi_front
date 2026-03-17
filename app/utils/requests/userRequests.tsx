@@ -30,13 +30,13 @@ export async function Login(
 	let FormPassword = formData.get("password")
 
 	if(isAdminDemo) {
-		FormEmail = process.env.ADMIN_EMAIL
-		FormPassword = process.env.ADMIN_PASSWORD
+		FormEmail = process.env.ADMIN_EMAIL ?? null
+		FormPassword = process.env.ADMIN_PASSWORD ?? null
 	}
 
 	if(isRegularDemo) {
-		FormEmail = process.env.REGULAR_EMAIL
-		FormPassword = process.env.REGULAR_PASSWORD
+		FormEmail = process.env.REGULAR_EMAIL ?? null
+		FormPassword = process.env.REGULAR_PASSWORD ?? null
 	}
 
 	const parsed = LoginSchema.safeParse({
