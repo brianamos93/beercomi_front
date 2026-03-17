@@ -1,6 +1,6 @@
 import z from "zod";
 
-const url = "https://beercomi.onrender.com:3005"
+const url = "https://beercomi.onrender.com"
 
 export default url
 
