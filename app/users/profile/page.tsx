@@ -1,5 +1,6 @@
 import UserFavoriteList from "@/app/components/profile/FavoriteList";
 import TableComponents from "@/app/components/TableComponents";
+import { Entry } from "@/app/utils/def";
 import {
 	getLoggedInUsersData,
 	getRecentActivityOneUser,
@@ -16,7 +17,7 @@ export default async function Profile() {
 	let userDisplayName = null;
 	let userLocation = "unknown";
 	if (token) {
-		const userData = await getLoggedInUsersData(token);
+		const userData = await getLoggedInUsersData();
 		userId = userData.id;
 		userImg = userData.profile_img_url;
 		userDisplayName = userData.display_name;
@@ -35,7 +36,7 @@ export default async function Profile() {
 
 	// Fetch all entry data in parallel
 	const entriesArr = await Promise.all(
-		recentActivity.map(async (entry) => {
+		recentActivity.map(async (entry: Entry) => {
 			try {
 				let url = `http://localhost:3005/${entry.table_name}/${entry.id}`;
 				if (entry.table_name === "beer_reviews") {
@@ -107,7 +108,7 @@ export default async function Profile() {
 					Recent Activity
 				</h2>
 				<ul className="space-y-4 flex flex-col items-center">
-					{recentActivity?.map((entry) => {
+					{recentActivity?.map((entry: Entry) => {
 						type TableComponentKey = keyof typeof TableComponents;
 						const componentKey = entry.table_name as TableComponentKey;
 						const Component =

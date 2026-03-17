@@ -4,7 +4,6 @@ import { Login } from "../../utils/requests/userRequests";
 import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import { AdminLoginDemo, RegularUserLoginDemo } from "@/app/utils/requests/demoUserRequests";
 
 const initialState = { error: {}, success: undefined };
 

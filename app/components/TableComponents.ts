@@ -7,12 +7,12 @@ import DefaultCard from "./DefaultCard";
 
 import { Beer, Brewery, Review } from "@/app/utils/def";
 
-type TableEntry =
+export type TableEntry =
   | (Beer & { table_name: "beers" })
   | (Brewery & { table_name: "breweries" })
   | (Review & { table_name: "beer_reviews" });
 
-type TableComponent = ComponentType<{ entry: TableEntry }>;
+export type TableComponent = ComponentType<{ entry: TableEntry }>;
 
 const TableComponents: Record<string, TableComponent> = {
   beers: BeerCard as TableComponent,
