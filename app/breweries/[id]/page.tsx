@@ -1,9 +1,8 @@
 export const dynamic = "force-dynamic";
 import {
 	getBrewery,
-	getBreweriesList,
 } from "@/app/utils/requests/breweryRequests";
-import { Beer, Brewery } from "@/app/utils/def";
+import { Beer } from "@/app/utils/def";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import BeerCard from "@/app/components/beer/BeerCard";
@@ -14,13 +13,7 @@ import { checkFavorite } from "@/app/utils/requests/favoriteRequests";
 import { PaginationLinks } from "@/app/components/interface/ServerPagination";
 import { notFound } from "next/navigation";
 
-export async function generateStaticParams() {
-	const breweries = await getBreweriesList();
 
-	return breweries.map((brewery: Brewery) => ({
-		slug: brewery.id,
-	}));
-}
 export default async function BreweryPage({
 	params,
 	searchParams,
