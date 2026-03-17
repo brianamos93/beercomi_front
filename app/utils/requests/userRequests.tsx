@@ -2,13 +2,16 @@
 import z from "zod";
 import url from "../utils";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import dotenv from "dotenv";
+dotenv.config();
 
 const LoginSchema = z.object({
 	email: z.string().email("Invalid email").min(1, "Email is required"),
 	password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type LoginState =
+export type LoginState =
 	| { success: true; error?: undefined }
 	| {
 			success?: undefined;
@@ -19,9 +22,26 @@ export async function Login(
 	prevState: LoginState,
 	formData: FormData,
 ): Promise<LoginState> {
+
+	const isAdminDemo = formData.get("adminDemo")
+	const isRegularDemo = formData.get("regularUserDemo")
+
+	let FormEmail = formData.get("email")
+	let FormPassword = formData.get("password")
+
+	if(isAdminDemo) {
+		FormEmail = process.env.ADMIN_EMAIL
+		FormPassword = process.env.ADMIN_PASSWORD
+	}
+
+	if(isRegularDemo) {
+		FormEmail = process.env.REGULAR_EMAIL
+		FormPassword = process.env.REGULAR_PASSWORD
+	}
+
 	const parsed = LoginSchema.safeParse({
-		email: formData.get("email"),
-		password: formData.get("password"),
+		email: FormEmail,
+		password: FormPassword,
 	});
 
 	if (!parsed.success) {
@@ -86,6 +106,8 @@ export async function logout() {
 		await // Destroy the session
 		cookies()
 	).set("userData", "", { expires: new Date(0) });
+
+	redirect('/')
 }
 
 export const getRecentActivityOneUser = async (userId: string) => {
