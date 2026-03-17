@@ -5,6 +5,7 @@ import {
 	getLoggedInUsersData,
 	getRecentActivityOneUser,
 } from "@/app/utils/requests/userRequests";
+import url from "@/app/utils/utils";
 import { MapPinIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { cookies } from "next/headers";
 import Image from "next/image";
@@ -38,11 +39,11 @@ export default async function Profile() {
 	const entriesArr = await Promise.all(
 		recentActivity.map(async (entry: Entry) => {
 			try {
-				let url = `http://localhost:3005/${entry.table_name}/${entry.id}`;
+				let activityurl = `${url}/${entry.table_name}/${entry.id}`;
 				if (entry.table_name === "beer_reviews") {
-					url = `http://localhost:3005/beers/review/${entry.id}`;
+					activityurl = `${url}/beers/review/${entry.id}`;
 				}
-				const res = await fetch(url);
+				const res = await fetch(activityurl);
 
 				if (!res.ok) {
 					// fallback for server error
