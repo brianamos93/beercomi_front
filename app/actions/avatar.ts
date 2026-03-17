@@ -1,60 +1,68 @@
-'use server'
+"use server";
 
 import { cookies } from "next/headers";
-import { z } from "zod"
+import { z } from "zod";
 import { uploadAvatar } from "../utils/requests/profileRequests";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 const AvatarFormSchema = z.object({
-	id: z.string(),
-	image: z.any()
-		//.refine((file) => file.size > 0, 'File must not be empty')
-		//.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 5MB')
-		//.refine((file) => ['image/jpeg', 'image/png'].includes(file.type), 'Only JPEG and PNG allowed')
-})
+  image: z.any(),
+});
 
 export type State = {
-	avatar?:{
-		file?: File | null;
-	}
-	errors?: {
-		file?: string[]
-	}
-	message?: string | null;
-}
+  avatar?: {
+    file?: File | null;
+  };
+  errors?: {
+    file?: string[];
+  };
+  message?: string | null;
+};
 
-const UploadAvatar = AvatarFormSchema.omit({ id: true })
+export async function uploadAvatarServer(
+  prevState: State,
+  formData: FormData
+): Promise<State> {
+  const token = (await cookies()).get("token")?.value;
 
-export async function uploadAvatarServer(prevState: State, formData: FormData) {
-		const token = (await cookies()).get('token')?.value
+  const validatedFields = AvatarFormSchema.safeParse({
+    image: formData.get("image"), // ✅ FIXED: matches input name
+  });
 
-		const validatedFields = UploadAvatar.safeParse({
-			file: formData.get('avatar')
-		})
+  // ✅ Not logged in
+  if (!token) {
+    return {
+      errors: {
+        file: ["Not Logged In"],
+      },
+      message: "Not Logged In",
+    };
+  }
 
-		if (token == undefined) {
-			return {
-				errors: "Not Logged In"
-			}
-		}
+  // ✅ Validation failed
+  if (!validatedFields.success) {
+    return {
+      avatar: {
+        file: formData.get("image") as File | null, // ✅ correct type
+      },
+      errors: {
+        file: validatedFields.error.flatten().fieldErrors.image ?? [],
+      },
+      message: "Failed to upload avatar",
+    };
+  }
 
-		if (!validatedFields.success) {
-			return {
-				avatar: {
-					file: formData.get('image')?.toString() ?? ''
-				},
-				errors: validatedFields.error.flatten().fieldErrors,
-				message: 'Failed to upload avatar'
-			}
-		}
-		try {
-			await uploadAvatar(formData, token)
-		} catch (error) {
-			return {
-				message: 'Database Error: Failed to Uplaod Avatar.'
-			}
-		}
-		revalidatePath("/users/profile")
-		redirect("/users/profile")
+  // ✅ Upload attempt
+  try {
+    await uploadAvatar(formData, token);
+  } catch (error) {
+    return {
+      message: "Database Error: Failed to Upload Avatar.",
+    };
+  }
+
+  // ✅ Success (no return needed because redirect ends execution)
+  revalidatePath("/users/profile");
+  redirect("/users/profile");
 }
