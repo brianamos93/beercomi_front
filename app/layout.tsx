@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Tsunagaru - クラフトビール　評価とメニュー",
-	description: "好きなビールを見つける",
+	title: "Tsunagaru - クラフトビール　評価",
+	description: "好きなビールを見つけろう！",
 };
 
 export default async function RootLayout({

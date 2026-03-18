@@ -23,21 +23,9 @@ export async function Login(
 	formData: FormData,
 ): Promise<LoginState> {
 
-	const isAdminDemo = formData.get("adminDemo")
-	const isRegularDemo = formData.get("regularUserDemo")
+	const FormEmail = formData.get("email")
+	const FormPassword = formData.get("password")
 
-	let FormEmail = formData.get("email")
-	let FormPassword = formData.get("password")
-
-	if(isAdminDemo) {
-		FormEmail = process.env.ADMIN_EMAIL ?? null
-		FormPassword = process.env.ADMIN_PASSWORD ?? null
-	}
-
-	if(isRegularDemo) {
-		FormEmail = process.env.REGULAR_EMAIL ?? null
-		FormPassword = process.env.REGULAR_PASSWORD ?? null
-	}
 
 	const parsed = LoginSchema.safeParse({
 		email: FormEmail,

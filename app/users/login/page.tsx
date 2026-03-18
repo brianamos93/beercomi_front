@@ -79,26 +79,6 @@ export default function LoginForm() {
 
 				<SubmitButton />
 
-				<button
-					type="submit"
-					name="adminDemo"
-					value="true"
-					className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg font-medium
-	           hover:bg-gray-100 transition"
-				>
-					Try Admin Demo Account
-				</button>
-
-				<button
-					type="submit"
-					name="regularUserDemo"
-					value="true"
-					className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg font-medium
-	           hover:bg-gray-100 transition"
-				>
-					Try Regular Demo Account
-				</button>
-
 				{/* Optional signup link */}
 				<p className="text-center text-sm text-gray-600">
 					Don’t have an account?
