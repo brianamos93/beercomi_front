@@ -82,7 +82,7 @@ export default function Header() {
 										onClick={handleNavClick}
 										href={link.route}
 										className={clsx("border-b border-gray-400 my-8 uppercase", {
-											"text-yellow-600 underline": pathname === link.route,
+											"text-amber-400 underline": pathname === link.route,
 										})}
 									>
 										{link.page}
@@ -103,7 +103,7 @@ export default function Header() {
 							) : (
 								<>
 									<li
-										className="px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+										className="px-4 py-2 text-sm bg-amber-400 text-black rounded hover:bg-amber-600"
 										onClick={() => setIsNavOpen(false)}
 									>
 										<Link href="/users/login">Login</Link>
@@ -125,8 +125,8 @@ export default function Header() {
 						<li key={link.page} className="flex items-center">
 							<Link
 								href={link.route}
-								className={clsx("hover:text-yellow-600", {
-									"text-yellow-600 underline": pathname === link.route,
+								className={clsx("hover:text-amber-600", {
+									"text-amber-400 underline": pathname === link.route,
 								})}
 							>
 								{link.page}
@@ -151,7 +151,7 @@ export default function Header() {
 						<>
 							<li className="flex items-center">
 								<Link href="/users/login">
-									<span className="px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">
+									<span className="px-4 py-2 text-sm bg-amber-400 text-black rounded hover:bg-amber-600">
 										Login
 									</span>
 								</Link>

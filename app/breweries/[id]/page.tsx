@@ -52,7 +52,7 @@ export default async function BreweryPage({
 		<main className="min-h-screen py-8">
 			<div className="max-w-3xl mx-auto px-4 space-y-6">
 				{/* Brewery Card */}
-				<div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+				<div className="bg-white border border-gray-200 rounded-2xl shadow-xl p-6">
 					<div className="flex flex-col md:flex-row gap-6">
 						{/* Cover Image */}
 						<div className="flex-shrink-0 w-40 h-40 relative">
@@ -115,7 +115,7 @@ export default async function BreweryPage({
 					<div className="flex flex-col items-center gap-4">
 						{brewery.beers.length > 0 ? (
 						brewery.beers.map((beer: Beer) => (
-							<div key={beer.id} className="w-full max-w-lg">
+							<div key={beer.id} className="w-full max-w-lg shadow-lg">
 								<BeerCard type="nobrewery" entry={beer} />
 							</div>
 						))
@@ -125,13 +125,11 @@ export default async function BreweryPage({
 					</div>
 
 					{/* Pagination */}
-					<div className="mt-6 flex justify-center">
 						<PaginationLinks
 							currentPage={formattedPage}
 							totalPages={totalPages}
 							basePath={`/breweries/${(await params).id}`}
 						/>
-					</div>
 				</div>
 			</div>
 		</main>

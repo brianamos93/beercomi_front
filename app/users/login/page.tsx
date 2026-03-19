@@ -38,7 +38,7 @@ export default function LoginForm() {
 						id="email"
 						type="email"
 						placeholder="email@example.com"
-						className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm
+						className="w-full border text-gray-800 border-gray-300 rounded-lg px-3 py-2 text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 					/>
 
@@ -61,7 +61,7 @@ export default function LoginForm() {
 						id="password"
 						type="password"
 						placeholder="Enter your password"
-						className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm
+						className="w-full text-gray-800 border border-gray-300 rounded-lg px-3 py-2 text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 					/>
 
@@ -84,7 +84,7 @@ export default function LoginForm() {
 					Don’t have an account?
 					<Link
 						href="/users/signup"
-						className="text-blue-600 hover:underline ml-1 font-medium"
+						className="hover:underline ml-1 font-medium text-amber-500 hover:text-amber-600"
 					>
 						Sign up
 					</Link>

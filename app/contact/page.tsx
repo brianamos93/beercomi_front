@@ -14,22 +14,12 @@ export default async function ContactPage() {
 						<p className="text-gray-500 text-sm">Email</p>
 						<a
 							href="mailto:your@email.com"
-							className="text-blue-600 hover:underline"
+							className="text-yellow-600 hover:underline"
 						>
 							your@email.com
 						</a>
 					</div>
 
-					<div>
-						<p className="text-gray-500 text-sm">Portfolio</p>
-						<a
-							href="https://yourportfolio.com"
-							target="_blank"
-							className="text-blue-600 hover:underline"
-						>
-							View My Portfolio
-						</a>
-					</div>
 				</div>
 			</div>
 		</div>

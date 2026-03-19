@@ -45,7 +45,7 @@ export default function SearchBar({ initialTerm = "", onSearch }: SearchBarProps
 
 			<input
 				id="search"
-				className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+				className="peer block w-full text-gray-800 rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
 				placeholder="Search..."
 				value={term}
 				onChange={(e) => setTerm(e.target.value)}

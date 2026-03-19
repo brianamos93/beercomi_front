@@ -76,7 +76,7 @@ export default async function BeerPage({
 			)}
 
 			<section>
-				<h2 className="text-2xl font-bold mb-6 border-b pb-2">Reviews</h2>
+				<h2 className="text-2xl font-bold mb-6 border-b-2 pb-2">Reviews</h2>
 
 				{userId !== null &&
 					!beer.reviews.some(
@@ -93,7 +93,7 @@ export default async function BeerPage({
 							<div
 								id={review.id}
 								key={review.id}
-								className="border rounded-xl p-5 bg-white shadow-sm"
+								className="border rounded-xl p-5 bg-white shadow-lg"
 							>
 								{/* Photos */}
 								{review.photos && review.photos.length > 0 && (
@@ -130,7 +130,7 @@ export default async function BeerPage({
 									{review.author_id === userId && (
 										<Link
 											href={`/beers/${beer.id}/review/${review.id}/edit`}
-											className="text-blue-600 hover:underline font-semibold"
+											className="text-yellow-600 hover:underline font-semibold"
 										>
 											Edit
 										</Link>

@@ -6,7 +6,7 @@ import { StarIcon } from "@heroicons/react/20/solid";
 export default function BeerHeader({ beer }: { beer: Beer }) {
 	const coverImage = beer.cover_image ? beer.cover_image : "/file.svg";
 	return (
-		<div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+		<div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-xl p-6">
 			<div className="flex flex-col sm:flex-row gap-6">
 				{/* Beer Label */}
 				<div className="flex-shrink-0 flex justify-center sm:block">
@@ -52,7 +52,7 @@ export default function BeerHeader({ beer }: { beer: Beer }) {
 						</span>
 					</div>
 					{/* Stats Row */}
-					<div className="flex flex-wrap gap-4 text-sm mt-3 text-gray-700">
+					<div className="flex flex-wrap gap-4 text-sm mt-3 text-gray-700 ">
 						<span className="bg-gray-100 px-3 py-1 rounded-full">
 							{beer.style}
 						</span>
