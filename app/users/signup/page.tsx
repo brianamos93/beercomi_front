@@ -93,7 +93,7 @@ export default function SignupForm() {
 					Already have an account?
 					<Link
 						href="/users/login"
-						className="text-blue-600 hover:underline ml-1 font-medium"
+						className="hover:underline ml-1 font-medium text-amber-500 hover:text-amber-600"
 					>
 						Login
 					</Link>
