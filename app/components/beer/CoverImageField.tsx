@@ -27,7 +27,7 @@ export default function CoverImageField({
 
 	return (
 		<div>
-			<label className="block text-sm font-medium text-sky-800 mb-2">
+			<label className="block text-sm font-medium text-black-800 mb-2">
 				Cover Image
 			</label>
 
@@ -70,10 +70,10 @@ export default function CoverImageField({
 				{({ getRootProps, getInputProps }) => (
 					<div
 						{...getRootProps()}
-						className="p-6 border-2 border-dashed border-sky-400 rounded-lg text-center cursor-pointer bg-sky-50 hover:bg-sky-100 transition"
+						className="p-6 border-2 border-dashed border-amber-400 rounded-lg text-center cursor-pointer bg-amber-50 hover:bg-amber-100 transition"
 					>
 						<input {...getInputProps()} aria-label="Upload cover image" />
-						<p className="text-sm text-sky-700">
+						<p className="text-sm text-gray-700">
 							Drag & drop an image or tap to select
 						</p>
 						<p className="text-xs text-gray-500 mt-1">Max size 1MB</p>

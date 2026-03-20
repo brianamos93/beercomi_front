@@ -83,7 +83,7 @@ export default function CreateBeerForm() {
 			onSubmit={handleSubmit(onSubmit)}
 			className="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md space-y-6"
 		>
-			<h2 className="text-xl font-semibold text-sky-700">Add Beer</h2>
+			<h2 className="text-xl font-semibold text-black-700">Add Beer</h2>
 
 			<Controller
 				name="cover_image"

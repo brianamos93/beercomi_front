@@ -32,7 +32,7 @@ export default function TextField<T extends FieldValues>({
 }: Props<T>) {
   return (
     <div>
-      <label className="block text-sm font-medium text-sky-800">
+      <label className="block text-sm font-medium text-black-800 mb-2">
         {label}
       </label>
 
