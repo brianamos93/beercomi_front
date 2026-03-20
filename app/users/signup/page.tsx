@@ -1,6 +1,7 @@
 "use client";
 import { signup } from "@/app/actions/auth";
 import SubmitButton from "@/app/components/form/SubmitButton";
+import Form from "next/form";
 import Link from "next/link";
 import { useActionState } from "react";
 
@@ -9,7 +10,7 @@ export default function SignupForm() {
 
 	return (
 		<div className="flex items-center justify-center min-h-[60vh] px-4">
-			<form
+			<Form
 				action={action}
 				className="w-full max-w-md bg-white border border-gray-200 rounded-2xl shadow-sm p-8 space-y-6"
 			>
@@ -98,7 +99,7 @@ export default function SignupForm() {
 						Login
 					</Link>
 				</p>
-			</form>
+			</Form>
 		</div>
 	);
 }

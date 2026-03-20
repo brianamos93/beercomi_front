@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import SubmitButton from "../../components/form/SubmitButton";
+import Form from 'next/form'
 
 
 const initialState = { error: {}, success: undefined };
@@ -19,7 +20,7 @@ export default function LoginForm() {
 
 	return (
 		<div className="flex items-center justify-center min-h-[60vh] px-4">
-			<form
+			<Form
 				action={formAction}
 				className="w-full max-w-sm bg-white border border-gray-200 rounded-2xl shadow-sm p-8 space-y-5"
 			>
@@ -93,7 +94,7 @@ export default function LoginForm() {
 						Sign up
 					</Link>
 				</p>
-			</form>
+			</Form>
 		</div>
 	);
 }
