@@ -1,5 +1,6 @@
 "use client";
 import { signup } from "@/app/actions/auth";
+import SubmitButton from "@/app/components/form/SubmitButton";
 import Link from "next/link";
 import { useActionState } from "react";
 
@@ -85,13 +86,8 @@ export default function SignupForm() {
 				</div>
 
 				{/* Button */}
-				<button
-					type="submit"
-					disabled={pending}
-					className="w-full rounded-lg bg-blue-600 text-white py-2 font-medium hover:bg-blue-700 transition disabled:opacity-50"
-				>
-					{pending ? "Creating account..." : "Sign up"}
-				</button>
+
+				<SubmitButton loadingText="Signing up" isSubmitting={pending}>Sign Up</SubmitButton>
 
 				<p className="text-center text-sm text-gray-600">
 					Already have an account?
