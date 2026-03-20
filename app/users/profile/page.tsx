@@ -27,7 +27,7 @@ export default async function Profile() {
 		}
 	}
 
-	const pictureurl = userImg ? userImg : "/defaultavatar.png";
+	const pictureurl = userImg ? userImg : "/avatar-icon.svg";
 
 	const altText = userDisplayName
 		? `${userDisplayName}'s avatar`
