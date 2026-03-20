@@ -1,6 +1,12 @@
 "use client";
 
-import { useForm, Controller, UseFormRegister, FieldErrors, Control } from "react-hook-form";
+import {
+	useForm,
+	Controller,
+	UseFormRegister,
+	FieldErrors,
+	Control,
+} from "react-hook-form";
 import { useEffect } from "react";
 import { updateServerBeer } from "../../actions/beer";
 import { Beer } from "../../utils/def";
@@ -9,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CoverImageField from "./CoverImageField";
 import BeerCommonFields from "./BeerCommonFields";
 import { BeerBaseFields } from "./BeerFormType";
+import SubmitButton from "../form/SubmitButton";
 
 export default function EditBeerForm({ beer }: { beer: Beer }) {
 	// use undefined when there's no image so the form type matches
@@ -52,7 +59,6 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 			reset();
 		}
 	}, [isSubmitSuccessful, reset]);
-
 
 	useEffect(() => {
 		reset({
@@ -116,7 +122,6 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 		}
 	};
 
-
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
@@ -132,8 +137,8 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 						? value.type === "existing" && value.url
 							? value.url
 							: value.type !== "existing" && value.preview
-							? value.preview
-							: null
+								? value.preview
+								: null
 						: null;
 
 					return (
@@ -174,13 +179,7 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 			</div>
 
 			{/* Submit */}
-			<button
-				type="submit"
-				disabled={isSubmitting}
-				className="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-3 rounded-lg transition disabled:opacity-50"
-			>
-				{isSubmitting ? "Loading..." : "Update"}
-			</button>
+			<SubmitButton loadingText="Saving" isSubmitting={isSubmitting}>Save</SubmitButton>
 		</form>
 	);
 }

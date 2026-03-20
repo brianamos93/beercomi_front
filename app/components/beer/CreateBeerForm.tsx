@@ -1,6 +1,12 @@
 "use client";
 
-import { useForm, Controller, UseFormRegister, FieldErrors, Control } from "react-hook-form";
+import {
+	useForm,
+	Controller,
+	UseFormRegister,
+	FieldErrors,
+	Control,
+} from "react-hook-form";
 import { useEffect } from "react";
 import { createServerBeer } from "../../actions/beer";
 import { CreateBeerSchema } from "@/app/utils/schemas/beerSchema";
@@ -8,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CoverImageField from "./CoverImageField";
 import BeerCommonFields from "./BeerCommonFields";
 import { BeerBaseFields } from "./BeerFormType";
+import SubmitButton from "../form/SubmitButton";
 
 type FormValues = {
 	cover_image?: File | null;
@@ -24,7 +31,6 @@ type FormValues = {
 };
 
 export default function CreateBeerForm() {
-
 	const form = useForm<FormValues>({
 		resolver: zodResolver(CreateBeerSchema),
 		defaultValues: {},
@@ -72,7 +78,6 @@ export default function CreateBeerForm() {
 		}
 	};
 
-
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
@@ -107,13 +112,7 @@ export default function CreateBeerForm() {
 			</div>
 
 			{/* Submit */}
-			<button
-				type="submit"
-				disabled={isSubmitting}
-				className="w-full bg-sky-600 text-white font-medium py-2.5 rounded-lg hover:bg-sky-700 disabled:opacity-50"
-			>
-				{isSubmitting ? "Loading..." : "Submit"}
-			</button>
+			<SubmitButton loadingText="Saving" isSubmitting={isSubmitting}>Save</SubmitButton>
 		</form>
 	);
 }

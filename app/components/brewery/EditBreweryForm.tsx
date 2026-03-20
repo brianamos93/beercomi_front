@@ -13,6 +13,7 @@ import { Brewery } from "../../utils/def";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import url from "@/app/utils/utils";
+import SubmitButton from "../form/SubmitButton";
 
 export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 	let coverImageUrl;
@@ -271,13 +272,7 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 			)}
 
 			{/* Submit */}
-			<button
-				type="submit"
-				disabled={isSubmitting}
-				className="w-full bg-sky-600 text-white font-medium py-2.5 rounded-lg hover:bg-sky-700 disabled:opacity-50"
-			>
-				{isSubmitting ? "Loading..." : "Update"}
-			</button>
+			<SubmitButton loadingText="Saving" isSubmitting={isSubmitting}>Save</SubmitButton>
 		</form>
 	);
 }

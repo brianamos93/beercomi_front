@@ -4,11 +4,14 @@ import { Login } from "../../utils/requests/userRequests";
 import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
+import SubmitButton from "../../components/form/SubmitButton";
+
 
 const initialState = { error: {}, success: undefined };
 
 export default function LoginForm() {
 	const [state, formAction] = useActionState(Login, initialState);
+	const { pending } = useFormStatus();
 
 	if (state?.success) {
 		redirect("/");
@@ -77,7 +80,8 @@ export default function LoginForm() {
 					</div>
 				)}
 
-				<SubmitButton />
+				<SubmitButton loadingText="Logging in" isSubmitting={pending}>Login</SubmitButton>
+				
 
 				{/* Optional signup link */}
 				<p className="text-center text-sm text-gray-600">
@@ -91,19 +95,5 @@ export default function LoginForm() {
 				</p>
 			</form>
 		</div>
-	);
-}
-
-function SubmitButton() {
-	const { pending } = useFormStatus();
-
-	return (
-		<button
-			disabled={pending}
-			className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium
-                 hover:bg-blue-700 transition disabled:opacity-50"
-		>
-			{pending ? "Logging in..." : "Login"}
-		</button>
 	);
 }

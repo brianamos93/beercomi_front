@@ -10,6 +10,7 @@ import {
 } from "@/app/utils/schemas/brewerySchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import SubmitButton from "../form/SubmitButton";
 
 type FormValues = {
 	cover_image?: File | null;
@@ -229,13 +230,7 @@ export default function CreateBeerForm() {
 			)}
 
 			{/* Submit */}
-			<button
-				type="submit"
-				disabled={isSubmitting}
-				className="w-full bg-sky-600 text-white font-medium py-2.5 rounded-lg hover:bg-sky-700 disabled:opacity-50"
-			>
-				{isSubmitting ? "Loading..." : "Submit"}
-			</button>
+			<SubmitButton loadingText="Saving" isSubmitting={isSubmitting}>Save</SubmitButton>
 		</form>
 	);
 }
