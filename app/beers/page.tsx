@@ -5,6 +5,9 @@ import { Beer } from "../utils/def";
 import { cookies } from "next/headers";
 import { PaginationLinks } from "../components/interface/ServerPagination";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import BeerList from "./components/BeerList";
+import { Suspense } from "react";
+import BeersLoading from "./components/BeersLoading";
 
 export default async function beers({
 	searchParams,
@@ -17,7 +20,7 @@ export default async function beers({
 	const limit = 10;
 	const offset = (page - 1) * limit;
 
-	const { data, pagination } = await getBeers({ offset, limit });
+	const { pagination } = await getBeers({ offset, limit });
 
 	const token = (await cookies()).get("token")?.value;
 	const totalPages = Math.ceil(pagination.total / limit);
@@ -39,13 +42,9 @@ export default async function beers({
 					</div>
 				)}
 
-				<ul className="space-y-4 flex flex-col items-center">
-					{data.map((beer: Beer) => (
-						<li key={beer.id} className="w-full max-w-md">
-							<BeerCard entry={beer} />
-						</li>
-					))}
-				</ul>
+				<Suspense fallback={<BeersLoading />}>
+					<BeerList page={page} />
+				</Suspense>
 
 				<div className="max-w-md mx-auto mt-6">
 					<PaginationLinks
