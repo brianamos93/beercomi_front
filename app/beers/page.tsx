@@ -1,7 +1,5 @@
 import Link from "next/link";
-import BeerCard from "../components/beer/BeerCard";
 import { getBeers } from "../utils/requests/beerRequests";
-import { Beer } from "../utils/def";
 import { cookies } from "next/headers";
 import { PaginationLinks } from "../components/interface/ServerPagination";
 import { PlusIcon } from "@heroicons/react/24/solid";
