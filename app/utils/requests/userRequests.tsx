@@ -3,6 +3,7 @@ import z from "zod";
 import url from "../utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -103,7 +104,7 @@ export const getRecentActivityOneUser = async (userId: string) => {
 	return res.json();
 };
 
-export const getLoggedInUsersData = async () => {
+export const getLoggedInUsersData = cache(async () => {
 	const token = (await cookies()).get("token")?.value;
 
 	if (!token) return null;
@@ -122,7 +123,7 @@ export const getLoggedInUsersData = async () => {
 	}
 
 	return res.json();
-};
+});
 
 export const getUserFavorites = async (
 	user_id: string,
