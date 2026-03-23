@@ -13,16 +13,6 @@ export default async function BeerDynamicSection({
   const token = (await cookies()).get("token")?.value;
   if (!token) return null;
 
-  let userId: string | null = null;
-  try {
-    const payload = JSON.parse(
-      Buffer.from(token.split(".")[1], "base64url").toString()
-    );
-    userId = payload.id ?? payload.sub ?? null;
-  } catch {
-    userId = null;
-  }
-
   const favoriteRes = await checkFavorite(beerId, "beers", token);
   const favorited = Boolean(favoriteRes.favorited);
   const favorite_id = favoriteRes.favorited ? favoriteRes.favorite_id : undefined;
