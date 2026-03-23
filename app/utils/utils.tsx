@@ -1,6 +1,6 @@
 import z from "zod";
 
-const url = "https://beercomi.onrender.com"
+const url = process.env.NEXT_PUBLIC_BACKEND_URL
 
 export default url
 
