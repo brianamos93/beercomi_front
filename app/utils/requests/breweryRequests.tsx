@@ -33,23 +33,34 @@ export const getBreweriesList = async () => {
 	return res.json();
 };
 
-export const getBrewery = async (id: string, limit?: number, offset?: number) => {
-	const params = new URLSearchParams();
-
-	if (limit !== undefined) params.append("limit", limit.toString());
-	if (offset !== undefined) params.append("offset", offset.toString());
-
-	const query = params.toString();
-
-	const res = await fetch(
-		`${url}/breweries/${id}${query ? `?${query}` : ""}`,
-		{
-			cache: "no-store",
-		},
-	);
+export const getBrewery = async (id: string) => {
+	const res = await fetch(`${url}/breweries/${id}`);
 	if (!res.ok) return undefined;
 	return res.json();
 };
+
+export const getBreweryBeers = async ({
+	id,
+	limit,
+	offset,
+}: {
+	id: string;
+	limit?: number;
+	offset?: number;
+}) => {
+	const params = new URLSearchParams();
+	if (limit !== undefined) params.append("limit", String(limit));
+	if (offset !== undefined) params.append("offset", String(offset));
+
+	const query = params.toString();
+	const res = await fetch(
+		`${url}/breweries/${id}/beers${query ? `?${query}` : ""}`,
+	);
+
+	if (!res.ok) return undefined;
+	return res.json();
+};
+
 export const createBrewery = async (
 	newBreweryData: FormData,
 	token: string,
