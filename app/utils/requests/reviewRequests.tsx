@@ -1,7 +1,7 @@
 import { DeletedFilter } from "../def"
 import url from "../utils"
 
-export const getReview = async ({id, limit, offset}: {id: string, limit: number, offset: number}) => {
+export const getReview = async ({id, limit, offset}: {id: string, limit?: number, offset?: number}) => {
 	const params = new URLSearchParams();
 
 	if (limit !== undefined) params.append("limit", limit.toString());

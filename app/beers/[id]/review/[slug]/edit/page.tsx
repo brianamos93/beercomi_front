@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
-	title: 'Edit Beer Review',
+	title: 'レビュー　編集',
 }
 
 export default async function editBeerReview(props: { params: Promise<{ id: string, slug: string }>}) {
@@ -15,7 +15,7 @@ export default async function editBeerReview(props: { params: Promise<{ id: stri
 
 	const [beer, review] = await Promise.all([
 		getBeer(id),
-		getReview(slug)
+		getReview({id: slug})
 	]);
 
 	if (!beer || !review) {
