@@ -85,22 +85,18 @@ export const getBeersList = async () => {
 	return res.json();
 };
 
-export const getBeer = async (id: string, limit?: number, offset?: number) => {
-	const params = new URLSearchParams();
+export const getBeer = async (id: string) => {
 
-	if (limit !== undefined) params.append("limit", limit.toString());
-	if (offset !== undefined) params.append("offset", offset.toString());
+	const requestUrl = `${url}/beers/${id}`;
 
-	const query = params.toString();
-	const requestUrl = `${url}/beers/${id}${query ? `?${query}` : ""}`;
-
-	const res = await fetch(requestUrl, {
-		cache: "no-store",
-	});
+	const res = await fetch(requestUrl);
 
 	if (!res.ok) return undefined;
 	return res.json();
 };
+
+
+
 export const createBeer = async (newBeerData: FormData, token: string) => {
 	const res = await fetch(url + "/beers", {
 		method: "POST",

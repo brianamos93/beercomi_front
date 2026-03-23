@@ -14,7 +14,7 @@ import TextArea from "../../form/TextArea";
 import RatingField from "../../form/RatingField";
 import ImageField from "./ImageField";
 
-export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
+export default function CreateBeerReviewForm({ id, onReviewCreated }: { id: string, onReviewCreated?: () => void }) {
 	const form = useForm<CreateReviewInput>({
 		resolver: zodResolver(CreateReviewSchema),
 		defaultValues: { photos: [], rating: undefined, review: "" },
@@ -65,7 +65,7 @@ export default function CreateBeerReviewForm({ beer }: { beer: Beer }) {
 				{...register("beer_id")}
 				type="hidden"
 				name="beer_id"
-				value={beer.id}
+				value={id}
 			/>
 
 			{/* Photo Upload */}

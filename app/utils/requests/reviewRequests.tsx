@@ -1,8 +1,15 @@
 import { DeletedFilter } from "../def"
 import url from "../utils"
 
-export const getReview = async (id: string) => {
-	const res = await fetch(url + `/beers/review/${id}`, {
+export const getBeerReviews = async ({id, limit, offset}: {id: string, limit: number, offset: number}) => {
+	const params = new URLSearchParams();
+
+	if (limit !== undefined) params.append("limit", limit.toString());
+	if (offset !== undefined) params.append("offset", offset.toString());
+
+	const query = params.toString();
+	
+	const res = await fetch(url + `/beers/${id}/reviews${query ? `?${query}` : ""}`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
