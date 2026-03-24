@@ -15,23 +15,23 @@ export default function Header() {
 
 	const links = [
 		{
-			page: "Home",
+			page: "ホーム",
 			route: "/",
 		},
 		{
-			page: "About",
+			page: "ビアログとは",
 			route: "/about",
 		},
 		{
-			page: "Beers",
+			page: "ビール",
 			route: "/beers",
 		},
 		{
-			page: "Breweries",
+			page: "ブルワリー",
 			route: "/breweries",
 		},
 		{
-			page: "Contact",
+			page: "お取り合わせ",
 			route: "/contact",
 		},
 	];
@@ -41,7 +41,7 @@ export default function Header() {
 
 	return (
 		<div className="flex items-center justify-between border-b border-gray-400 py-8">
-			<Link href="/">つながる</Link>
+			<Link href="/">ビアログ</Link>
 			<nav>
 				<section className="MOBILE-MENU flex lg:hidden">
 					<div
@@ -106,14 +106,14 @@ export default function Header() {
 										className="px-4 py-2 text-sm bg-amber-400 text-black rounded hover:bg-amber-600"
 										onClick={() => setIsNavOpen(false)}
 									>
-										<Link href="/users/login">Login</Link>
+										<Link href="/users/login">ログイン</Link>
 									</li>
 
 									<li
 										className="px-4 py-2 text-sm bg-gray-300 text-black rounded hover:bg-gray-400"
 										onClick={() => setIsNavOpen(false)}
 									>
-										<Link href="/users/signup">Sign Up</Link>
+										<Link href="/users/signup">登録</Link>
 									</li>
 								</>
 							)}
@@ -141,7 +141,7 @@ export default function Header() {
 					{user ? (
 						<>
 							<li className="flex items-center">
-								<Link href="/users/profile">Profile</Link>
+								<Link href="/users/profile">プロフィール</Link>
 							</li>
 							<li className="flex items-center">
 								<LogoutButton />
@@ -152,14 +152,14 @@ export default function Header() {
 							<li className="flex items-center">
 								<Link href="/users/login">
 									<span className="px-4 py-2 text-sm bg-amber-400 text-black rounded hover:bg-amber-600">
-										Login
+										ログイン
 									</span>
 								</Link>
 							</li>
 							<li className="flex items-center">
 								<Link href="/users/signup">
 									<span className="px-4 py-2 text-sm bg-gray-300 text-black rounded hover:bg-gray-400">
-										Sign Up
+										登録
 									</span>
 								</Link>
 							</li>

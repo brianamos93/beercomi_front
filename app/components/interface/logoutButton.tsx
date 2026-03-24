@@ -11,7 +11,7 @@ export default function LogoutButton({onClick}: logoutButtonProps) {
 				type="submit"
 				className="text-gray-700 hover:text-red-600"
 			>
-				Logout
+				ログアウト
 			</button>
 		</form>
 	);
