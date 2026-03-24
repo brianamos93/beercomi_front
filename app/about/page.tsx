@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "アプリについて",
+  description: "ビールの評価・レビュー・管理ができるフルスタックアプリ「ビアログ」。実務を想定した設計で、検索・投稿・データ管理機能を実装。",
+};
 
 export default function AboutPage() {
   return (
@@ -7,9 +13,9 @@ export default function AboutPage() {
 
         {/* Title */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-800">About This Project</h1>
+          <h1 className="text-3xl font-bold text-gray-800">アプリについて</h1>
           <p className="text-gray-600 mt-2">
-            A beer review platform built to practice full-stack web development.
+            フルースタックのびーる評価するアプリ
           </p>
         </div>
 
@@ -31,7 +37,7 @@ export default function AboutPage() {
         {/* Tech Stack */}
         <section>
           <h2 className="text-xl font-semibold mb-4 text-gray-800">
-            Tech Stack
+            テックスタック
           </h2>
 
           <div className="flex flex-wrap gap-3">
@@ -42,7 +48,7 @@ export default function AboutPage() {
               "Node.js",
               "Express",
               "PostgreSQL",
-              "JWT Authentication",
+              "JWT 認証",
             ].map((tech) => (
               <span
                 key={tech}
@@ -57,7 +63,7 @@ export default function AboutPage() {
         {/* Features */}
         <section>
           <h2 className="text-xl font-semibold mb-4 text-gray-800">
-            Features
+            工夫点
           </h2>
 
           <ul className="list-disc list-inside space-y-2 text-gray-700">
@@ -73,11 +79,19 @@ export default function AboutPage() {
         {/* GitHub */}
         <section className="text-center pt-4">
           <Link
-            href="https://github.com/yourusername/yourrepo"
+            href="https://github.com/brianamos93/beercomi_front"
             target="_blank"
             className="inline-block bg-gray-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-800 transition"
           >
-            View the Source on GitHub
+            View the Frontend Source on GitHub
+          </Link>
+
+          <Link
+            href="https://github.com/brianamos93/beercomi"
+            target="_blank"
+            className="inline-block bg-gray-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-800 transition"
+          >
+            View the Backend Source on GitHub
           </Link>
         </section>
 
