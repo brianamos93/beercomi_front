@@ -1,16 +1,10 @@
 "use client";
 import { signup } from "@/app/actions/auth";
 import SubmitButton from "@/app/components/form/SubmitButton";
-import { Metadata } from "next";
 import Form from "next/form";
 import Link from "next/link";
 import { useActionState } from "react";
 
-export const metadata: Metadata = {
-  title: "新規登録｜ビアログをはじめる",
-  description:
-    "ビアログのアカウントを作成して、レビュー投稿や評価などの機能を利用しましょう。",
-};
 
 export default function SignupForm() {
 	const [state, action, pending] = useActionState(signup, undefined);
