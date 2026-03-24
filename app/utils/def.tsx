@@ -121,16 +121,16 @@ export interface ActivityLogResponse {
 export const SignupFormSchema = z.object({
 	display_name: z
 		.string()
-		.min(5, { message: "Display Name must be at least 5 characters long." })
+		.min(5, { message: "表示名は5文字以上で入力してください。" })
 		.trim(),
-	email: z.string().email({ message: "Please enter a valid email." }).trim(),
+	email: z.string().email({ message: "メールを入力してください。" }).trim(),
 	password: z
 		.string()
-		.min(8, { message: "Be at least 8 characters long" })
-		.regex(/[a-zA-Z]/, { message: "Contain at least one letter." })
-		.regex(/[0-9]/, { message: "Contain at least one number." })
+		.min(8, { message: "8文字以上で入力してください。" })
+		.regex(/[a-zA-Z]/, { message: "英字を1文字以上含めてください。" })
+		.regex(/[0-9]/, { message: "数字を1文字以上含めてください。" })
 		.regex(/[^a-zA-Z0-9]/, {
-			message: "Contain at least one special character.",
+			message: "記号を1文字以上含めてください。",
 		})
 		.trim(),
 });
