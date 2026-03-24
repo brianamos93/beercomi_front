@@ -40,13 +40,13 @@ export default function SearchBar({ initialTerm = "", onSearch }: SearchBarProps
 	return (
 		<form onSubmit={handleSubmit} className="relative flex flex-1 shrink-0">
 			<label htmlFor="search" className="sr-only">
-				Search
+				検索
 			</label>
 
 			<input
 				id="search"
 				className="peer block w-full text-gray-800 rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-				placeholder="Search..."
+				placeholder="検索キーワードを入力"
 				value={term}
 				onChange={(e) => setTerm(e.target.value)}
 			/>
