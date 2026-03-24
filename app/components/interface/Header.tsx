@@ -31,7 +31,7 @@ export default function Header() {
 			route: "/breweries",
 		},
 		{
-			page: "お取り合わせ",
+			page: "お問い合わせ",
 			route: "/contact",
 		},
 	];
