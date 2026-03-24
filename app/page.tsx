@@ -79,7 +79,7 @@ export default function Home() {
 	return (
 		<main className="flex justify-center">
 			<div className="max-w-2xl w-full p-4">
-				<h1 className="text-2xl font-bold mb-4">Recent Entries</h1>
+				<h1 className="text-2xl font-bold mb-4">最近の投稿</h1>
 
 				<ul className="space-y-4 flex flex-col items-center">
 					{entries.map((entry) => {
@@ -102,12 +102,12 @@ export default function Home() {
 
 				{/* Loader Trigger */}
 				<div ref={loaderRef} className="h-12 flex items-center justify-center">
-					{loading ? <p>Loading…</p> : <p></p>}
+					{loading ? <p>読み込み中…</p> : <p></p>}
 				</div>
 
 				{/* No more pages */}
 				{cursor === null && entries.length > 0 && (
-					<p className="text-center text-gray-500 py-4">No more entries</p>
+					<p className="text-center text-gray-500 py-4">これ以上の投稿はありません。</p>
 				)}
 			</div>
 		</main>
