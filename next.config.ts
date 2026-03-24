@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
         hostname: "loremflickr.com",
         pathname: "/**",
       },
+       {
+        protocol: 'https',
+        hostname: 'beercomi.onrender.com',
+        port: '',
+        pathname: '/uploads/**',
+      },
     ],
   },
 };
