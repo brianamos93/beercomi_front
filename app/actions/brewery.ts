@@ -64,9 +64,10 @@ export async function updateServerBrewery(id: string, formData: FormData) {
 			status: res.status ?? 400,
 		};
 	}
-	if (res.id) {
-		revalidatePath("/breweries");
-		redirect("/breweries");
+	if (res.message) {
+		console.log("Success:", res.message);
+		revalidatePath(`/breweries/${id}`);
+		redirect(`/breweries/${id}`);
 	}
 
 	return {
