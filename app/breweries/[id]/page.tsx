@@ -16,7 +16,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Brewery }): Promise<Metadata> {
-  const brewery = await getBrewery(params.id);
+    const { id } = await params
+    const brewery = await getBrewery(id);
 
   return {
     title: `${brewery.name}の醸造所情報・ビール一覧`,
