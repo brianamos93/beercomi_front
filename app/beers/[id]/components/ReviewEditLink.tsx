@@ -12,7 +12,7 @@ export default function ReviewEditLink({ beer_id, review_id, author_id }: { beer
             href={`/beers/${beer_id}/review/${review_id}/edit`}
             className="text-yellow-600 hover:underline font-semibold"
         >
-            Edit
+            レビューを編集
         </Link>
     );
 }

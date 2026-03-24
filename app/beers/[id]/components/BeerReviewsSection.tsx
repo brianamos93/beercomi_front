@@ -65,7 +65,7 @@ export default function BeerReviewsSection({
 			)}
 
 			{loading ? (
-				<p className="text-gray-400 text-center">Loading reviews…</p>
+				<p className="text-gray-400 text-center">レビューを読み込み中…</p>
 			) : (
 				<div className="space-y-6">
 					{reviews.length > 0 ? (
@@ -100,7 +100,7 @@ export default function BeerReviewsSection({
 											⭐ {review.rating}
 										</span>
 										<span className="text-gray-500">
-											by {review.author_name}
+											投稿者： {review.author_name}
 										</span>
 									</div>
 									<ReviewEditLink
@@ -112,7 +112,7 @@ export default function BeerReviewsSection({
 							</div>
 						))
 					) : (
-						<p className="text-gray-500 text-center">No reviews yet.</p>
+						<p className="text-gray-500 text-center">まだレビューがありません。最初のレビューを投稿してみましょう！</p>
 					)}
 				</div>
 			)}

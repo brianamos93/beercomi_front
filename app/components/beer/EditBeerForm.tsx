@@ -127,7 +127,7 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 			onSubmit={handleSubmit(onSubmit)}
 			className="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md space-y-6"
 		>
-			<h2 className="text-xl font-semibold text-sky-700">Update Beer</h2>
+			<h2 className="text-xl font-semibold text-sky-700">ビール編集</h2>
 
 			<Controller
 				name="cover_image"

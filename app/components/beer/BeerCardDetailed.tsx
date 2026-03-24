@@ -47,7 +47,7 @@ export default function BeerHeader({ beer }: { beer: Beer }) {
 
 						<span className="text-sm text-gray-600">{beer.avg_rating}</span>
 						<span className="text-sm text-gray-600">
-							{beer.review_count} Review
+							{beer.review_count} レビュー
 							{Number(beer.review_count) === 1 ? "" : "s"}
 						</span>
 					</div>
@@ -69,7 +69,7 @@ export default function BeerHeader({ beer }: { beer: Beer }) {
 
 						{beer.color && (
 							<span className="bg-gray-100 px-3 py-1 rounded-full">
-								Color {beer.color}
+								色: {beer.color}
 							</span>
 						)}
 					</div>

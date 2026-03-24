@@ -28,7 +28,7 @@ export default function ToggleFavoriteButton({
 			disabled={isPending}
 			className="px-3 py-2 border rounded"
 		>
-			{isFavorited ? "★ Favorited" : "☆ Favorite"}
+			{isFavorited ? "★ お気に入りから外す" : "☆ お気に入りに追加"}
 		</button>
 	);
 }
