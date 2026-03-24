@@ -1,3 +1,11 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "お問い合わせ",
+  description:
+    "本サイトへのご質問・ご意見・ご要望などは、メールよりお気軽にお問い合わせください。",
+};
+
 export default async function ContactPage() {
 	return (
 		<div className="min-h-screen flex items-center justify-center p-6 bg-gray-100">
@@ -13,10 +21,10 @@ export default async function ContactPage() {
 					<div>
 						<p className="text-gray-500 text-sm">Email</p>
 						<a
-							href="mailto:your@email.com"
+							href="mailto:brianizzo93@gmai.com"
 							className="text-yellow-600 hover:underline"
 						>
-							your@email.com
+							brianizzo93@gmail.com
 						</a>
 					</div>
 
