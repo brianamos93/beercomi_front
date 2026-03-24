@@ -134,7 +134,7 @@ export default function ReviewTable({ token }: { token: string }) {
 			<Link
 				href={`/beers/${log.beer_id}/review/${log.id}/edit`}
 				className="p-2 rounded-lg hover:bg-gray-200 transition"
-				title="Edit"
+				title="編集"
 			>
 				<PencilSquareIcon className="h-5 w-5 text-gray-600 hover:text-blue-600" />
 			</Link>
@@ -162,7 +162,7 @@ export default function ReviewTable({ token }: { token: string }) {
 				<button
 					onClick={() => setPendingDelete(log.id)}
 					className="p-2 rounded-lg hover:bg-gray-200 transition"
-					title={log.deleted_at ? "Hard Delete" : "Soft Delete"}
+					title={log.deleted_at ? "ハード削除" : "ソフト削除"}
 				>
 					{log.deleted_at ? (
 						<TrashIcon className="h-5 w-5 text-red-600 hover:text-red-800" />
@@ -175,7 +175,7 @@ export default function ReviewTable({ token }: { token: string }) {
 				<button
 					onClick={() => handleUndoSoftDelete(log.id)}
 					className="p-1 rounded hover:bg-gray-100 transition"
-					title="Undelete"
+					title="復元"
 				>
 					<ArrowUturnLeftIcon className="h-5 w-5 text-gray-600 hover:text-green-600" />
 				</button>
@@ -184,21 +184,21 @@ export default function ReviewTable({ token }: { token: string }) {
 	);
 
 	const columns: Column<ReviewLog>[] = [
-		{ header: "Review", accessor: (row) => row.review },
-		{ header: "Rating", accessor: (row) => row.rating },
-		{ header: "Author", accessor: (row) => row.author_name },
-		{ header: "Beer", accessor: (row) => row.beer_name },
-		{ header: "Brewery", accessor: (row) => row.brewery_name },
+		{ header: "レビュー", accessor: (row) => row.review },
+		{ header: "評価", accessor: (row) => row.rating },
+		{ header: "作成者", accessor: (row) => row.author_name },
+		{ header: "ビール", accessor: (row) => row.beer_name },
+		{ header: "ブルワリー", accessor: (row) => row.brewery_name },
 		{
-			header: "Date Created",
+			header: "作成日",
 			accessor: (row) => new Date(row.date_created).toLocaleString(),
 		},
 		{
-			header: "Date Updated",
+			header: "更新日",
 			accessor: (row) => new Date(row.date_updated).toLocaleString(),
 		},
 		{
-			header: "Date Deleted",
+			header: "削除日",
 			accessor: (row) =>
 				row.deleted_at ? new Date(row.deleted_at).toLocaleString() : "-",
 		},
@@ -206,7 +206,7 @@ export default function ReviewTable({ token }: { token: string }) {
 
 	return (
 		<div>
-			<h2 className="text-xl font-semibold mb-4">Beer Log</h2>
+			<h2 className="text-xl font-semibold mb-4">レビューログ</h2>
 
 			<div>
 				<select
@@ -214,9 +214,9 @@ export default function ReviewTable({ token }: { token: string }) {
 					id="category-select"
 					onChange={handleTableChange}
 				>
-					<option value="all">All</option>
-					<option value="true">Deleted</option>
-					<option value="false">Active</option>
+					<option value="all">すべて</option>
+					<option value="true">ソフト削除済</option>
+					<option value="false">公開中のビール</option>
 				</select>
 			</div>
 
