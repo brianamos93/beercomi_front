@@ -7,9 +7,16 @@ import {
 } from "@/app/utils/requests/userRequests";
 import url from "@/app/utils/utils";
 import { MapPinIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "プロフィール｜アカウント情報",
+  description:
+    "ビアログのプロフィールページです。ユーザー情報の確認や編集、投稿したレビューの管理ができます。",
+};
 
 export default async function Profile() {
 	const token = await (await cookies()).get("token")?.value;
