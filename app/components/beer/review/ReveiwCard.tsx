@@ -44,10 +44,10 @@ export default function ReviewCard({ entry }: { entry: Review }) {
 
 				<CardMeta>
 					<p>
-						<strong>Brewery:</strong> {entry.brewery_name}
+						<strong>ブルワリー名：</strong> {entry.brewery_name}
 					</p>
 					<div className="flex items-center gap-2">
-						<strong>Rating:</strong>
+						<strong>評価：</strong>
 						{[1, 2, 3, 4, 5].map((star) => (
 							<StarIcon
 								key={star}
@@ -61,12 +61,12 @@ export default function ReviewCard({ entry }: { entry: Review }) {
 					</div>
 
 					<p>
-						<strong>Updated:</strong> {new Date(entry.date_updated).toLocaleDateString()}
+						<strong>更新日：</strong> {new Date(entry.date_updated).toLocaleDateString()}
 					</p>
 				</CardMeta>
 				<CardAction
 					link={`/beers/${entry.beer_id}#${entry.id}`}
-					type={"review"}
+					type={"レビュー"}
 				/>
 			</CardContent>
 		</CardBase>

@@ -37,7 +37,7 @@ export default function BreweryCard({ entry }: { entry: Brewery }) {
 					</p>
 				</CardMeta>
 
-				<CardAction link={`/breweries/${entry.id}`} type={"brewery"} />
+				<CardAction link={`/breweries/${entry.id}`} type={"ブルワリー"} />
 			</CardContent>
 		</CardBase>
 	);

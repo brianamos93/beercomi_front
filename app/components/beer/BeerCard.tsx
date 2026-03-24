@@ -53,23 +53,23 @@ export default function BeerCard({
 						</div>
 					</div>
 					<p>
-						<strong>Style:</strong> {entry.style}
+						<strong>スタイル：</strong> {entry.style}
 					</p>
 
 					<p>
-						<strong>ABV:</strong> {fixedAbv}%
+						<strong>ABV：</strong> {fixedAbv}%
 					</p>
 
 					<p>
-						<strong>IBU:</strong> {entry.ibu}
+						<strong>IBU：</strong> {entry.ibu}
 					</p>
 					<p>
-						<strong>Updated:</strong>{" "}
+						<strong>更新日：</strong>{" "}
 						{new Date(entry.date_updated).toLocaleDateString()}
 					</p>
 				</CardMeta>
 
-				<CardAction link={beerUrl} type="beer" />
+				<CardAction link={beerUrl} type="ビール" />
 			</CardContent>
 		</CardBase>
 	);
