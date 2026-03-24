@@ -9,29 +9,23 @@ import {
 } from "@/app/utils/schemas/brewerySchema";
 import { Brewery } from "../../utils/def";
 import { zodResolver } from "@hookform/resolvers/zod";
-import url from "@/app/utils/utils";
 import SubmitButton from "../form/SubmitButton";
 import BreweryCommonFields from "./BreweryCommonFields";
 import CoverImageField from "../beer/CoverImageField";
 import { BreweryBaseFields } from "./BreweryFormType";
 
 export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
-	let coverImageUrl;
-	if (!brewery.cover_image) {
-		coverImageUrl = undefined;
-	} else {
-		coverImageUrl = url + brewery.cover_image;
-	}
+	const coverImageUrl = brewery.cover_image ?? undefined;
+
 	const form = useForm<EditBreweryInput>({
 		resolver: zodResolver(EditBrewerySchema),
 		defaultValues: {
 			name: brewery.name,
 			location: brewery.location,
 			date_of_founding: brewery.date_of_founding,
-			cover_image: {
-				url: coverImageUrl,
-				type: "existing" as const,
-			},
+			cover_image: coverImageUrl
+				? { url: coverImageUrl, type: "existing" as const }
+				: null,
 			deleteCoverImage: false,
 		},
 		resetOptions: {
@@ -53,6 +47,25 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 			reset();
 		}
 	}, [isSubmitSuccessful, reset]);
+
+	useEffect(() => {
+		reset({
+			name: brewery.name,
+			location: brewery.location,
+			date_of_founding: brewery.date_of_founding,
+			cover_image: coverImageUrl
+				? { url: coverImageUrl, type: "existing" as const }
+				: null,
+			deleteCoverImage: false,
+		})
+	}, [
+		brewery.id,
+		brewery.name,
+		brewery.location,
+		brewery.date_of_founding,
+		coverImageUrl,
+		reset,
+	])
 
 	const onSubmit = async (data: EditBreweryInput) => {
 		const formData = new FormData();
