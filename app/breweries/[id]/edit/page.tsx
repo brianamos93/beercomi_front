@@ -1,10 +1,16 @@
 import EditBreweryForm from "@/app/components/brewery/EditBreweryForm";
+import { Brewery } from "@/app/utils/def";
 import { getBrewery } from "@/app/utils/requests/breweryRequests";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export const metadata: Metadata = {
-	title: 'Edit Brewery'
+export async function generateMetadata({ params }: {params: Brewery}): Promise<Metadata> {
+  const brewery = await getBrewery(params.id);
+
+  return {
+	title: `${brewery.name}の情報を編集`,
+	description: `${brewery.name}の住所、創立などを簡単に修正可能。`,
+  };
 }
 
 export default async function editBreweryPage(props: { params: Promise<{ id: string }> }) {

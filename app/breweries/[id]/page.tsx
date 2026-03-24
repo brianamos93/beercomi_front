@@ -6,12 +6,22 @@ import { Brewery } from "@/app/utils/def";
 import BreweryCardDetailed from "./components/BreweryCardDetailed";
 import BreweryDynamicSection from "./components/BreweryDynamicSection";
 import BreweryBeerList from "./components/BreweryBeerList";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
   const breweries = await getBreweriesList()
   return breweries.map((brewery: Brewery) => ({
 	id: brewery.id
   }))
+}
+
+export async function generateMetadata({ params }: { params: Brewery }): Promise<Metadata> {
+  const brewery = await getBrewery(params.id);
+
+  return {
+    title: `${brewery.name}の醸造所情報・ビール一覧`,
+    description: `${brewery.name}の所在地や設立年などの基本情報に加え、醸造しているビール一覧を掲載。レビューや評価を参考に、このブルワリーの魅力をチェックしましょう。`,
+  };
 }
 
 export default async function BreweryPage({
