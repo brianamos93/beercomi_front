@@ -5,7 +5,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }: {params: Brewery}): Promise<Metadata> {
-  const brewery = await getBrewery(params.id);
+	const { id } = await params
+  const brewery = await getBrewery(id);
 
   return {
 	title: `${brewery.name}の情報を編集`,
