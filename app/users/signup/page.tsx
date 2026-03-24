@@ -37,7 +37,7 @@ export default function SignupForm() {
 						type="text"
 						name="display_name"
 						id="display_name"
-						placeholder="Display Name"
+						placeholder="表示名を入力してください。"
 						className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 					/>
 					{state?.errors?.display_name && (
@@ -77,7 +77,7 @@ export default function SignupForm() {
 						type="password"
 						name="password"
 						id="password"
-						placeholder="Enter password"
+						placeholder="パスワードを入力してください。"
 						className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 					/>
 

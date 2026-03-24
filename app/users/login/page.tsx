@@ -71,7 +71,7 @@ export default function LoginForm() {
 						name="password"
 						id="password"
 						type="password"
-						placeholder="Enter your password"
+						placeholder="パスワードを入力してください。"
 						className="w-full text-gray-800 border border-gray-300 rounded-lg px-3 py-2 text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 					/>
@@ -88,7 +88,7 @@ export default function LoginForm() {
 					</div>
 				)}
 
-				<SubmitButton loadingText="Logging in" isSubmitting={pending}>Login</SubmitButton>
+				<SubmitButton loadingText="ログイン中…" isSubmitting={pending}>ログイン</SubmitButton>
 				
 
 				{/* Optional signup link */}
