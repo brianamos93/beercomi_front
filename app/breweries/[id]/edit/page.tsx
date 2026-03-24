@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: {params: Brewery}): Promise<M
 
   return {
 	title: `${brewery.name}の情報を編集`,
-	description: `${brewery.name}の住所、創立などを簡単に修正可能。`,
+	description: `${brewery.name}の住所、設立年などを簡単に修正可能。`,
   };
 }
 
