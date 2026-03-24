@@ -6,13 +6,6 @@ import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import SubmitButton from "../../components/form/SubmitButton";
 import Form from 'next/form'
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "ログイン",
-  description:
-    "ビアログのアカウントにログインして、各種機能をご利用ください。",
-};
 
 
 const initialState = { error: {}, success: undefined };
