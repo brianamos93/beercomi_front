@@ -45,7 +45,7 @@ export const CreateBrewerySchema = z.object({
 });
 
 export const EditBrewerySchema = CreateBrewerySchema.extend({
-	cover_image: z.union([newEditCoverImageSchema, existingCoverImageSchema]).optional(),
+	cover_image: z.union([newEditCoverImageSchema, existingCoverImageSchema, z.null()]).optional(),
 	deleteCoverImage: z.boolean()
 })
 
