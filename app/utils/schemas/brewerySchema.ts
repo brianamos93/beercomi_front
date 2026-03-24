@@ -10,10 +10,10 @@ const ACCEPTED_IMAGE_TYPES = [
 
 export const newCoverImageSchema = z
 	.instanceof(File)
-	.refine((f) => f.size <= MAX_FILE_SIZE, "Max file size is 1MB.")
+	.refine((f) => f.size <= MAX_FILE_SIZE, "最大サイズ：1MB")
 	.refine(
 		(f) => ACCEPTED_IMAGE_TYPES.includes(f.type),
-		"Only JPG, JPEG, PNG, WEBP are allowed."
+		"Only JPG, JPEG, PNG, WEBP are allowed.",
 	)
 	.nullable()
 	.optional();
@@ -41,12 +41,14 @@ export const CreateBrewerySchema = z.object({
 	date_of_founding: z.string().trim().min(4, {
 		message: "創立年は4文字以上で入力してください。",
 	}),
-	cover_image: newCoverImageSchema
+	cover_image: newCoverImageSchema,
 });
 
 export const EditBrewerySchema = CreateBrewerySchema.extend({
-	cover_image: z.union([newEditCoverImageSchema, existingCoverImageSchema, z.null()]).optional(),
-	deleteCoverImage: z.boolean()
-})
+	cover_image: z
+		.union([newEditCoverImageSchema, existingCoverImageSchema, z.null()])
+		.optional(),
+	deleteCoverImage: z.boolean(),
+});
 
-export type EditBreweryInput = z.infer<typeof EditBrewerySchema>
+export type EditBreweryInput = z.infer<typeof EditBrewerySchema>;
