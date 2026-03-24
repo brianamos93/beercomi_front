@@ -17,11 +17,11 @@ export default function BreweryCardDetailed({ brewery }: { brewery: Brewery }) {
                     </h1>
                     <div className="grid grid-cols-2 gap-3 text-sm mb-4">
                         <div className="bg-gray-50 rounded-lg px-3 py-2">
-                            <span className="text-gray-500">Location</span>
+                            <span className="text-gray-500">住所：</span>
                             <p className="font-semibold text-gray-800">{brewery.location}</p>
                         </div>
                         <div className="bg-gray-50 rounded-lg px-3 py-2">
-                            <span className="text-gray-500">Founded</span>
+                            <span className="text-gray-500">創立年：</span>
                             <p className="font-semibold text-gray-800">
                                 {brewery.date_of_founding}
                             </p>

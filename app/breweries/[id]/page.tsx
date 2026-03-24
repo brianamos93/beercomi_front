@@ -55,7 +55,7 @@ export default async function BreweryPage({
 
                 {/* Beer list with pagination */}
                 <BreweryBeerList
-					breweryId={brewery.id} initialPage={page}                />
+					breweryId={brewery.id} initialPage={page}/>
             </div>
         </main>
     );

@@ -130,8 +130,8 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 			)}
 
 			{/* Submit */}
-			<SubmitButton loadingText="Saving" isSubmitting={isSubmitting}>
-				Save
+			<SubmitButton loadingText="保存中…" isSubmitting={isSubmitting}>
+				保存
 			</SubmitButton>
 		</form>
 	);

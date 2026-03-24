@@ -86,8 +86,8 @@ export default function CreateBeerForm() {
 			)}
 
 			{/* Submit */}
-			<SubmitButton loadingText="Saving" isSubmitting={isSubmitting}>
-				Save
+			<SubmitButton loadingText="保存中" isSubmitting={isSubmitting}>
+				保存
 			</SubmitButton>
 		</form>
 	);

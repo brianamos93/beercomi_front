@@ -43,10 +43,10 @@ export default function BreweryBeerList({ breweryId, initialPage }: Props) {
 
     return (
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Beers</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">ビール一覧</h2>
 
             {loading ? (
-                <p className="text-gray-400 text-center">Loading beers…</p>
+                <p className="text-gray-400 text-center">ビールを読み込み中…</p>
             ) : (
                 <div className="flex flex-col items-center gap-4">
                     {beers.length > 0 ? (
@@ -56,7 +56,7 @@ export default function BreweryBeerList({ breweryId, initialPage }: Props) {
                             </div>
                         ))
                     ) : (
-                        <p className="text-gray-500 text-center">No beers yet.</p>
+                        <p className="text-gray-500 text-center">まだビールがありません。最初のビールを投稿してみましょう！</p>
                     )}
                 </div>
             )}

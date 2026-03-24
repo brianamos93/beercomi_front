@@ -27,13 +27,13 @@ export default function BreweryCard({ entry }: { entry: Brewery }) {
 
 				<CardMeta>
 					<p>
-						<strong>Location:</strong> {entry.location}
+						<strong>住所：</strong> {entry.location}
 					</p>
 					<p>
-						<strong>Founded:</strong> {entry.date_of_founding}
+						<strong>創立年：</strong> {entry.date_of_founding}
 					</p>
 					<p>
-						<strong>Updated:</strong> {new Date(entry.date_updated).toLocaleDateString()}
+						<strong>更新日：</strong> {new Date(entry.date_updated).toLocaleDateString()}
 					</p>
 				</CardMeta>
 
