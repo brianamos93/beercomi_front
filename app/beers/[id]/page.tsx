@@ -7,12 +7,22 @@ import { notFound } from "next/navigation";
 import { getBeer, getBeersList } from "@/app/utils/requests/beerRequests";
 import { SearchParams } from "next/dist/server/request/search-params";
 import { Beer } from "@/app/utils/def";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
   const beers = await getBeersList()
   return beers.map((beer: Beer) => ({
     id: beer.id
   }))
+}
+
+export async function generateMetadata({ params }: {params: Beer}): Promise<Metadata> {
+  const beer = await getBeer(params.id);
+
+  return {
+    title: `${beer.name}の情報・評価・レビュー`,
+    description: `${beer.name}の味わいや特徴、スタイル、醸造所「${beer.brewery_name}」の情報を掲載。レビューや評価を参考に、お気に入りのビールを見つけましょう。`,
+  };
 }
 
 export default async function BeerPage({ params, searchParams }: {params: {id: string}, searchParams: SearchParams}) {

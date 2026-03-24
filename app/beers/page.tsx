@@ -6,6 +6,30 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import BeerList from "./components/BeerList";
 import { Suspense } from "react";
 import BeersLoading from "./components/BeersLoading";
+import { Metadata } from "next";
+
+type Props = {
+  searchParams: { page?: string };
+};
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+	const page = Number(searchParams.page) || 1;
+
+	const title =
+		page === 1
+			? "ビール一覧 "
+			: `ビール一覧（${page}ページ目）`;
+
+	const description =
+		page === 1
+			? "ビールの評価・レビューを一覧でチェックできるページです。さまざまなビールを探して、自分好みの一本を見つけましょう。"
+			: `ビール一覧の${page}ページ目です。レビューや評価を参考に、多様なビールを比較・検索できます。`;
+
+	return {
+		title,
+		description,
+	};
+}
 
 export default async function beers({
 	searchParams,

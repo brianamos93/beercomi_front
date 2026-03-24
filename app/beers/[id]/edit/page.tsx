@@ -1,10 +1,16 @@
 import EditBeerForm from "@/app/components/beer/EditBeerForm";
+import { Beer } from "@/app/utils/def";
 import { getBeer } from "@/app/utils/requests/beerRequests";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export const metadata: Metadata = {
-	title: 'Edit Beer',
+export async function generateMetadata({ params }: {params: Beer}): Promise<Metadata> {
+  const beer = await getBeer(params.id);
+
+  return {
+	title: `${beer.name}の情報を編集`,
+	description: `${beer.name}の味わいや特徴、スタイル、カラーなどを簡単に修正可能。`,
+  };
 }
 
 export default async function editBeerPage(props: { params: Promise<{ id: string }> }) {
