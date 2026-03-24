@@ -48,7 +48,6 @@ export default function BeerHeader({ beer }: { beer: Beer }) {
 						<span className="text-sm text-gray-600">{beer.avg_rating}</span>
 						<span className="text-sm text-gray-600">
 							{beer.review_count} レビュー
-							{Number(beer.review_count) === 1 ? "" : "s"}
 						</span>
 					</div>
 					{/* Stats Row */}
