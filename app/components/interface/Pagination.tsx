@@ -20,11 +20,11 @@ export function Pagination({
         disabled={currentPage === 1 || disabled}
         className="px-3 py-1 border rounded disabled:opacity-50"
       >
-        Previous
+        前のページ
       </button>
 
       <span>
-        Page {currentPage} of {totalPages}
+        {currentPage}/{totalPages}ページ
       </span>
 
       <button
@@ -32,7 +32,7 @@ export function Pagination({
         disabled={currentPage === totalPages || disabled}
         className="px-3 py-1 border rounded disabled:opacity-50"
       >
-        Next
+        次のページ
       </button>
     </div>
   );
