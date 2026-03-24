@@ -2,12 +2,19 @@ import Link from "next/link";
 import SearchBar from "../components/interface/SearchBar";
 import { SearchResult } from "../utils/def";
 import { getSearch } from "../utils/requests/searchRequests";
+import { Metadata } from "next";
 
 type Props = {
   searchParams?: {
     query?: string;
     page?: string;
   };
+};
+
+export const metadata: Metadata = {
+  title: "ビール・ブルワリー検索",
+  description:
+    "ビール名やスタイル、ブルワリー名などで検索できるページです。レビューや評価を参考に、お気に入りのビールや醸造所を見つけましょう。",
 };
 
 export default async function SearchPage(props: Props) {
