@@ -32,7 +32,7 @@ export default function LoginForm() {
 				className="w-full max-w-sm bg-white border border-gray-200 rounded-2xl shadow-sm p-8 space-y-5"
 			>
 				<h2 className="text-2xl font-semibold text-center text-gray-800">
-					Log in
+					ログイン
 				</h2>
 
 				{/* Email */}
@@ -41,7 +41,7 @@ export default function LoginForm() {
 						htmlFor="email"
 						className="block text-sm font-medium text-gray-700"
 					>
-						Email
+						メール
 					</label>
 
 					<input
@@ -64,7 +64,7 @@ export default function LoginForm() {
 						htmlFor="password"
 						className="block text-sm font-medium text-gray-700"
 					>
-						Password
+						パスワード
 					</label>
 
 					<input
@@ -93,12 +93,12 @@ export default function LoginForm() {
 
 				{/* Optional signup link */}
 				<p className="text-center text-sm text-gray-600">
-					Don’t have an account?
+					アカウントをお持ちでない方は
 					<Link
 						href="/users/signup"
 						className="hover:underline ml-1 font-medium text-amber-500 hover:text-amber-600"
 					>
-						Sign up
+						登録
 					</Link>
 				</p>
 			</Form>

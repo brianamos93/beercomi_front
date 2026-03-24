@@ -22,7 +22,7 @@ export default function SignupForm() {
 				className="w-full max-w-md bg-white border border-gray-200 rounded-2xl shadow-sm p-8 space-y-6"
 			>
 				<h2 className="text-2xl font-semibold text-gray-800 text-center">
-					Create Account
+					アカウント登録
 				</h2>
 
 				{/* Display Name */}
@@ -31,7 +31,7 @@ export default function SignupForm() {
 						htmlFor="display_name"
 						className="block text-sm font-medium text-gray-700"
 					>
-						Display Name
+						表示名
 					</label>
 					<input
 						type="text"
@@ -51,7 +51,7 @@ export default function SignupForm() {
 						htmlFor="email"
 						className="block text-sm font-medium text-gray-700"
 					>
-						Email
+						メール
 					</label>
 					<input
 						type="email"
@@ -71,7 +71,7 @@ export default function SignupForm() {
 						htmlFor="password"
 						className="block text-sm font-medium text-gray-700"
 					>
-						Password
+						パスワード
 					</label>
 					<input
 						type="password"
@@ -83,7 +83,7 @@ export default function SignupForm() {
 
 					{state?.errors?.password && (
 						<div className="text-sm text-red-600 mt-2">
-							<p className="font-medium">Password must:</p>
+							<p className="font-medium">パスワードの条件：</p>
 							<ul className="list-disc ml-5">
 								{state.errors.password.map((error) => (
 									<li key={error}>{error}</li>
@@ -95,15 +95,15 @@ export default function SignupForm() {
 
 				{/* Button */}
 
-				<SubmitButton loadingText="Signing up" isSubmitting={pending}>Sign Up</SubmitButton>
+				<SubmitButton loadingText="Signing up" isSubmitting={pending}>登録</SubmitButton>
 
 				<p className="text-center text-sm text-gray-600">
-					Already have an account?
+					アカウントをお持ちの方は
 					<Link
 						href="/users/login"
 						className="hover:underline ml-1 font-medium text-amber-500 hover:text-amber-600"
 					>
-						Login
+						ログイン
 					</Link>
 				</p>
 			</Form>
