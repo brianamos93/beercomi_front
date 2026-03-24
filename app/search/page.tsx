@@ -57,10 +57,10 @@ export default async function SearchPage(props: Props) {
 				<section>
 					{query === "" ? (
 						<p className="text-sm text-gray-600">
-							Enter a search term to see results.
+							検索キーワードを入力してください。
 						</p>
 					) : results.data.length === 0 ? (
-						<p className="text-sm text-gray-600">No results for “{query}”.</p>
+						<p className="text-sm text-gray-600">「{query}」の検索結果はありません。</p>
 					) : (
 						<ul className="space-y-3">
 							{results.data.map((r: SearchResult) => (
@@ -82,11 +82,11 @@ export default async function SearchPage(props: Props) {
 							currentPage <= 1 ? "opacity-50 pointer-events-none" : ""
 						}`}
 					>
-						Previous
+						前のページ
 					</Link>
 
 					<span>
-						Page {currentPage} of {totalPages}
+						{currentPage}/{totalPages}ページ
 					</span>
 
 					<Link
@@ -95,7 +95,7 @@ export default async function SearchPage(props: Props) {
 							currentPage >= totalPages ? "opacity-50 pointer-events-none" : ""
 						}`}
 					>
-						Next
+						次のページ
 					</Link>
 				</div>
 			</div>

@@ -44,7 +44,7 @@ export function CardAction({ link, type }: { link: string; type: string }) {
 				href={link}
 				className="inline-flex items-center gap-1 text-sm font-semibold text-amber-500 hover:text-amber-600"
 			>
-				View {type}
+				{type}詳細
 				<ArrowRightIcon className="h-4 w-4" />
 			</Link>
 		</div>

@@ -47,21 +47,21 @@ export default function ActivityLogTable({
 	const totalPages = Math.ceil(total / LIMIT);
 
 	const columns: Column<ActivityLogData>[] = [
-		{ header: "User", accessor: (row) => row.display_name },
-		{ header: "Action", accessor: (row) => row.action },
-		{ header: "Entity Type", accessor: (row) => row.entity_type },
-		{ header: "Entity ID", accessor: (row) => row.entity_id },
-		{ header: "Metadata", accessor: (row) => row.metadata },
+		{ header: "ユーザー", accessor: (row) => row.display_name },
+		{ header: "アクション", accessor: (row) => row.action },
+		{ header: "エンティティタイプ", accessor: (row) => row.entity_type },
+		{ header: "エンティティID", accessor: (row) => row.entity_id },
+		{ header: "メータデータ", accessor: (row) => row.metadata },
 
 		{
-			header: "Date",
+			header: "日付",
 			accessor: (row) => new Date(row.created_at).toLocaleString(),
 		},
 	];
 
 	return (
 		<div>
-			<h2 className="text-xl font-semibold mb-4">Activity Log</h2>
+			<h2 className="text-xl font-semibold mb-4">アクティビティログ</h2>
 
 			{error && <p className="text-red-500 mb-2">{error}</p>}
 			<div className="w-full overflow-x-auto">

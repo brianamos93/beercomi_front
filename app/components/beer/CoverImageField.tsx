@@ -21,14 +21,14 @@ export default function CoverImageField({
 	const [dropError, setDropError] = useState<string[]>([]);
 
 	const errorMessages: Record<string, string> = {
-		"file-too-large": "This file exceeds the 1 MB limit.",
-		"file-invalid-type": "Only image files are allowed.",
+		"file-too-large": "最大サイズ：1MB",
+		"file-invalid-type": "画像データ限定",
 	};
 
 	return (
 		<div>
 			<label className="block text-sm font-medium text-black-800 mb-2">
-				Cover Image
+				カバー画像
 			</label>
 
 			<Dropzone
@@ -74,9 +74,9 @@ export default function CoverImageField({
 					>
 						<input {...getInputProps()} aria-label="Upload cover image" />
 						<p className="text-sm text-gray-700">
-							Drag & drop an image or tap to select
+							画像をドラッグ＆ドロップするか、クリックして選択してください
 						</p>
-						<p className="text-xs text-gray-500 mt-1">Max size 1MB</p>
+						<p className="text-xs text-gray-500 mt-1">最大サイズ：1MB</p>
 					</div>
 				)}
 			</Dropzone>

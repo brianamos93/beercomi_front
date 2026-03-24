@@ -5,10 +5,10 @@ import { usePathname } from 'next/navigation';
 // app/components/interface/admin/Sidenav.tsx
 
 const links = [
-	{ name: 'Activity Log', href: '/users/admin/activity' },
-	{ name: 'Beers', href: '/users/admin/beers' },
-	{ name: 'Breweries', href: '/users/admin/breweries' },
-	{ name: 'Reviews', href: '/users/admin/reviews' },
+	{ name: 'アクティビティログ', href: '/users/admin/activity' },
+	{ name: 'ビールログ', href: '/users/admin/beers' },
+	{ name: 'ブルワリーログ', href: '/users/admin/breweries' },
+	{ name: 'レビューログ', href: '/users/admin/reviews' },
 ];
 
 export default function SideNav() {

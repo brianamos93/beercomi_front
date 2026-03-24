@@ -10,7 +10,7 @@ export default async function AdminLanding() {
 
 	return (
 		<div>
-			<span>Select from the left</span>
+			<span>左から選択してください。</span>
 		</div>
 	)
 

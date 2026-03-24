@@ -33,13 +33,13 @@ export const CreateBrewerySchema = z.object({
 	name: z
 		.string()
 		.trim()
-		.min(1, { message: "Brewery name must be at least 1 character long." })
+		.min(1, { message: "ブルワリー名は1文字以上で入力してください。" })
 		.trim(),
 	location: z.string().trim().min(5, {
-		message: "Brewery location must be at least 5 characters long.",
+		message: "住所は1文字以上で入力してください。",
 	}),
 	date_of_founding: z.string().trim().min(4, {
-		message: "The date of founding must be at least 4 character long.",
+		message: "創立年は4文字以上で入力してください。",
 	}),
 	cover_image: newCoverImageSchema
 });

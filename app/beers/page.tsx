@@ -50,7 +50,7 @@ export default async function beers({
 	return (
 		<main>
 			<div className="max-w-2xl mx-auto p-4">
-				<h1 className="text-2xl font-bold mb-4 text-center">Beers</h1>
+				<h1 className="text-2xl font-bold mb-4 text-center">ビール一覧</h1>
 
 				{token && (
 					<div className="flex justify-center my-6">
@@ -59,7 +59,7 @@ export default async function beers({
 							className="inline-flex items-center gap-2 px-5 py-3 bg-amber-400 text-black font-semibold rounded-lg shadow hover:bg-amber-500 transition"
 						>
 							<PlusIcon className="w-5 h-5" />
-							New Beer
+							ビール登録
 						</Link>
 					</div>
 				)}

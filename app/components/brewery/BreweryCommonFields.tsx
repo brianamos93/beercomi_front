@@ -10,9 +10,9 @@ interface BeerCommonFieldsProps {
 export default function BreweryCommonFields({ errors, control }: BeerCommonFieldsProps) {
 	return (
 		<>
-			<TextField<BreweryBaseFields> name="name" label="Name" control={control} errors={errors} />
-			<TextField<BreweryBaseFields> name="location" label="Location" control={control} errors={errors} />
-			<TextField<BreweryBaseFields> name="date_of_founding" label="Date of Founding" control={control} errors={errors} />
+			<TextField<BreweryBaseFields> name="name" label="ブルワリー名：" control={control} errors={errors} />
+			<TextField<BreweryBaseFields> name="location" label="住所：" control={control} errors={errors} />
+			<TextField<BreweryBaseFields> name="date_of_founding" label="創立年：" control={control} errors={errors} />
 		</>
 	);
 }

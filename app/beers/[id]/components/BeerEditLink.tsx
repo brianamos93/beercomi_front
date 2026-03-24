@@ -18,7 +18,7 @@ export default function BeerEditLink({
 			href={`/beers/${beer_id}/edit`}
 			className="px-4 py-2 text-sm font-semibold text-yellow-800 bg-yellow-100 rounded-lg hover:bg-yellow-200"
 		>
-			Edit Beer
+			ビールを編集
 		</Link>
 	);
 }

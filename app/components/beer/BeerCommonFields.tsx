@@ -13,13 +13,13 @@ interface BeerCommonFieldsProps {
 export default function BeerCommonFields({ register, errors, control }: BeerCommonFieldsProps) {
 	return (
 		<>
-			<TextField<BeerBaseFields> name="name" label="Name" control={control} errors={errors} />
-			<TextField<BeerBaseFields> name="style" label="Style" control={control} errors={errors} />
+			<TextField<BeerBaseFields> name="name" label="ビール名" control={control} errors={errors} />
+			<TextField<BeerBaseFields> name="style" label="スタイル" control={control} errors={errors} />
 			<NumberField<BeerBaseFields> name="abv" label="ABV (%)" step="0.1" register={register} errors={errors} />
 			<BrewerySelectField control={control} errors={errors} />
-			<TextField<BeerBaseFields> name="description" label="Description" control={control} errors={errors} />
+			<TextField<BeerBaseFields> name="description" label="説明文" control={control} errors={errors} />
 			<NumberField<BeerBaseFields> name="ibu" label="IBU" step="1" register={register} errors={errors} />
-			<TextField<BeerBaseFields> name="color" label="Color" control={control} errors={errors} />
+			<TextField<BeerBaseFields> name="color" label="色" control={control} errors={errors} />
 		</>
 	);
 }

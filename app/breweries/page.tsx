@@ -40,7 +40,7 @@ export default async function BreweriesPage({
 	return (
 		<main>
 			<div className="max-w-2xl mx-auto p-4">
-				<h1 className="text-2xl font-bold mb-4 text-center">Breweries</h1>
+				<h1 className="text-2xl font-bold mb-4 text-center">ブルワリー一覧</h1>
 
 				{/* Instant render */}
 				{token && (
@@ -50,7 +50,7 @@ export default async function BreweriesPage({
 							className="inline-flex items-center gap-2 px-5 py-3 bg-amber-400 text-black font-semibold rounded-lg shadow hover:bg-amber-500 transition"
 						>
 							<PlusIcon className="w-5 h-5" />
-							Add Brewery
+							ブルワリーを登録
 						</Link>
 					</div>
 				)}

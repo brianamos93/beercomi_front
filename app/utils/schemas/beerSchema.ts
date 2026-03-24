@@ -10,7 +10,7 @@ const ACCEPTED_IMAGE_TYPES = [
 
 export const newCoverImageSchema = z
 	.instanceof(File)
-	.refine((f) => f.size <= MAX_FILE_SIZE, "Max file size is 1MB.")
+	.refine((f) => f.size <= MAX_FILE_SIZE, "最大サイズ：1MB")
 	.refine(
 		(f) => ACCEPTED_IMAGE_TYPES.includes(f.type),
 		"Only JPG, JPEG, PNG, WEBP are allowed."
@@ -32,23 +32,23 @@ const beerBase = z.object({
 	name: z
 		.string()
 		.trim()
-		.min(1, "Name is required."),
+		.min(1, "ビール名をを入力してください。"),
 	style: z
 		.string()
 		.trim()
-		.min(1, "Style is required."),
-	abv: z.coerce.number().min(0, "ABV must be a positive number."),
+		.min(1, "スタイルをを入力してください。"),
+	abv: z.coerce.number().min(0, "ABVは0より大きい数を入力してください。"),
 	brewery_id: z.object({
 		value: z.string(),
 		label: z.string()
 	}),
 	color: z
 		.string()
-		.min(1, "Color is required."),
-	ibu: z.coerce.number().min(0, "IBU must be a positive number."),
+		.min(1, "色を入力してください。"),
+	ibu: z.coerce.number().min(0, "IBUは0より大きい数を入力してください。"),
 	description: z
 		.string()
-		.min(1, "Description is required.")
+		.min(1, "説明文を入力してください。")
 })
 
 
