@@ -7,6 +7,7 @@ import { getLoggedInUsersData } from "./utils/requests/userRequests";
 import { AuthProvider } from "./components/AuthProvider";
 import Header from "./components/interface/Header";
 import Link from "next/link";
+import { baseMetadata } from "./utils/libs/metadata";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -18,10 +19,7 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-	title: "Tsunagaru - クラフトビール　評価",
-	description: "好きなビールを見つけろう！",
-};
+export const metadata = baseMetadata;
 
 export default async function RootLayout({
 	children,
