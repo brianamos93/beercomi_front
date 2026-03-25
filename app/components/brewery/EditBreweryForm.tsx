@@ -43,12 +43,6 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 	} = form;
 
 	useEffect(() => {
-		if (isSubmitSuccessful) {
-			reset();
-		}
-	}, [isSubmitSuccessful, reset]);
-
-	useEffect(() => {
 		reset({
 			name: brewery.name,
 			location: brewery.location,
@@ -57,15 +51,16 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 				? { url: coverImageUrl, type: "existing" as const }
 				: null,
 			deleteCoverImage: false,
-		})
+		});
 	}, [
+		isSubmitSuccessful,
 		brewery.id,
 		brewery.name,
 		brewery.location,
 		brewery.date_of_founding,
 		coverImageUrl,
 		reset,
-	])
+	]);
 
 	const onSubmit = async (data: EditBreweryInput) => {
 		const formData = new FormData();
@@ -138,10 +133,11 @@ export default function EditBreweryForm({ brewery }: { brewery: Brewery }) {
 			/>
 
 			{/* Server Error */}
-			{errors?.root && (
-				<p className="text-sm text-red-500">{errors?.root?.message}</p>
-			)}
-
+			<div id="server-error" aria-live="polite">
+				{errors?.root && (
+					<p className="text-sm text-red-500">{errors?.root?.message}</p>
+				)}
+			</div>
 			{/* Submit */}
 			<SubmitButton loadingText="保存中…" isSubmitting={isSubmitting}>
 				保存

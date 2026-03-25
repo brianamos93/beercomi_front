@@ -55,12 +55,6 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 	} = form;
 
 	useEffect(() => {
-		if (isSubmitSuccessful) {
-			reset();
-		}
-	}, [isSubmitSuccessful, reset]);
-
-	useEffect(() => {
 		reset({
 			name: beer.name,
 			style: beer.style,
@@ -78,6 +72,7 @@ export default function EditBeerForm({ beer }: { beer: Beer }) {
 			deleteCoverImage: false,
 		});
 	}, [
+		isSubmitSuccessful,
 		beer.id,
 		beer.name,
 		beer.style,
