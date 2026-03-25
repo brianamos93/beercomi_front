@@ -7,24 +7,25 @@ import Image from "next/image";
 import CreateBeerReviewForm from "@/app/components/beer/review/CreateBeerReviewForm";
 import ReviewEditLink from "./ReviewEditLink";
 import { PaginationUI } from "@/app/components/interface/paginationBase";
+import { useAuth } from "@/app/components/AuthProvider";
 
 const LIMIT = 10;
 
 interface Props {
 	beerId: string;
-	userId: string | null;
 	initialPage: number;
 }
 
 export default function BeerReviewsSection({
 	beerId,
-	userId,
 	initialPage,
 }: Props) {
 	const [reviews, setReviews] = useState<Review[]>([]);
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(initialPage);
 	const [loading, setLoading] = useState(true);
+
+	const { user } = useAuth();
 
 	useEffect(() => {
 		let cancelled = false;
@@ -49,13 +50,13 @@ export default function BeerReviewsSection({
 		setPage(newPage);
 	};
 
-	const userHasReviewed = reviews.some((r) => r.author_id === userId);
+	const userHasReviewed = reviews.some((r) => r.author_id === user?.id);
 
 	return (
 		<section>
 			<h2 className="text-2xl font-bold mb-6 border-b-2 pb-2">Reviews</h2>
 
-			{userId && !userHasReviewed && (
+			{user && !userHasReviewed && (
 				<div className="mb-6">
 					<CreateBeerReviewForm
 						id={beerId}
