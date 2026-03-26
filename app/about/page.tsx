@@ -15,7 +15,7 @@ export default function AboutPage() {
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-800">アプリについて</h1>
           <p className="text-gray-600 mt-2">
-            フルースタックのびーる評価するアプリ
+            フルースタックのビール評価するアプリ
           </p>
         </div>
 
@@ -77,7 +77,7 @@ export default function AboutPage() {
         </section>
 
         {/* GitHub */}
-        <section className="text-center pt-4">
+        <section className="text-center pt-4 flex flex-col gap-4 md:flex-row md:justify-center">
           <Link
             href="https://github.com/brianamos93/beercomi_front"
             target="_blank"
