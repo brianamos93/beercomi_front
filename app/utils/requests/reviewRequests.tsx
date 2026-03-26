@@ -59,7 +59,7 @@ export const getBeerReviews = async ({
 
 export const getReviewConfirm = async ({ id, token }: { id: string, token: string }) => {
 
-	const res = await fetch(url + `beers/${id}/reviews/mine`, {
+	const res = await fetch(url + `/beers/${id}/reviews/mine`, {
 		method: "GET",
 		headers: {
 			Authorization: `Bearer ${token}`,
