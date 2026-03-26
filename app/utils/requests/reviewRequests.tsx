@@ -73,7 +73,7 @@ export const createReview = async (newReviewData: FormData, token: string) => {
 		},
 		body: newReviewData,
 	});
-	return res
+	return res.json()
 };
 
 export const editReview = async (
