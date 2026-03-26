@@ -61,7 +61,7 @@ export default function CreateBeerReviewForm({
 			setError("root", { type: "server", message: res.error });
 			return;
 		}
-		onReviewCreated?.(res.review);
+		onReviewCreated?.(res);
 	};
 
 	return (

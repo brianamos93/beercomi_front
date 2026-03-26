@@ -12,6 +12,6 @@ export default async function ReviewSectionWrapper({beerId, initialPage}: {beerI
 	
 
 	return (
-		<BeerReviewsSection beerId={beerId} initialPage={initialPage} hasReviewed={hasReviewed}/>
+		<BeerReviewsSection beerId={beerId} initialPage={initialPage} Reviewed={hasReviewed}/>
 	)
 }

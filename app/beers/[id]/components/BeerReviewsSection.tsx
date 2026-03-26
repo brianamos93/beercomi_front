@@ -13,18 +13,19 @@ const LIMIT = 10;
 interface Props {
 	beerId: string;
 	initialPage: number;
-	hasReviewed: boolean;
+	Reviewed: boolean;
 }
 
 export default function BeerReviewsSection({
 	beerId,
 	initialPage,
-	hasReviewed,
+	Reviewed,
 }: Props) {
 	const [reviews, setReviews] = useState<Review[]>([]);
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(initialPage);
 	const [loading, setLoading] = useState(true);
+	const [hasReviewed, setHasReviewed] = useState(Reviewed)
 
 	useEffect(() => {
 		let cancelled = false;
@@ -50,7 +51,9 @@ export default function BeerReviewsSection({
 	};
 
 	const handleReviewCreated = (newReview: Review) => {
+		console.log("new review:", newReview);
 		setReviews((prev) => [newReview, ...prev]);
+		setHasReviewed(true)
 	};
 
 	return (

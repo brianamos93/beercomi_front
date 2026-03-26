@@ -15,6 +15,7 @@ export async function createServerReview(formData: FormData) {
 
 	try {
 		res = await createReview(formData, token);
+		console.log("API response:", res);
 	} catch (err: unknown) {
 		console.error("Server action error:", err);
 		return {
@@ -28,9 +29,8 @@ export async function createServerReview(formData: FormData) {
 			status: res.status ?? 400,
 		};
 	}
-	if (res.status === 201) {
-		const review = await res.json();
-		return { review, status: 201 };
+	if (res.id) {
+		return res;
 	}
 
 	return { error: "Unexpected API response", status: 500 };
