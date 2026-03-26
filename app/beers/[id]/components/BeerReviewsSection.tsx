@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-	getBeerReviews
-} from "@/app/utils/requests/reviewRequests";
+import { getBeerReviews } from "@/app/utils/requests/reviewRequests";
 import { Photo, Review } from "@/app/utils/def";
 import Image from "next/image";
 import CreateBeerReviewForm from "@/app/components/beer/review/CreateBeerReviewForm";
@@ -18,15 +16,19 @@ interface Props {
 	hasReviewed: boolean;
 }
 
-export default function BeerReviewsSection({ beerId, initialPage, hasReviewed }: Props) {
+export default function BeerReviewsSection({
+	beerId,
+	initialPage,
+	hasReviewed,
+}: Props) {
 	const [reviews, setReviews] = useState<Review[]>([]);
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(initialPage);
 	const [loading, setLoading] = useState(true);
+	const [refreshToken, setRefreshToken] = useState(0);
 
 	useEffect(() => {
 		let cancelled = false;
-
 		const offset = (page - 1) * LIMIT;
 		getBeerReviews({ id: beerId, limit: LIMIT, offset }).then((data) => {
 			if (cancelled) return;
@@ -36,15 +38,18 @@ export default function BeerReviewsSection({ beerId, initialPage, hasReviewed }:
 			);
 			setLoading(false);
 		});
-
 		return () => {
 			cancelled = true;
 		};
-	}, [beerId, page]);
+	}, [beerId, page, refreshToken]);
 
 	const handlePageChange = (newPage: number) => {
 		setLoading(true);
-		setPage(newPage);
+		if (newPage === page) {
+			setRefreshToken((t) => t + 1); // force re-fetch on same page
+		} else {
+			setPage(newPage);
+		}
 	};
 
 	return (
@@ -55,11 +60,10 @@ export default function BeerReviewsSection({ beerId, initialPage, hasReviewed }:
 				<div className="mb-6">
 					<CreateBeerReviewForm
 						id={beerId}
-						onReviewCreated={() => setPage(1)} // refresh to page 1 after posting
+						onReviewCreated={() => handlePageChange(1)} // refresh to page 1 after posting
 					/>
 				</div>
 			)}
-
 
 			{loading ? (
 				<p className="text-gray-400 text-center">レビューを読み込み中…</p>
