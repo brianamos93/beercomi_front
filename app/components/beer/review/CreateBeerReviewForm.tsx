@@ -72,7 +72,7 @@ export default function CreateBeerReviewForm({ id, onReviewCreated }: { id: stri
 
 			<ImageField<CreateReviewInput>
 				name="photos"
-				label="Upload photos:"
+				label="レビュー画像："
 				control={control}
 				errors={errors}
 				zodSchema={createNewfileSchema}
@@ -83,7 +83,7 @@ export default function CreateBeerReviewForm({ id, onReviewCreated }: { id: stri
 
 			<TextArea
 				name="review"
-				label="Review:"
+				label="レビュー："
 				register={register}
 				errors={errors}
 			/>
@@ -92,7 +92,7 @@ export default function CreateBeerReviewForm({ id, onReviewCreated }: { id: stri
 
 			<RatingField
 				name="rating"
-				label="Rating:"
+				label="評価："
 				register={register}
 				errors={errors}
 				watch={watch}
@@ -110,7 +110,7 @@ export default function CreateBeerReviewForm({ id, onReviewCreated }: { id: stri
 					disabled={isSubmitting}
 					className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-lg transition disabled:opacity-50"
 				>
-					{isSubmitting ? "Submitting..." : "Submit Review"}
+					{isSubmitting ? "送信中…" : "レビューを送信"}
 				</button>
 			</div>
 		</form>

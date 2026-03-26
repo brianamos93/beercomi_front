@@ -107,7 +107,7 @@ export default function EditBeerReviewForm({
 
 			<ImageField<EditReviewInput>
 				name="photos"
-				label="Upload photos:"
+				label="レビュー画像："
 				control={control}
 				errors={errors}
 				zodSchema={createNewfileSchema}
@@ -118,7 +118,7 @@ export default function EditBeerReviewForm({
 
 			<TextArea
 				name="review"
-				label="Review:"
+				label="レビュー："
 				register={register}
 				errors={errors}
 			/>
@@ -127,7 +127,7 @@ export default function EditBeerReviewForm({
 
 			<RatingField
 				name="rating"
-				label="Rating:"
+				label="評価："
 				register={register}
 				errors={errors}
 				watch={watch}
@@ -146,7 +146,7 @@ export default function EditBeerReviewForm({
 					type="submit"
 					disabled={isSubmitting}
 				>
-					{isSubmitting ? "Loading..." : "Save changes"}
+					{isSubmitting ? "保存中…" : "保存"}
 				</button>
 			</div>
 		</form>
