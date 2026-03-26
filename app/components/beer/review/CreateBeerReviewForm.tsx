@@ -1,7 +1,6 @@
 "use client";
 
 import { createServerReview } from "@/app/actions/review";
-import { Beer } from "@/app/utils/def";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -13,8 +12,9 @@ import { useEffect } from "react";
 import TextArea from "../../form/TextArea";
 import RatingField from "../../form/RatingField";
 import ImageField from "./ImageField";
+import { Review } from "@/app/utils/def";
 
-export default function CreateBeerReviewForm({ id, onReviewCreated }: { id: string, onReviewCreated?: () => void }) {
+export default function CreateBeerReviewForm({ id, onReviewCreated }: { id: string, onReviewCreated?: (res: Review) => void }) {
 	const form = useForm<CreateReviewInput>({
 		resolver: zodResolver(CreateReviewSchema),
 		defaultValues: { photos: [], rating: undefined, review: "" },
@@ -54,6 +54,7 @@ export default function CreateBeerReviewForm({ id, onReviewCreated }: { id: stri
 		if (res.error) {
 			setError("root", { type: "server", message: res.error });
 		}
+		onReviewCreated?.(res);
 	};
 
 	return (

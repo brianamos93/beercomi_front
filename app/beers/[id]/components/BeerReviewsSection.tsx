@@ -25,10 +25,10 @@ export default function BeerReviewsSection({
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(initialPage);
 	const [loading, setLoading] = useState(true);
-	const [refreshToken, setRefreshToken] = useState(0);
 
 	useEffect(() => {
 		let cancelled = false;
+
 		const offset = (page - 1) * LIMIT;
 		getBeerReviews({ id: beerId, limit: LIMIT, offset }).then((data) => {
 			if (cancelled) return;
@@ -38,18 +38,19 @@ export default function BeerReviewsSection({
 			);
 			setLoading(false);
 		});
+
 		return () => {
 			cancelled = true;
 		};
-	}, [beerId, page, refreshToken]);
+	}, [beerId, page]);
 
 	const handlePageChange = (newPage: number) => {
 		setLoading(true);
-		if (newPage === page) {
-			setRefreshToken((t) => t + 1); // force re-fetch on same page
-		} else {
-			setPage(newPage);
-		}
+		setPage(newPage);
+	};
+
+	const handleReviewCreated = (newReview: Review) => {
+		setReviews((prev) => [newReview, ...prev]);
 	};
 
 	return (
@@ -60,7 +61,7 @@ export default function BeerReviewsSection({
 				<div className="mb-6">
 					<CreateBeerReviewForm
 						id={beerId}
-						onReviewCreated={() => handlePageChange(1)} // refresh to page 1 after posting
+						onReviewCreated={(res) => handleReviewCreated(res)} // refresh to page 1 after posting
 					/>
 				</div>
 			)}
