@@ -15,7 +15,6 @@ export async function createServerReview(formData: FormData) {
 
 	try {
 		res = await createReview(formData, token);
-		console.log("API response:", res);
 	} catch (err: unknown) {
 		console.error("Server action error:", err);
 		return {

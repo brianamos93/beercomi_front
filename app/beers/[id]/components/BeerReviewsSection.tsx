@@ -51,7 +51,6 @@ export default function BeerReviewsSection({
 	};
 
 	const handleReviewCreated = (newReview: Review) => {
-		console.log("new review:", newReview);
 		setReviews((prev) => [newReview, ...prev]);
 		setHasReviewed(true)
 	};
