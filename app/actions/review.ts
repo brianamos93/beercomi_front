@@ -7,7 +7,6 @@ import { redirect } from "next/navigation";
 
 export async function createServerReview(formData: FormData) {
 	const token = (await cookies()).get("token")?.value;
-	const beerId = formData.get("beer_id");
 
 	if (!token) {
 		return { error: "Not Logged In", status: 401 };
@@ -29,9 +28,9 @@ export async function createServerReview(formData: FormData) {
 			status: res.status ?? 400,
 		};
 	}
-	if (res.message) {
-		revalidatePath(`/beers/${beerId}`);
-		redirect(`/beers/${beerId}`);
+	if (res.ok) {
+		const review = await res.json();
+		return { review, status: 201 };
 	}
 
 	return { error: "Unexpected API response", status: 500 };
@@ -40,7 +39,7 @@ export async function createServerReview(formData: FormData) {
 export async function editServerReview(id: string, formData: FormData) {
 	const token = (await cookies()).get("token")?.value;
 	const beerId = formData.get("beer_id");
-	console.log(formData)
+	console.log(formData);
 	if (!token) {
 		return { error: "Not Logged In", status: 401 };
 	}
