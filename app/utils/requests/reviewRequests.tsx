@@ -1,5 +1,3 @@
-"use server"
-import { cookies } from "next/headers";
 import { DeletedFilter } from "../def";
 import url from "../utils";
 
@@ -59,8 +57,7 @@ export const getBeerReviews = async ({
 	return res.json();
 };
 
-export const getReviewConfirm = async ({ id }: { id: string }) => {
-	const token = (await cookies()).get("token")?.value;
+export const getReviewConfirm = async ({ id, token }: { id: string, token: string }) => {
 
 	const res = await fetch(url + `beers/${id}/reviews/mine`, {
 		method: "GET",

@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { getBeer, getBeersList } from "@/app/utils/requests/beerRequests";
 import { Beer } from "@/app/utils/def";
 import { Metadata } from "next";
-import BeerReviewsSection from "./components/BeerReviewsSection";
+import ReviewSectionWrapper from "./components/ReviewSectionWrapper";
 
 type SearchParams = { [key: string]: string | string[] | undefined };
 
@@ -56,7 +56,9 @@ export default async function BeerPage({
 			>
 				<BeerDynamicSection beerId={beer.id} authorId={beer.author_id} />
 			</Suspense>
-			<BeerReviewsSection beerId={beer.id} initialPage={page}/>
+			<Suspense fallback={<div>読み込み中</div>}>
+				<ReviewSectionWrapper beerId={beer.id} initialPage={page} />
+			</Suspense>
 		</main>
 	);
 }

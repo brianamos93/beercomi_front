@@ -2,31 +2,27 @@
 
 import { useEffect, useState } from "react";
 import {
-	getBeerReviews,
-	getReviewConfirm,
+	getBeerReviews
 } from "@/app/utils/requests/reviewRequests";
 import { Photo, Review } from "@/app/utils/def";
 import Image from "next/image";
 import CreateBeerReviewForm from "@/app/components/beer/review/CreateBeerReviewForm";
 import ReviewEditLink from "./ReviewEditLink";
 import { PaginationUI } from "@/app/components/interface/paginationBase";
-import { useAuth } from "@/app/components/AuthProvider";
 
 const LIMIT = 10;
 
 interface Props {
 	beerId: string;
 	initialPage: number;
+	hasReviewed: boolean;
 }
 
-export default function BeerReviewsSection({ beerId, initialPage }: Props) {
+export default function BeerReviewsSection({ beerId, initialPage, hasReviewed }: Props) {
 	const [reviews, setReviews] = useState<Review[]>([]);
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(initialPage);
 	const [loading, setLoading] = useState(true);
-	const [reviewed, setReviewed] = useState<boolean | null>(null);
-
-	const { user } = useAuth();
 
 	useEffect(() => {
 		let cancelled = false;
@@ -46,25 +42,16 @@ export default function BeerReviewsSection({ beerId, initialPage }: Props) {
 		};
 	}, [beerId, page]);
 
-	useEffect(() => {
-		if (!user) return; // don't run the check if not logged in
-
-		getReviewConfirm({ id: beerId }).then((data) => {
-			setReviewed(data.reviewed ?? false);
-		});
-	}, [beerId, user]);
-
 	const handlePageChange = (newPage: number) => {
 		setLoading(true);
 		setPage(newPage);
 	};
-	const showReviewForm = user && reviewed === false;
 
 	return (
 		<section>
 			<h2 className="text-2xl font-bold mb-6 border-b-2 pb-2">Reviews</h2>
 
-			{showReviewForm && (
+			{hasReviewed && (
 				<div className="mb-6">
 					<CreateBeerReviewForm
 						id={beerId}
