@@ -39,13 +39,8 @@ export default async function beers({
 	const params = await searchParams;
 
 	const page = Number(params.page) || 1;
-	const limit = 10;
-	const offset = (page - 1) * limit;
-
-	const { pagination } = await getBeers({ offset, limit });
 
 	const token = (await cookies()).get("token")?.value;
-	const totalPages = Math.ceil(pagination.total / limit);
 
 	return (
 		<main>
