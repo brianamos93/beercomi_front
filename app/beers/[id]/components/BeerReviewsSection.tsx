@@ -51,7 +51,7 @@ export default function BeerReviewsSection({ beerId, initialPage, hasReviewed }:
 		<section>
 			<h2 className="text-2xl font-bold mb-6 border-b-2 pb-2">Reviews</h2>
 
-			{hasReviewed && (
+			{!hasReviewed && (
 				<div className="mb-6">
 					<CreateBeerReviewForm
 						id={beerId}
