@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getBeerReviews } from "@/app/utils/requests/reviewRequests";
+import {
+	getBeerReviews,
+	getReviewConfirm,
+} from "@/app/utils/requests/reviewRequests";
 import { Photo, Review } from "@/app/utils/def";
 import Image from "next/image";
 import CreateBeerReviewForm from "@/app/components/beer/review/CreateBeerReviewForm";
@@ -16,14 +19,12 @@ interface Props {
 	initialPage: number;
 }
 
-export default function BeerReviewsSection({
-	beerId,
-	initialPage,
-}: Props) {
+export default function BeerReviewsSection({ beerId, initialPage }: Props) {
 	const [reviews, setReviews] = useState<Review[]>([]);
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(initialPage);
 	const [loading, setLoading] = useState(true);
+	const [reviewed, setReviewed] = useState<boolean | null>(null);
 
 	const { user } = useAuth();
 
@@ -45,18 +46,25 @@ export default function BeerReviewsSection({
 		};
 	}, [beerId, page]);
 
+	useEffect(() => {
+		if (!user) return; // don't run the check if not logged in
+
+		getReviewConfirm({ id: beerId }).then((data) => {
+			setReviewed(data.reviewed ?? false);
+		});
+	}, [beerId, user]);
+
 	const handlePageChange = (newPage: number) => {
 		setLoading(true);
 		setPage(newPage);
 	};
-
-	const userHasReviewed = reviews.some((r) => r.author_id === user?.id);
+	const showReviewForm = user && reviewed === false;
 
 	return (
 		<section>
 			<h2 className="text-2xl font-bold mb-6 border-b-2 pb-2">Reviews</h2>
 
-			{user && !userHasReviewed && (
+			{showReviewForm && (
 				<div className="mb-6">
 					<CreateBeerReviewForm
 						id={beerId}
@@ -64,6 +72,7 @@ export default function BeerReviewsSection({
 					/>
 				</div>
 			)}
+
 
 			{loading ? (
 				<p className="text-gray-400 text-center">レビューを読み込み中…</p>
@@ -113,7 +122,9 @@ export default function BeerReviewsSection({
 							</div>
 						))
 					) : (
-						<p className="text-gray-500 text-center">まだレビューがありません。最初のレビューを投稿してみましょう！</p>
+						<p className="text-gray-500 text-center">
+							まだレビューがありません。最初のレビューを投稿してみましょう！
+						</p>
 					)}
 				</div>
 			)}
