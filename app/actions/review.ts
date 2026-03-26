@@ -28,7 +28,7 @@ export async function createServerReview(formData: FormData) {
 			status: res.status ?? 400,
 		};
 	}
-	if (res.ok) {
+	if (res.status === 201) {
 		const review = await res.json();
 		return { review, status: 201 };
 	}
