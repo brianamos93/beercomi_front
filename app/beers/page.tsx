@@ -67,14 +67,6 @@ export default async function beers({
 				<Suspense fallback={<BeersLoading />}>
 					<BeerList page={page} />
 				</Suspense>
-
-				<div className="max-w-md mx-auto mt-6">
-					<PaginationLinks
-						currentPage={page}
-						totalPages={totalPages}
-						basePath="/beers"
-					/>
-				</div>
 			</div>
 		</main>
 	);
