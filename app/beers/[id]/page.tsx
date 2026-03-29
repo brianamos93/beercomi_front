@@ -8,8 +8,6 @@ import { Beer } from "@/app/utils/def";
 import { Metadata } from "next";
 import ReviewSectionWrapper from "./components/ReviewSectionWrapper";
 
-type SearchParams = { [key: string]: string | string[] | undefined };
-
 export async function generateStaticParams() {
 	const beers = await getBeersList();
 	return beers.map((beer: Beer) => ({
@@ -36,7 +34,7 @@ export default async function BeerPage({
 	searchParams,
 }: {
 	params: { id: string };
-	searchParams: SearchParams;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
 	const { id } = await params;
 	const beer = await getBeer(id);
