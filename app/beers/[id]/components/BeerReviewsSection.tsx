@@ -7,6 +7,7 @@ import Image from "next/image";
 import CreateBeerReviewForm from "@/app/components/beer/review/CreateBeerReviewForm";
 import ReviewEditLink from "./ReviewEditLink";
 import { PaginationUI } from "@/app/components/interface/paginationBase";
+import { useAuth } from "@/app/components/AuthProvider";
 
 const LIMIT = 10;
 
@@ -26,6 +27,8 @@ export default function BeerReviewsSection({
 	const [page, setPage] = useState(initialPage);
 	const [loading, setLoading] = useState(true);
 	const [hasReviewed, setHasReviewed] = useState(Reviewed)
+
+	const { user } = useAuth();
 
 	useEffect(() => {
 		let cancelled = false;
@@ -59,7 +62,7 @@ export default function BeerReviewsSection({
 		<section>
 			<h2 className="text-2xl font-bold mb-6 border-b-2 pb-2">Reviews</h2>
 
-			{!hasReviewed && (
+			{user && !hasReviewed &&(
 				<div className="mb-6">
 					<CreateBeerReviewForm
 						id={beerId}

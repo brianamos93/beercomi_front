@@ -10,7 +10,6 @@ export default async function ReviewSectionWrapper({beerId, initialPage}: {beerI
 		hasReviewed = (await res).reviewed
 	}
 	
-
 	return (
 		<BeerReviewsSection beerId={beerId} initialPage={initialPage} Reviewed={hasReviewed}/>
 	)
