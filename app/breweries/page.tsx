@@ -13,7 +13,7 @@ type Props = {
 export async function generateMetadata({
 	searchParams,
 }: Props): Promise<Metadata> {
-	const page = Number(searchParams.page) || 1;
+	const page = Number(await searchParams.page) || 1;
 
 	const title =
 		page === 1 ? "ブルワリー一覧 " : `ブルワリー一覧（${page}ページ目）`;

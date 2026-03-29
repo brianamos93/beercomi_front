@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { getBeers } from "../utils/requests/beerRequests";
 import { cookies } from "next/headers";
-import { PaginationLinks } from "../components/interface/ServerPagination";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import BeerList from "./components/BeerList";
 import { Suspense } from "react";
@@ -13,7 +11,7 @@ type Props = {
 };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-	const page = Number(searchParams.page) || 1;
+	const page = Number(await searchParams.page) || 1;
 
 	const title =
 		page === 1
