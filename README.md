@@ -1,209 +1,251 @@
-# ビアログ Beer Log (Japanese Craft Beer Review App)
+# ビアログ（Beer Log）  
+日本市場向けクラフトビールレビューアプリ
 
-## Overview
-
-A full-stack web application designed for the Japanese market, allowing users to discover, review, and manage craft beers and breweries with a rating system aligned to local tastes.
-
-Most existing beer review platforms are built outside Japan, resulting in rating systems that often reflect Western preferences. This project aims to address that gap by providing a platform tailored to Japanese users.
-
-The application uses a decoupled architecture, separating frontend and backend for better scalability and maintainability.
-
-ビールおよびブルワリーの登録・管理機能とレビュー投稿機能を備え、ユーザーがお気に入りのビールを発見できるWebアプリの開発・実装
 
 ---
 
-## Tech Stack
 
-### Frontend
-- Next.js (App Router)
+## 概要
+
+
+本アプリケーションは、日本市場向けに開発したクラフトビールレビューサービスである。
+ ユーザーはビールおよび醸造所の検索、レビュー投稿、管理を行うことができる。
+既存のビールレビューサービスの多くは海外発であり、評価基準が欧米の嗜好に偏っているという課題がある。
+ そのため、本アプリケーションでは、日本人ユーザーの嗜好に基づいた評価体験を提供することを目的としている。
+本システムは、フロントエンドとバックエンドを分離した構成（Decoupled Architecture）を採用し、拡張性および保守性を考慮した設計とした。
+フロントエンドにはNext.js、バックエンドにはExpressおよびPostgreSQLを採用したフルスタック構成で開発している。
+---
+
+
+## 技術スタック
+
+
+### フロントエンド
+- Next.js（App Router）
 - TypeScript
-- Zod validation
+- Zod（バリデーション）
 - React Hook Form
-- useActionState (Server Actions)
+- useActionState（Server Actions）
 
-### Backend
+
+### バックエンド
 - Node.js
 - Express
-- Zod validation
+- Zod（バリデーション）
 - REST API
 
-### Database
+
+### データベース
 - PostgreSQL
 
-### Authentication & Security
-- bcrypt (password hashing)
-- JWT (authentication)
-- HTTPS-only cookies
 
 ---
 
-## Architecture
 
-- Decoupled frontend and backend
-- RESTful API design
-- Relational data modeling:
+## 認証・セキュリティ
+
+
+- bcryptによるパスワードハッシュ化
+- JWT認証
+- HTTPS Only Cookieによるセキュリティ対策（XSS対策）
+- ロールベースの権限管理
+  - 一般ユーザー：自身の投稿の作成・編集
+  - 管理者ユーザー：全データの閲覧・編集・削除（論理削除／物理削除／復元）
+- レート制限
+- CORS設定（クロスオリジンアクセス制御）
+
+
+---
+
+
+## アーキテクチャ
+
+
+- フロントエンド／バックエンド分離構成による高い拡張性
+- ExpressによるREST API設計
+- PostgreSQLによるリレーショナルデータベース設計
   - Users
   - Beers
   - Breweries
   - Reviews
   - Review Pictures
-  - Activity Log
+  - Recent Activity
+
 
 ---
 
-## Features
 
-### Authentication & Authorization
-- Secure login and signup system
-- JWT-based authentication
-- Role-based access control:
-  - Basic Users
-    - Create and edit beers, breweries, and reviews
-    - Edit their own content
-  - Admin Users
-    - Full data control
-    - Soft delete, hard delete, and restore
-    - Access to admin dashboard
+## 主な機能
 
-### Core Functionality
-- Beer and brewery listings
-- Review system
-- Search functionality
-- Admin management panel
 
-### Search
-- Keyword-based search using SQL LIKE
-- Pagination with limit and offset
+### 基本機能
+- ビール・醸造所一覧表示
+- レビュー投稿・管理機能
+- 検索機能
+- 管理者向け管理画面
 
-### Rendering Strategy
 
-- SSG (Static Site Generation)
-  - Beer detail pages
-  - Brewery detail pages
-  - Improves SEO and crawlability
+### 検索機能
+- SQLのLIKE句を用いたキーワード検索
+- limit / offsetによるページネーション
 
-- CSR (Client Side Rendering)
-  - Paginated data such as reviews and lists
-  - Improves user experience for dynamic content
 
-### Forms
+### レンダリング最適化
+- SSG（静的生成）
+  - ビール・醸造所ページ（SEO対策）
 
-- Text-based forms
-  - Built with useActionState
-  - Server and client validation
 
-- Image upload forms
-  - Built with React Hook Form
-  - Allows front end validation of image data
+- CSR（クライアントサイドレンダリング）
+  - レビュー一覧など動的コンテンツ
+  - ユーザー体験の向上
 
-### Pagination Strategy
 
-- Cursor Pagination
-  - Used for activity feeds
-  - Optimized for continuous browsing
+### フォーム機能
+- テキストフォーム
+  - useActionStateを利用
+  - サーバー／クライアント両方でのバリデーション
 
-- Offset / Limit Pagination
-  - Used for beers, breweries, and reviews
-  - Allows bookmarking and sharing URLs
+
+- 画像アップロードフォーム
+  - React Hook Formを利用
+  - フロントエンドでの画像バリデーション対応
+
+
+### ページネーション戦略
+- カーソルページネーション
+  - アクティビティフィードに使用
+  - 無限スクロールに最適化
+
+
+- オフセットページネーション（limit / offset）
+  - ビール・ブルワリー・レビュー一覧に使用
+  - URL共有・ブックマークに対応
+
 
 ---
 
-## Security
 
-- Password hashing with bcrypt
-- JWT authentication
-- HTTPS-only cookies to mitigate XSS risks
-- Role-based permission control
-- Rate limiting and CORS permissions
+## 設計上の工夫
 
----
 
-## Key Design Decisions
+- 画面の目的に応じてSSG / SSR / CSRを使い分け、表示速度とSEOの最適化を実現
+- ユースケースごとにページネーション手法を使い分け、パフォーマンスとユーザー体験を向上
+- フロントエンドとバックエンドを分離した構成により、スケーラビリティおよび保守性を確保
+- JWTを用いた認証・認可機構を実装し、セキュアなユーザー管理を実現
+- リレーショナルデータベースの特性を活かしたスキーマ設計により、データ整合性を担保
+- コンポーネント設計およびAPI設計の統一により、再利用性と可読性を向上
+- エラーハンドリングおよびバリデーションの統一により、アプリケーションの安定性を向上
 
-- Decoupled architecture for scalability and flexibility
-- Relational database for strong data consistency
-- Multiple rendering strategies for performance and SEO
-- Dual pagination approach based on user behavior
+
+
 
 ---
 
-## Future Improvements
 
-- Full-text search (e.g., PostgreSQL tsvector)
-- Recommendation system based on user preferences
-- Multi-language support
-- Image optimization and CDN integration
+## 今後の改善案
+
+
+- 全文検索の導入（PostgreSQL tsvector など）
+- ユーザー嗜好に基づくレコメンド機能
+- 多言語対応
+- 画像最適化およびCDN連携
+
 
 ---
 
-## Setup
 
-### 1. Clone the repository
+## セットアップ手順
+
+
+### 1. リポジトリのクローン
 ```bash
 git clone https://github.com/brianamos93/beercomi_front
 cd beercomi_front
 ```
 ## Getting Started
 
-Install the packages
+
+パッケージのインストール
+
 
 ```bash
 npm install
 
+
 ```
 
-First, run the development server:
+
+開発サーバー起動
+
 
 ```bash
 npm run dev
 
+
 ```
 
-Second, build and start the final version:
+
+本番ビルド・起動
+
 
 ```bash
 npm run build
 
+
 npm run start
+
 
 ```
 
-Create .env files for the front end.
+
+環境変数の設定（フロントエンド）dot env
+
+
 
 
 ```bash
 NEXT_PUBLIC_BACKEND_URL=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+[http://localhost:3000](http://localhost:3000)を開いてください
 
 
-## Folder layout (Front End)
 
-beercomi_front top folder
+
+## フロントエンド構成
+
+
+beercomi_front ルートディレクトリ
 ├── app
-│   ├── about (page route)
-│   ├── actions (server actions)
-│   ├── beers (routes and specific components for pages)
-│   ├── breweries (routes and specific components for pages)
-│   ├── components (shared components)
-│   │   ├── beer
-│   │   ├── brewery
-│   │   ├── form
-│   │   ├── interface
-│   │   ├── profile
-│   │   └── user
-│   ├── contact (page route)
-│   ├── hooks (hooks)
-│   ├── search (page route)
-│   ├── unauthorized (page route)
-│   ├── users (routes)
-│   │   ├── admin (admin panels)
-│   │   ├── login (form page)
-│   │   ├── profile (user profile page)
-│   │   └── signup (form page)
-│   └── utils (shared functions) 
-│       ├── libs (metadata base and token functions)
-│       ├── requests (server request to the back end)
-│       └── schemas (zod validation schemas)
-└── public (front end images)
+│   ├── about（ページルート）
+│   ├── actions（サーバーアクション）
+│   ├── beers（ルーティングおよびページ固有コンポーネント）
+│   ├── breweries（ルーティングおよびページ固有コンポーネント）
+│   ├── components（共通コンポーネント）
+│   │   ├── beer（ビール関連コンポーネント）
+│   │   ├── brewery（醸造所関連コンポーネント）
+│   │   ├── form（フォーム関連コンポーネント）
+│   │   ├── interface（UIコンポーネント）
+│   │   ├── profile（プロフィール関連コンポーネント）
+│   │   └── user（ユーザー関連コンポーネント）
+│   ├── contact（ページルート）
+│   ├── hooks（カスタムフック）
+│   ├── search（ページルート）
+│   ├── unauthorized（認証エラーページ）
+│   ├── users（ユーザー関連ルート）
+│   │   ├── admin（管理者向け管理画面）
+│   │   ├── login（ログインフォームページ）
+│   │   ├── profile（ユーザープロフィールページ）
+│   │   └── signup（新規登録フォームページ）
+│   └── utils（共通関数）
+│       ├── libs（メタデータおよびトークン関連処理）
+│       ├── requests（バックエンドへのサーバーリクエスト処理）
+│       └── schemas（Zodによるバリデーションスキーマ）
+└── public（フロントエンド用画像ファイル）
+
+
+## バックエンドのGithubを見てください
+```bash
+https://github.com/brianamos93/beercomi
+```
