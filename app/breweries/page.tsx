@@ -13,10 +13,11 @@ type Props = {
 export async function generateMetadata({
 	searchParams,
 }: Props): Promise<Metadata> {
-	const page = Number(await searchParams.page) || 1;
+	const params = await searchParams;
+	const page = Number(params.page) || 1;
 
 	const title =
-		page === 1 ? "ブルワリー一覧 " : `ブルワリー一覧（${page}ページ目）`;
+		page === 1 ? "醸造所一覧 " : `醸造所一覧（${page}ページ目）`;
 
 	const description =
 		page === 1
@@ -34,7 +35,8 @@ export default async function BreweriesPage({
 }: {
 	searchParams: Promise<{ page?: string }>;
 }) {
-	const page = Number((await searchParams).page) || 1;
+	const params = await searchParams;
+	const page = Number(params.page) || 1;
 	const token = (await cookies()).get("token")?.value;
 
 	return (

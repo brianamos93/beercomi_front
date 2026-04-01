@@ -27,7 +27,7 @@ export async function generateMetadata({
 
 	return {
 		title: `${brewery.name}の醸造所情報・ビール一覧`,
-		description: `${brewery.name}の所在地や設立年などの基本情報に加え、醸造しているビール一覧を掲載。レビューや評価を参考に、このブルワリーの魅力をチェックしましょう。`,
+		description: `${brewery.name}の所在地や設立年などの基本情報に加え、醸造しているビール一覧を掲載。レビューや評価を参考に、この醸造所の魅力をチェックしましょう。`,
 	};
 }
 
