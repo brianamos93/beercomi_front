@@ -49,7 +49,7 @@ export default function BrewerySelectField({
 	return (
 		<div>
 			<label className="block text-sm font-medium text-black-800 mb-2">
-				Brewery
+				醸造所
 			</label>
 
 			<Controller

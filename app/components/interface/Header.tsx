@@ -27,7 +27,7 @@ export default function Header() {
 			route: "/beers",
 		},
 		{
-			page: "ブルワリー",
+			page: "醸造所",
 			route: "/breweries",
 		},
 		{
