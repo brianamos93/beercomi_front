@@ -7,16 +7,17 @@ import BeersLoading from "./components/BeersLoading";
 import { Metadata } from "next";
 
 type Props = {
-  searchParams: { page?: string };
+	searchParams: { page?: string };
 };
 
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-	const page = Number(await searchParams.page) || 1;
+export async function generateMetadata({
+	searchParams,
+}: Props): Promise<Metadata> {
+	const params = await searchParams;
 
-	const title =
-		page === 1
-			? "ビール一覧 "
-			: `ビール一覧（${page}ページ目）`;
+	const page = Number(params.page) || 1;
+
+	const title = page === 1 ? "ビール一覧 " : `ビール一覧（${page}ページ目）`;
 
 	const description =
 		page === 1
