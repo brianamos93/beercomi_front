@@ -27,7 +27,7 @@ export default function Home() {
 			? `${url}/recent?cursor=${cursor}`
 			: `${url}/recent`;
 
-		const res = await fetch(cursorurl);
+		const res = await fetch(cursorurl, { cache: 'no-store' });
 		const json = await res.json();
 
 		setEntries((prev) => [...prev, ...json.data]);
