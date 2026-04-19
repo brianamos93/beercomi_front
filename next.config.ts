@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    minimumCacheTTL: 2678400, // 31 days in seconds
+    deviceSizes: [640, 1080, 1920],   // default has 7 sizes
+    imageSizes: [16, 64, 256],        // default has 8 sizes
     remotePatterns: [
       {
         protocol: "http",
